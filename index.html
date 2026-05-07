@@ -9082,7 +9082,7 @@ window.addEventListener('pageshow', function(){
 /* ── Bolinhas verdes: itens novos por plano ── */
 (function(){
   var style = document.createElement('style');
-  style.textContent = '.spc-feat-new{display:inline-block;width:6px;height:6px;border-radius:50%;background:#4a9e6b;flex-shrink:0;margin-left:7px;box-shadow:0 0 5px rgba(74,158,107,.7);align-self:center;}';
+  style.textContent = '.spc-feat{position:relative;} .spc-feat-new{position:absolute;left:-10px;top:50%;transform:translateY(-50%);width:5px;height:5px;border-radius:50%;background:#4a9e6b;box-shadow:0 0 4px rgba(74,158,107,.8);pointer-events:none;flex-shrink:0;}';
   document.head.appendChild(style);
 
   /* Extrai o texto limpo de um li — ignora SVG, pega só text nodes e spans de texto */
@@ -9124,12 +9124,10 @@ window.addEventListener('pageshow', function(){
         var t = liText(li);
         if(!t) return;
         if(!seen[t]){
-          /* item novo — adicionar bolinha */
+          /* item novo — bolinha antes do SVG, sem caixa de colisão */
           var dot = document.createElement('span');
           dot.className = 'spc-feat-new';
-          li.style.display = 'flex';
-          li.style.alignItems = 'center';
-          li.appendChild(dot);
+          li.insertBefore(dot, li.firstChild);
         }
       });
       /* adicionar textos deste card ao seen para o próximo */
