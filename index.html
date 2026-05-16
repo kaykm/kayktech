@@ -1706,7 +1706,7 @@ body.view-mobile .menu-btn{
         </div>
         <div class="tm-text">
           <strong>Por que cobro taxa de deslocamento?</strong>
-          <p>Para te atender em casa, preciso me locomover via Uber ou a pé. Isso tem um custo real de tempo e dinheiro que precisa ser coberto para que o serviço continue viável e sustentável.</p>
+          <p>Para te atender em casa, preciso me locomover via veículo ou a pé até o seu endereço. Isso tem um custo real de tempo e dinheiro que precisa ser coberto para que o serviço continue viável e sustentável.</p>
         </div>
       </div>
 
@@ -1790,13 +1790,9 @@ body.view-mobile .menu-btn{
     </div>
 
     <div class="tm-footer">
-      <div id="tm-scroll-hint" style="font-family:'Space Mono',monospace;font-size:13px;letter-spacing:1.5px;color:var(--muted);text-align:center;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:5px">
-        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-        ROLE ATÉ O FINAL PARA ACEITAR
-      </div>
       <button class="tm-btn" id="termsAcceptBtn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-        Role até o final para aceitar
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Entendi e aceito os termos
       </button>
     </div>
 
@@ -1816,38 +1812,12 @@ body.view-mobile .menu-btn{
   window.openTerms = function(){
     overlay.style.display = '';
     document.body.style.overflow = 'hidden';
-    btn.disabled = true;
-    btn.style.opacity = '0.4';
-    btn.style.cursor = 'not-allowed';
-    btn.title = 'Role até o final para confirmar os termos';
-    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;flex-shrink:0"><polyline points="6 9 12 15 18 9"/></svg> Role até o final para aceitar`;
-    requestAnimationFrame(()=>{ overlay.classList.add('show'); setTimeout(checkScroll, 450); });
+    btn.disabled = false;
+    btn.style.opacity = '1';
+    btn.style.cursor = 'pointer';
+    btn.title = '';
+    requestAnimationFrame(()=>{ overlay.classList.add('show'); });
   };
-
-  
-  const body = modal.querySelector('.tm-body');
-  function checkScroll(){
-    
-    
-    const noModalScroll = modal.scrollHeight <= modal.clientHeight + 10;
-    const modalScrolled = modal.scrollTop + modal.clientHeight >= modal.scrollHeight - 24;
-    const noBodyScroll = !body || body.scrollHeight <= body.clientHeight + 10;
-    const bodyScrolled = body && (body.scrollTop + body.clientHeight >= body.scrollHeight - 24);
-    const scrolled = (noModalScroll && noBodyScroll) || modalScrolled || bodyScrolled;
-    if(scrolled && btn.disabled){
-      btn.disabled = false;
-      btn.style.opacity = '1';
-      btn.style.cursor = 'pointer';
-      btn.title = '';
-      btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg> Entendi e aceito os termos`;
-      const hint = document.getElementById('tm-scroll-hint');
-      if(hint) hint.style.display = 'none';
-    }
-  }
-  modal.addEventListener('scroll', checkScroll, {passive:true});
-  if(body) body.addEventListener('scroll', checkScroll, {passive:true});
-  
-  setTimeout(checkScroll, 450);
 
   btn.addEventListener('click', ()=>{
     if(btn.disabled) return;
@@ -6392,7 +6362,10 @@ function orcUpdatePanel(){
   
   const numPaidSvcs = paidItems.filter(i => !i.noDiscount).length;
   const discount = getAtendimentoDiscount(numPaidSvcs);
-  const finalPrice = Math.max(0, totalPrice - discount);
+  /* taxa de deslocamento — só domiciliar com taxa definida */
+  const isDomicilio = atendimentoMode !== 'tecnica';
+  const taxaDesloc  = (isDomicilio && window._distTaxaVal > 0) ? window._distTaxaVal : 0;
+  const finalPrice = Math.max(0, totalPrice - discount) + taxaDesloc;
   const totalTime  = allItems.reduce((s,i)=>s+i.time, 0);
   const itemsForAvg = allItems.filter(i=>i.lvl > 0);
   const avgLvl = itemsForAvg.length ? Math.round(itemsForAvg.reduce((s,i)=>s+i.lvl,0)/itemsForAvg.length) : 1;
@@ -6514,6 +6487,11 @@ function orcUpdatePanel(){
       </span>
     </div>`;}).join('') +
     discountRow +
+    (taxaDesloc > 0 ? `
+    <div class="orc-list-row" style="background:rgba(200,169,110,.04);border-top:1px solid rgba(200,169,110,.15)">
+      <span class="orc-list-name" style="display:flex;align-items:center;gap:5px;color:var(--gold)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg> Taxa de deslocamento <span style="font-size:10px;color:var(--muted);font-family:'Space Mono',monospace;margin-left:4px">(${window._distTaxaLabel||''})</span></span>
+      <span class="orc-list-price" style="color:var(--gold)">+ R$&nbsp;${taxaDesloc}</span>
+    </div>` : '') +
     `<div class="orc-list-row" style="background:rgba(200,169,110,.05);border-top:1px solid var(--border2)">
       <span class="orc-list-name" style="color:var(--gold);font-weight:400">Total</span>
       <span class="orc-list-price" style="font-size:15.6px">R$&nbsp;${finalPrice.toLocaleString('pt-BR')}</span>
@@ -9701,6 +9679,10 @@ function buildQuickNav(pageId){
     function showResult(lat, lng, label){
       var km = haversine(TECH_LAT, TECH_LNG, lat, lng);
       var t  = getTaxa(km);
+      /* armazena taxa globalmente para o orçamento */
+      window._distTaxaVal   = (t.taxa !== null && t.taxa > 0) ? t.taxa : 0;
+      window._distTaxaLabel = t.label;
+      if(typeof orcUpdatePanel === 'function') orcUpdatePanel();
       var distStr = fmtDist(km);
       var taxaStr = t.taxa === 0
         ? '<span style="color:var(--green)">Grátis ✓</span>'
