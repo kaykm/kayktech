@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <!-- v20260515-orbs-blur -->
-<title>Kayk Tech · 1.0 · Assistência Premium · Ananindeua - PA</title>
+<title>Kayk Tech · 2.0 · Assistência Premium · Ananindeua - PA</title>
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="favicon.png">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -11062,18 +11062,18 @@ function closeWIP(){
 
   var W=0, H=0;
 
+  /* Lê as dimensões CSS renderizadas do próprio canvas (não da sidebar).
+     O canvas tem width:100%;height:100% em CSS, então offsetWidth/Height
+     sempre refletem o tamanho visual real — evita o bug de escala onde
+     o drawing buffer maior que o display CSS comprime os orbs e o
+     blur(56px) vira um borrão dourado uniforme cobrindo tudo. */
   function resize(){
-    var sidebar = document.getElementById('dt-sidebar');
-    var w = 0;
-    if(sidebar){
-      w = sidebar.getBoundingClientRect().width;
-      if(!w) w = sidebar.offsetWidth;
-    }
+    var w = canvas.offsetWidth;
+    var h = canvas.offsetHeight;
     W = w || 220;
-    H = window.innerHeight;
+    H = h || window.innerHeight;
     canvas.width  = W;
     canvas.height = H;
-    /* reposicionar orbs que ficaram fora dos novos limites */
     for(var i = 0; i < orbs.length; i++){
       if(orbs[i].x > W) orbs[i].x = rng(0, W);
     }
@@ -11210,11 +11210,15 @@ function closeWIP(){
 
   function start(){ init(); buildNoise(); loop(); }
 
-  window.addEventListener('resize', resize);
+  /* ResizeObserver no proprio canvas e mais confiavel que window.resize:
+     detecta mudancas no sidebar sem polling */
+  if(window.ResizeObserver){
+    new ResizeObserver(resize).observe(canvas);
+  } else {
+    window.addEventListener('resize', resize);
+  }
 
-  /* double rAF garante que o browser terminou o layout antes de ler
-     as dimensões do sidebar — evita o bug onde os orbs nascem em
-     largura incorreta no primeiro load */
+  /* double rAF: garante layout concluido antes de ler offsetWidth */
   if(document.readyState === 'loading'){
     document.addEventListener('DOMContentLoaded', function(){
       requestAnimationFrame(function(){ requestAnimationFrame(start); });
