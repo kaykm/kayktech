@@ -16,7 +16,8 @@
 :root{--black:#000;--surface:#111;--surface2:#1d1d1d;--border:#222;--border2:#2e2e2e;--text:#e8e8e8;--muted:#555;--gold:#c8a96e;--gold-dim:#7a6540;--green:#4a9e6b;--red:#9e4a4a;--amber:#b8842a;--sidebar:220px}
 html,body{background:var(--black);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;-webkit-tap-highlight-color:transparent!important;width:100%;overflow-x:hidden}
 a{color:inherit;text-decoration:none}
-#content-wrap{display:block}
+#content-wrap{display:block;position:relative;z-index:1}
+#bg-orbs-canvas{position:absolute;z-index:0;pointer-events:none;display:none}
 
 *{scrollbar-width:thin;scrollbar-color:#c8a96e33 transparent}
 ::-webkit-scrollbar{width:4px;height:4px}
@@ -35,17 +36,26 @@ a{color:inherit;text-decoration:none}
   display:flex;flex-direction:column;
   position:fixed;top:0;left:0;bottom:0;
   width:var(--sidebar);
-  background:var(--surface);
-  border-right:1px solid var(--border2);
+  background:rgba(2,2,4,0.68);
+  backdrop-filter:blur(22px) saturate(160%);
+  -webkit-backdrop-filter:blur(22px) saturate(160%);
+  border-right:1px solid rgba(200,140,40,0.13);
   z-index:200;
   overflow-y:auto;overflow-x:hidden;
+}
+#sidebar-orbs-canvas{
+  position:absolute;inset:0;width:100%;height:100%;
+  pointer-events:none;z-index:0;display:block;
+}
+#dt-sidebar > *:not(#sidebar-orbs-canvas){
+  position:relative;z-index:1;
 }
 
 @media(min-width:600px){
   :root{--sidebar:clamp(220px,33vw,340px)}
 
   #dt-sidebar::-webkit-scrollbar{width:3px}
-  #dt-sidebar::-webkit-scrollbar-thumb{background:linear-gradient(180deg,transparent,#c8a96e66,transparent);border-radius:99px}
+  #dt-sidebar::-webkit-scrollbar-thumb{background:linear-gradient(180deg,transparent,rgba(120,120,120,.35),transparent);border-radius:99px}
 
   
   body{padding-left:var(--sidebar);font-size:16.8px}
@@ -341,12 +351,46 @@ a{color:inherit;text-decoration:none}
   background:none;border:none;border-left:2px solid transparent;
   color:var(--muted);cursor:pointer;text-align:left;
   font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:300;
-  transition:background .15s,color .15s,border-color .15s;
+  position:relative;
+  transition:color .18s;
   -webkit-tap-highlight-color:transparent;
 }
-#dt-sidebar .ds-btn svg{width:17px;height:17px;flex-shrink:0;color:inherit}
-#dt-sidebar .ds-btn:hover{background:var(--surface2);color:var(--text);border-left-color:var(--border2)}
-#dt-sidebar .ds-btn.active{color:var(--gold);border-left-color:var(--gold);background:rgba(200,169,110,.06)}
+/* Caixa flutuante de seleção: cantos arredondados, separada 3px acima/abaixo */
+#dt-sidebar .ds-btn::after{
+  content:'';
+  position:absolute;
+  top:3px;bottom:3px;left:8px;right:8px;
+  border-radius:10px;
+  background:linear-gradient(90deg,
+    rgba(0,0,0,0) 0%,
+    rgba(40,28,8,0.18) 42%,
+    rgba(120,86,28,0.45) 78%,
+    rgba(200,169,110,0.78) 100%);
+  border:none;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.03);
+  opacity:0;
+  transform:scale(.98);
+  transition:opacity .18s ease, transform .22s cubic-bezier(.22,1,.36,1);
+  pointer-events:none;
+  z-index:-1;
+}
+#dt-sidebar .ds-btn svg{width:17px;height:17px;flex-shrink:0;color:inherit;position:relative;z-index:1}
+#dt-sidebar .ds-btn .ds-btn-label{position:relative;z-index:1}
+@media(hover:hover){
+  #dt-sidebar .ds-btn:hover{background:none;color:var(--text);border-left-color:transparent}
+  #dt-sidebar .ds-btn:hover::after{opacity:1;transform:scale(1)}
+}
+#dt-sidebar .ds-btn.active{color:var(--gold);border-left-color:transparent;background:none}
+#dt-sidebar .ds-btn.active::after{
+  opacity:1;
+  transform:scale(1);
+  background:linear-gradient(90deg,
+    rgba(0,0,0,0) 0%,
+    rgba(50,36,10,0.22) 42%,
+    rgba(140,100,34,0.52) 78%,
+    rgba(210,178,118,0.88) 100%);
+  border:none;
+}
 #dt-sidebar .ds-btn em{color:var(--gold);font-style:normal}
 
 .ds-group{display:flex;flex-direction:column}
@@ -381,7 +425,7 @@ a{color:inherit;text-decoration:none}
 }
 .ds-group.open .ds-sub-btn{opacity:1;transform:translateX(0)}
 .ds-sub-btn:hover{background:var(--surface2);color:var(--text);border-left-color:var(--border2)}
-.ds-sub-btn.ds-sub-active{color:var(--gold);border-left-color:var(--gold);background:rgba(200,169,110,.04)}
+.ds-sub-btn.ds-sub-active{color:var(--gold);border-left-color:transparent;background:rgba(200,169,110,.04)}
 .ds-sub-icon{display:flex;align-items:center;justify-content:center;width:22px;height:22px;flex-shrink:0}
 .ds-sub-icon svg{width:19px;height:19px}
 
@@ -460,7 +504,7 @@ a{color:inherit;text-decoration:none}
 #dt-sidebar .ds-wa:hover{color:#6dc993}
 #dt-sidebar .ds-wa svg{width:18px;height:18px;flex-shrink:0}
 
-.hero{position:relative;padding:22px 16px 20px;border-bottom:1px solid var(--border2);border-left:1px solid var(--border2);border-right:1px solid var(--border2);overflow:hidden;background:var(--black)}
+.hero{position:relative;padding:22px 16px 20px;border-bottom:1px solid var(--border2);border-left:1px solid var(--border2);border-right:1px solid var(--border2);overflow:hidden;background:var(--black);border-bottom-left-radius:22px;border-bottom-right-radius:22px}
 .hero-grid{display:none}
 .hero-glow{display:none}
 
@@ -682,10 +726,10 @@ body.anim-done .page-active #orc-resumo{
 .side-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:998;opacity:0;pointer-events:none;transition:opacity .3s}
 .side-overlay.open{opacity:1;pointer-events:all}
 
-.side-menu{position:fixed;top:0;right:-280px;width:280px;height:100%;background:var(--surface);border-left:1px solid var(--border2);z-index:999;transition:right .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden}
+.side-menu{position:fixed;top:0;right:-280px;width:280px;height:100%;background:rgba(0,0,0,0.52);backdrop-filter:blur(24px) saturate(160%);-webkit-backdrop-filter:blur(24px) saturate(160%);border-left:1px solid rgba(255,255,255,0.06);z-index:999;transition:right .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden;box-shadow:-4px 0 40px rgba(0,0,0,.75)}
 .side-menu.open{right:0}
 
-.side-header{display:flex;align-items:center;justify-content:space-between;padding:22px 18px 16px;border-bottom:1px solid var(--border2)}
+.side-header{display:flex;align-items:center;justify-content:space-between;padding:22px 18px 16px;border-bottom:1px solid rgba(255,255,255,0.06)}
 .side-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:24px;font-weight:500;letter-spacing:-.3px}
 .side-close{background:none;border:none;color:var(--muted);font-size:19.2px;cursor:pointer;padding:2px 4px;line-height:1;transition:color .2s}
 .side-close:hover{color:var(--gold)}
@@ -1129,7 +1173,7 @@ body.bancada-mode #plan-instalacao-2 > .th-price{display:block!important}
 }
 .vm-btn::before{
   content:'';position:absolute;inset:0;
-  background:linear-gradient(135deg,rgba(200,169,110,.06) 0%,transparent 60%);
+  background:linear-gradient(135deg,rgba(120,120,120,.05) 0%,transparent 60%);
   opacity:0;transition:opacity .22s;
 }
 .vm-btn:hover:not(.active)::before{opacity:1}
@@ -1139,16 +1183,16 @@ body.bancada-mode #plan-instalacao-2 > .th-price{display:block!important}
 }
 .vm-btn:hover:not(.active) svg{transform:scale(1.12)}
 .vm-btn.active{
-  background:rgba(200,169,110,.08);
-  border-color:rgba(200,169,110,.55);
-  color:var(--gold);
-  box-shadow:0 0 12px rgba(200,169,110,.10),inset 0 1px 0 rgba(200,169,110,.12);
+  background:rgba(100,100,100,.12);
+  border-color:rgba(150,150,150,.45);
+  color:rgba(210,210,210,.9);
+  box-shadow:none;
 }
 .vm-btn.active::after{
   content:'';position:absolute;top:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(200,169,110,.7),transparent);
+  background:linear-gradient(90deg,transparent,rgba(160,160,160,.5),transparent);
 }
-.vm-btn.active svg{color:var(--gold);transform:scale(1.08)}
+.vm-btn.active svg{color:rgba(200,200,200,.9);transform:scale(1.08)}
 .vm-btn:hover:not(.active){border-color:var(--border2);color:#777}
 
 #vm-floating-bar{
@@ -1379,9 +1423,6 @@ body.view-mobile .menu-btn{
   /* ── ROADMAP ── */
   .rdm-item-diff{display:none!important}
 
-  /* ── ACOMPANHAMENTO ── */
-  .acomp-grid{grid-template-columns:1fr!important}
-
   /* ── KT-STEP MODAL ── */
   .kt-step-list{gap:8px!important;max-height:55vh!important;overflow-y:auto!important}
   .kt-step-card{padding:10px 12px!important;border-radius:10px!important}
@@ -1390,23 +1431,13 @@ body.view-mobile .menu-btn{
   .kt-step-num{font-size:13px!important;padding:2px 8px!important}
   .kt-step-badge{font-size:10px!important}
 
-  /* ── BUILD INFO MODAL ── */
-  #build-info-overlay{align-items:flex-end!important}
-  #build-info-card{
-    width:100%!important;
-    max-width:100%!important;
-    border-radius:12px 12px 0 0!important;
-    padding-bottom:env(safe-area-inset-bottom,0px)!important;
-    transform:translateY(100%)!important;
-    opacity:1!important;
-  }
-  #build-info-card .bi-drag{display:block!important}
-
 }
 </style>
 
 </head>
 <body>
+
+<canvas id="bg-orbs-canvas" aria-hidden="true"></canvas>
 
 <!-- ═══ GRID + GLOWS ═══ -->
 <style>
@@ -1523,11 +1554,19 @@ body.view-mobile .menu-btn{
 })();
 </script>
 
-<aside id="dt-sidebar">
+<aside id="dt-sidebar" class="ds-collapsed">
+
+  <canvas id="sidebar-orbs-canvas" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;display:block"></canvas>
 
   <div class="ds-logo">
-    <div class="ds-logo-name">Kayk <em>Tech</em></div>
-    <div class="ds-logo-sub">Assistência Premium · Ananindeua - PA</div>
+    <div class="ds-logo-text">
+      <div class="ds-logo-name">Kayk <em>Tech</em></div>
+      <div class="ds-logo-sub">Assistência Premium · Ananindeua - PA</div>
+    </div>
+    <div class="ds-logo-mark">KT</div>
+    <button id="ds-toggle-btn" onclick="dsSidebarToggle()" aria-label="Expandir/Retrair menu">
+      <svg id="ds-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
   </div>
 
   <div class="ds-mode">
@@ -1604,15 +1643,15 @@ body.view-mobile .menu-btn{
 
     <button class="ds-btn" id="ds-rdm-btn" onclick="navigateTo('page-roadmap');dsSyncNav('page-roadmap')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-      Roadmap
+      <span class="ds-btn-label">Roadmap</span>
     </button>
     <button class="ds-btn" id="ds-combos-btn" onclick="showPacotesWIP()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
-      Pacotes
+      <span class="ds-btn-label">Pacotes</span>
     </button>
     <button class="ds-btn" id="ds-reparos-btn" onclick="showReparosWIP()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-      Reparos
+      <span class="ds-btn-label">Reparos</span>
     </button>
   </div>
 
@@ -1650,6 +1689,421 @@ body.view-mobile .menu-btn{
 </aside>
 
 <style>
+/* §SIDEBAR-FUTURISTIC — Dark Futuristic Glassmorphism override */
+#dt-sidebar{
+  background:rgba(0,0,0,0.48);
+  backdrop-filter:blur(26px) saturate(170%) brightness(0.92);
+  -webkit-backdrop-filter:blur(26px) saturate(170%) brightness(0.92);
+  border-right:1px solid rgba(255,255,255,0.06);
+  box-shadow:
+    4px 0 40px rgba(0,0,0,0.7),
+    inset -1px 0 0 rgba(255,255,255,0.04),
+    inset 1px 0 0 rgba(255,255,255,0.02);
+}
+
+/* ── LOGO ── */
+#dt-sidebar .ds-logo{
+  padding:20px 16px 16px;
+  border-bottom:1px solid rgba(100,100,100,.1);
+  background:linear-gradient(180deg,rgba(255,255,255,.025) 0%,transparent 100%);
+  position:relative;
+}
+#dt-sidebar .ds-logo::after{
+  content:'';position:absolute;bottom:0;left:16px;right:16px;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(120,120,120,.25) 40%,rgba(130,130,130,.28) 60%,transparent);
+}
+#dt-sidebar .ds-logo-name{
+  font-size:17px;font-weight:600;letter-spacing:.2px;
+  color:#e8dfc8;
+}
+#dt-sidebar .ds-logo-name em{
+  color:var(--gold);font-style:normal;
+  text-shadow:0 0 12px rgba(200,169,110,.4);
+}
+#dt-sidebar .ds-logo-sub{
+  font-family:'Space Mono',monospace;font-size:9.5px;
+  letter-spacing:1.8px;text-transform:uppercase;
+  color:rgba(130,130,130,.55);margin-top:5px;
+}
+
+/* ── MODE TOGGLE ── */
+#dt-sidebar .ds-mode{
+  padding:9px 16px;
+  border-bottom:1px solid rgba(100,100,100,.1);
+  background:rgba(0,0,0,.0);
+  gap:9px;
+}
+#dt-sidebar .ds-mode-label{
+  font-family:'Space Mono',monospace;font-size:10px;
+  letter-spacing:1.8px;text-transform:uppercase;
+  color:rgba(130,130,130,.6);
+  transition:color .25s,text-shadow .25s;
+}
+#dt-sidebar .ds-mode-label.active-label{
+  color:var(--gold);
+  text-shadow:0 0 8px rgba(200,169,110,.35);
+}
+
+/* ── NAV SECTION ── */
+#dt-sidebar .ds-nav{
+  padding:10px 0;
+  border-bottom:1px solid rgba(100,100,100,.1);
+  flex:1;overflow-y:auto;
+}
+#dt-sidebar .ds-nav-lbl{
+  font-family:'Space Mono',monospace;font-size:9px;
+  letter-spacing:2.8px;text-transform:uppercase;
+  color:rgba(130,130,130,.55);
+  padding:6px 16px 5px;display:block;
+}
+
+/* ── NAV BUTTONS ── */
+#dt-sidebar .ds-btn{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 14px;width:100%;
+  background:none;border:none;border-left:2px solid transparent;
+  color:rgba(140,140,140,.55);cursor:pointer;text-align:left;
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:13.5px;font-weight:400;
+  transition:background .18s,color .18s,border-color .18s,box-shadow .18s;
+  -webkit-tap-highlight-color:transparent;
+  position:relative;
+}
+#dt-sidebar .ds-btn svg{width:16px;height:16px;flex-shrink:0;color:inherit}
+#dt-sidebar .ds-btn:hover{
+  background:none;
+  color:rgba(225,225,225,.92);
+  border-left-color:transparent;
+}
+@media(hover:hover){
+  #dt-sidebar .ds-btn:hover::after{opacity:1;transform:scale(1)}
+}
+#dt-sidebar .ds-btn.active{
+  color:var(--gold);
+  border-left-color:transparent;
+  background:none;
+  box-shadow:none;
+}
+#dt-sidebar .ds-btn.active::after{
+  opacity:1;
+  transform:scale(1);
+  background:rgba(200,169,110,0.07);
+  border-color:rgba(200,169,110,0.22);
+  box-shadow:inset 0 0 18px rgba(200,169,110,.04), inset 0 1px 0 rgba(255,255,255,0.04);
+}
+#dt-sidebar .ds-btn em{color:var(--gold);font-style:normal}
+
+/* ── SUB BUTTONS ── */
+.ds-sub-btn{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 14px 8px 22px;width:100%;
+  background:none;border:none;border-left:2px solid transparent;
+  color:rgba(120,120,120,.55);cursor:pointer;text-align:left;
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:300;
+  opacity:0;transform:translateX(-6px);
+  transition:background .15s,color .15s,border-color .15s,
+             opacity .29s cubic-bezier(.4,0,.2,1),
+             transform .35s cubic-bezier(.34,1.1,.64,1);
+  -webkit-tap-highlight-color:transparent;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.ds-group.open .ds-sub-btn{opacity:1;transform:translateX(0)}
+.ds-sub-btn:hover{
+  background:rgba(120,120,120,.05);
+  color:rgba(200,200,200,.8);
+  border-left-color:rgba(120,120,120,.25);
+}
+.ds-sub-btn.ds-sub-active{
+  color:var(--gold);
+  border-left-color:transparent;
+  background:rgba(200,169,110,.04);
+}
+.ds-sub-icon{
+  display:flex;align-items:center;justify-content:center;
+  width:20px;height:20px;flex-shrink:0;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:4px;
+  transition:background .18s,border-color .18s;
+}
+.ds-sub-btn:hover .ds-sub-icon{
+  background:rgba(120,120,120,.08);
+  border-color:rgba(120,120,120,.18);
+}
+.ds-sub-icon svg{width:12px;height:12px}
+
+/* cycle item */
+.ds-sub-cycle{
+  align-items:flex-start!important;padding-top:8px!important;padding-bottom:8px!important;
+  border-left-color:rgba(100,100,100,.2)!important;
+  background:rgba(100,100,100,.02)!important;
+}
+.ds-sub-cycle:hover{border-left-color:rgba(150,150,150,.35)!important}
+.ds-cycle-top{color:rgba(180,180,180,.85);font-weight:400;font-size:13px}
+.ds-cp{color:rgba(100,140,180,.4);opacity:.5}
+.ds-cp.ds-cp-on{color:var(--gold);opacity:1}
+
+/* ── VM BAR (visualização) ── */
+.vm-bar{
+  padding:9px 16px;
+  border-top:1px solid rgba(100,100,100,.1);
+  background:rgba(0,0,0,.0);
+  flex-shrink:0;
+}
+.vm-bar-label{
+  font-family:'Space Mono',monospace;font-size:9px;
+  letter-spacing:2px;text-transform:uppercase;
+  color:rgba(110,110,110,.6);
+  display:flex;align-items:center;gap:6px;margin-bottom:7px;
+}
+.vm-bar-label svg{width:11px;height:11px;color:rgba(120,120,120,.5)}
+.vm-pills{display:flex;gap:5px}
+.vm-btn{
+  flex:1;display:flex;align-items:center;justify-content:center;gap:6px;
+  padding:6px 8px;background:rgba(100,100,100,.06);
+  border:1px solid rgba(100,100,100,.15);border-radius:4px;
+  color:rgba(120,120,120,.5);cursor:pointer;
+  font-family:'Space Mono',monospace;font-size:9.5px;letter-spacing:1px;text-transform:uppercase;
+  transition:all .18s;-webkit-tap-highlight-color:transparent;
+}
+.vm-btn svg{width:11px;height:11px;flex-shrink:0}
+.vm-btn:hover{background:rgba(120,120,120,.1);border-color:rgba(140,140,140,.28);color:rgba(180,180,180,.85)}
+.vm-btn.active-vm,.vm-btn[style*="gold"]{
+  background:rgba(100,100,100,.12);
+  border-color:rgba(150,150,150,.4);
+  color:rgba(210,210,210,.9);
+  box-shadow:none;
+}
+
+/* ── BOTTOM (search + wa) ── */
+#dt-sidebar .ds-bottom{
+  margin-top:auto;padding:12px 14px;
+  border-top:1px solid rgba(100,100,100,.1);
+  background:rgba(0,0,0,.0);
+  flex-shrink:0;display:flex;flex-direction:column;gap:0;
+}
+.ds-search-wrap{position:relative;margin-bottom:8px}
+.ds-search-icon{
+  position:absolute;left:9px;top:50%;transform:translateY(-50%);
+  width:11px;height:11px;color:rgba(120,120,120,.45);pointer-events:none;
+}
+.ds-search-input{
+  width:100%;
+  background:rgba(100,100,100,.05);
+  border:1px solid rgba(100,100,100,.15);
+  border-radius:5px;
+  padding:8px 28px 8px 28px;
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:12.5px;
+  color:rgba(200,225,255,.85);outline:none;
+  transition:border-color .2s,box-shadow .2s;
+  -webkit-user-select:text!important;user-select:text!important;
+}
+.ds-search-input::placeholder{color:rgba(120,120,120,.4)}
+.ds-search-input:focus{
+  border-color:rgba(140,140,140,.4);
+  box-shadow:0 0 0 2px rgba(120,120,120,.07),0 0 12px rgba(100,100,100,.06);
+}
+.ds-search-clear{
+  position:absolute;right:7px;top:50%;transform:translateY(-50%);
+  background:none;border:none;color:rgba(120,120,120,.4);cursor:pointer;
+  font-size:17px;line-height:1;padding:0 2px;
+}
+.ds-search-clear:hover{color:rgba(180,180,180,.9)}
+.ds-search-dropdown{
+  position:absolute;bottom:calc(100% + 6px);left:0;right:0;
+  background:#0a0a0a;border:1px solid rgba(120,120,120,.15);
+  border-radius:6px;overflow:hidden;
+  box-shadow:0 -8px 32px rgba(0,0,0,.8),0 0 0 1px rgba(100,100,100,.05);
+  display:none;z-index:500;
+  max-height:280px;overflow-y:auto;
+}
+.ds-search-dropdown.open{display:block}
+
+#dt-sidebar .ds-wa{
+  display:flex;align-items:center;justify-content:center;gap:9px;
+  padding:9px 12px;border-radius:5px;
+  background:rgba(74,158,107,.06);
+  border:1px solid rgba(74,158,107,.18);
+  color:rgba(74,158,107,.8);
+  font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:1.5px;text-transform:uppercase;
+  text-decoration:none;
+  transition:background .2s,border-color .2s,color .2s,box-shadow .2s;
+}
+#dt-sidebar .ds-wa:hover{
+  color:#6dc993;
+  background:rgba(74,158,107,.12);
+  border-color:rgba(74,158,107,.35);
+  box-shadow:0 0 12px rgba(74,158,107,.1);
+}
+#dt-sidebar .ds-wa svg{width:14px;height:14px;flex-shrink:0}
+
+/* chevron e divider do grupo */
+.ds-chevron{color:rgba(120,120,120,.45)!important}
+.ds-group.open .ds-chevron{transform:rotate(180deg)}
+
+/* §SIDEBAR-NAV-SCALE — +25% nav only */
+#dt-sidebar .ds-nav-lbl{font-size:11px;letter-spacing:2.8px;padding:8px 16px 5px}
+#dt-sidebar .ds-btn{padding:11px 17px;gap:13px;font-size:17px}
+#dt-sidebar .ds-btn svg{width:20px;height:20px}
+.ds-sub-btn{padding:10px 17px 10px 27px;gap:13px;font-size:16px}
+.ds-sub-icon{width:25px;height:25px;border-radius:5px}
+.ds-sub-icon svg{width:15px;height:15px}
+.ds-cycle-top{font-size:16px}
+.ds-cycle-pills{gap:6px}
+.ds-cp{width:18px;height:18px}
+
+/* §SIDEBAR-COLLAPSE — retraído/expandido */
+:root { --sidebar-mini: 54px }
+
+/* ── Grain overlay sobre o vidro ── */
+#dt-sidebar::before{
+  content:'';
+  position:fixed;top:0;left:0;bottom:0;
+  width:inherit;
+  pointer-events:none;z-index:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.038'/%3E%3C/svg%3E");
+  mix-blend-mode:overlay;
+}
+
+/* Subtle top shimmer edge */
+#dt-sidebar::after{
+  content:'';
+  position:fixed;top:0;left:0;
+  width:inherit;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.12) 35%,rgba(255,255,255,.08) 65%,transparent);
+  pointer-events:none;z-index:1;
+}
+
+#dt-sidebar {
+  transition: width .32s cubic-bezier(.4,0,.2,1);
+  overflow: hidden !important;
+}
+body.view-desktop {
+  transition: padding-left .32s cubic-bezier(.4,0,.2,1);
+}
+
+/* DEFAULT: retraído */
+body.view-desktop { padding-left: var(--sidebar-mini) !important }
+#dt-sidebar.ds-collapsed { width: var(--sidebar-mini) !important }
+
+/* EXPANDIDO */
+body.view-desktop.ds-sidebar-expanded { padding-left: var(--sidebar) !important }
+#dt-sidebar.ds-expanded { width: var(--sidebar) !important }
+
+/* ── Logo área ── */
+#dt-sidebar .ds-logo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 12px;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+#dt-sidebar .ds-logo-text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  opacity: 1;
+  transition: opacity .2s ease, max-width .32s cubic-bezier(.4,0,.2,1);
+  max-width: 200px;
+}
+#dt-sidebar .ds-logo-mark {
+  font-family: 'Space Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--gold);
+  text-shadow: 0 0 14px rgba(200,169,110,.4);
+  letter-spacing: 1px;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity .2s ease;
+  position: absolute;
+  left: 0; right: 0;
+  text-align: center;
+  pointer-events: none;
+}
+
+/* toggle button */
+#ds-toggle-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; flex-shrink: 0;
+  background: rgba(200,169,110,.07);
+  border: 1px solid rgba(200,169,110,.18);
+  border-radius: 5px; cursor: pointer;
+  color: rgba(200,169,110,.6);
+  transition: background .18s, color .18s, border-color .18s, transform .32s cubic-bezier(.4,0,.2,1);
+  -webkit-tap-highlight-color: transparent;
+}
+#ds-toggle-btn:hover {
+  background: rgba(200,169,110,.14);
+  color: var(--gold);
+  border-color: rgba(200,169,110,.4);
+}
+#ds-toggle-btn svg { width: 13px; height: 13px; transition: transform .32s cubic-bezier(.4,0,.2,1) }
+
+/* COLLAPSED overrides */
+#dt-sidebar.ds-collapsed .ds-logo-text { opacity: 0; max-width: 0; pointer-events: none }
+#dt-sidebar.ds-collapsed .ds-logo-mark { opacity: 1 }
+#dt-sidebar.ds-expanded #ds-toggle-btn svg { transform: rotate(180deg) }
+#dt-sidebar.ds-collapsed .ds-logo {
+  justify-content: center;
+  padding: 12px 0;
+  flex-direction: column;
+  gap: 6px;
+}
+#dt-sidebar.ds-collapsed #ds-toggle-btn { position: static }
+
+#dt-sidebar.ds-collapsed .ds-mode { display: none }
+#dt-sidebar.ds-collapsed .ds-nav-lbl { display: none }
+
+#dt-sidebar.ds-collapsed .ds-btn {
+  justify-content: center !important;
+  padding: 11px 0 !important;
+  gap: 0 !important;
+  border-left-color: transparent !important;
+  font-size: 0 !important;
+  overflow: hidden !important;
+}
+#dt-sidebar.ds-collapsed .ds-btn.active {
+  border-left-color: transparent !important;
+  background: transparent !important;
+}
+#dt-sidebar.ds-collapsed .ds-btn::after{
+  left:6px!important;right:6px!important;
+}
+#dt-sidebar.ds-collapsed .ds-btn .ds-group-label,
+#dt-sidebar.ds-collapsed .ds-btn .ds-btn-label,
+#dt-sidebar.ds-collapsed .ds-btn em,
+#dt-sidebar.ds-collapsed .ds-group-btn > span:last-child { display: none !important }
+
+/* sub-lista: forçar aberta e ícones centralizados */
+#dt-sidebar.ds-collapsed #ds-main-subs {
+  display: grid !important;
+  grid-template-rows: 1fr !important;
+}
+#dt-sidebar.ds-collapsed .ds-sub-btn {
+  justify-content: center !important;
+  padding: 9px 0 !important;
+  gap: 0 !important;
+  opacity: 1 !important;
+  transform: none !important;
+  border-left-color: transparent !important;
+  font-size: 0 !important;
+  overflow: hidden !important;
+}
+#dt-sidebar.ds-collapsed .ds-sub-btn .ds-sub-icon {
+  margin: 0 auto;
+  background: none !important;
+  border: none !important;
+}
+#dt-sidebar.ds-collapsed .ds-sub-btn > *:not(.ds-sub-icon) { display: none !important }
+/* cycle item collapsed: mostrar só o ícone do estado atual */
+#dt-sidebar.ds-collapsed .ds-sub-cycle { align-items: center !important }
+#dt-sidebar.ds-collapsed .ds-cycle-body { display: none !important }
+
+#dt-sidebar.ds-collapsed .ds-bottom { display: none }
+#dt-sidebar.ds-collapsed .vm-bar { display: none }
+
 /* §TERMS-MODAL — rebuild limpo */
 #terms-overlay{
   position:fixed;inset:0;
@@ -2488,7 +2942,7 @@ body.view-mobile .view-toggle{display:none!important}
   </div>
 </div>
 
-<div id="svc-intro-banner" style="padding:14px 16px 0;background:var(--surface);border:1px solid var(--border2);border-left:3px solid var(--gold);border-radius:3px;opacity:0;animation:fu .7s ease forwards .35s;position:relative;overflow:hidden">
+<div id="svc-intro-banner" style="padding:14px 16px 0;background:var(--surface);border:1px solid var(--border2);border-left:3px solid var(--gold);border-radius:16px;opacity:0;animation:fu .7s ease forwards .35s;position:relative;overflow:hidden">
   <div style="padding-bottom:14px">
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:7px">
       <svg width="15px" height="15px" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;user-select:none;-webkit-user-select:none;pointer-events:none"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="15" y2="16"/></svg>
@@ -2559,86 +3013,197 @@ body.view-mobile .view-toggle{display:none!important}
 
 <!-- ── Atendimento: prompt + tutorial + banner real num card único ── -->
 <style>
+/* ═══ §ATD-CARD — Dark Futuristic Glassmorphism ═══ */
 #atd-card{
   margin:14px 13px 2px;
-  background:var(--surface);
-  border:1px solid var(--border2);
-  border-left:3px solid var(--gold);
-  border-radius:3px;
+  background:rgba(8,8,10,0.52);
+  backdrop-filter:blur(22px) saturate(160%) brightness(0.9);
+  -webkit-backdrop-filter:blur(22px) saturate(160%) brightness(0.9);
+  border:1px solid rgba(255,255,255,0.07);
+  border-top:1px solid rgba(255,255,255,0.11);
+  border-radius:18px;
   position:relative;
   overflow:hidden;
   opacity:0;
   animation:fu .7s ease forwards .38s;
-  /* altura animada na transição */
   transition:height .42s cubic-bezier(.4,0,.2,1);
+  box-shadow:
+    0 8px 40px rgba(0,0,0,0.6),
+    0 1px 0 rgba(255,255,255,0.06) inset,
+    0 0 0 1px rgba(200,169,110,0.06) inset;
+  isolation:isolate;
 }
+/* Linha dourada animada no topo */
+#atd-card::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;height:1.5px;
+  background:linear-gradient(90deg,
+    transparent 0%,
+    rgba(200,169,110,0.18) 20%,
+    rgba(200,169,110,0.55) 50%,
+    rgba(200,169,110,0.18) 80%,
+    transparent 100%);
+  z-index:2;
+}
+/* Grão sutil como o svc-group-card */
+#atd-card::after{
+  content:'';
+  position:absolute;inset:0;border-radius:inherit;
+  pointer-events:none;z-index:0;
+  opacity:.10;mix-blend-mode:soft-light;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:200px 200px;
+}
+#atd-card > *{position:relative;z-index:1}
 
-.atd-face{
-  width:100%;
-  position:relative;
-}
+/* ── FACE base ── */
+.atd-face{width:100%;position:relative}
 .atd-face.atd-hidden{
-  position:absolute;
-  top:0; left:0; right:0;
-  visibility:hidden;
-  pointer-events:none;
-  opacity:0;
+  position:absolute!important;top:0;left:0;right:0;
+  height:0!important;overflow:hidden!important;
+  padding:0!important;margin:0!important;
+  visibility:hidden!important;pointer-events:none!important;opacity:0!important;
 }
 
-/* saindo: encolhe + blur + desloca pra cima */
+/* saindo */
 .atd-face.atd-leaving{
   animation:atd-leave .55s cubic-bezier(.4,0,.2,1) forwards;
   pointer-events:none;
 }
-/* entrando: cresce do blur + desloca de baixo */
+/* entrando */
 .atd-face.atd-entering{
   animation:atd-enter .72s cubic-bezier(.16,1,.3,1) forwards;
 }
-
 @keyframes atd-leave{
-  0%  { opacity:1; transform:translateY(0)    scale(1);    filter:blur(0px)  }
-  100%{ opacity:0; transform:translateY(-14px) scale(.96); filter:blur(8px)  }
+  0%  {opacity:1;transform:translateY(0)    scale(1);   filter:blur(0px)}
+  100%{opacity:0;transform:translateY(-14px)scale(.96); filter:blur(8px)}
 }
 @keyframes atd-enter{
-  0%  { opacity:0; transform:translateY(18px) scale(.96); filter:blur(10px) }
-  55% { filter:blur(0px) }
-  100%{ opacity:1; transform:translateY(0)   scale(1);   filter:blur(0px)  }
+  0%  {opacity:0;transform:translateY(18px)scale(.96);filter:blur(10px)}
+  55% {filter:blur(0px)}
+  100%{opacity:1;transform:translateY(0)  scale(1);  filter:blur(0px)}
+}
+
+/* ── Botões de seleção (tutorial + real) ── */
+.atd-loc-btn{
+  padding:11px 8px;
+  background:rgba(255,255,255,0.033);
+  border:1px solid rgba(255,255,255,0.09);
+  border-radius:10px;
+  color:rgba(140,140,140,.75);
+  font-family:'Space Mono',monospace;
+  font-size:11px;letter-spacing:1.5px;text-transform:uppercase;
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:5px;
+  min-height:76px;
+  position:relative;cursor:pointer;
+  transition:background .25s,border-color .25s,color .25s,box-shadow .25s,transform .18s;
+  -webkit-tap-highlight-color:transparent;
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  width:100%;
+  box-sizing:border-box;
+}
+.atd-loc-btn:hover{
+  background:rgba(200,169,110,0.07);
+  border-color:rgba(200,169,110,0.28);
+  color:rgba(200,185,140,.9);
+  box-shadow:0 0 20px rgba(200,169,110,0.07), inset 0 1px 0 rgba(255,255,255,0.06);
+  transform:translateY(-1px);
+}
+/* domicílio: active/selected */
+.atd-loc-btn.atd-active-dom{
+  background:rgba(200,169,110,0.12)!important;
+  border-color:rgba(200,169,110,0.55)!important;
+  color:var(--gold)!important;
+  box-shadow:0 0 28px rgba(200,169,110,0.14),inset 0 1px 0 rgba(255,255,255,0.08)!important;
+}
+/* bancada: active/selected */
+.atd-loc-btn.atd-active-ban{
+  background:rgba(200,169,110,0.08)!important;
+  border-color:rgba(200,169,110,0.35)!important;
+  color:var(--gold-dim)!important;
+  box-shadow:0 0 18px rgba(200,169,110,0.08),inset 0 1px 0 rgba(255,255,255,0.06)!important;
+}
+/* tut-btn pré-selecionado (highlight no tutorial) */
+.atd-loc-btn.tut-hl{
+  background:rgba(200,169,110,0.10);
+  border-color:rgba(200,169,110,0.45);
+  color:var(--gold);
+  box-shadow:0 0 22px rgba(200,169,110,0.10),inset 0 1px 0 rgba(255,255,255,0.07);
+}
+
+/* Linha separadora interna */
+.atd-inner-divider{
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.07) 40%,rgba(255,255,255,0.07) 60%,transparent);
+  margin:10px 0;
 }
 
 /* animações do tutorial */
-@keyframes tut-blink{ 0%,100%{opacity:1} 50%{opacity:0} }
-@keyframes tut-click{ 0%{transform:scale(1)} 40%{transform:scale(.82)} 100%{transform:scale(1)} }
-.tut-clicking{ animation:tut-click .22s ease forwards }
+@keyframes tut-blink{0%,100%{opacity:1}50%{opacity:0}}
+@keyframes tut-click{0%{transform:scale(1)}40%{transform:scale(.82)}100%{transform:scale(1)}}
+.tut-clicking{animation:tut-click .22s ease forwards}
+
+/* ── Header label da seção ── */
+.atd-section-label{
+  display:flex;align-items:center;gap:8px;margin-bottom:10px;
+}
+.atd-section-label span{
+  font-family:'Space Mono',monospace;font-size:13px;
+  letter-spacing:2px;text-transform:uppercase;
+  color:var(--gold);
+  text-shadow:0 0 10px rgba(200,169,110,0.3);
+}
+
+/* ── Skip / pular botão ── */
+.atd-skip-btn{
+  -webkit-tap-highlight-color:transparent;
+  background:none;
+  border:1px solid rgba(255,255,255,0.09);
+  border-radius:4px;
+  color:rgba(120,120,120,.65);
+  font-family:'Space Mono',monospace;font-size:10px;
+  letter-spacing:1.5px;text-transform:uppercase;
+  padding:4px 10px;cursor:pointer;
+  transition:border-color .2s,color .2s,background .2s;
+  backdrop-filter:blur(4px);
+}
+.atd-skip-btn:hover{
+  border-color:rgba(200,169,110,0.3);
+  color:var(--gold-dim);
+  background:rgba(200,169,110,0.05);
+}
 </style>
 
 <div id="atd-card">
 
   <!-- FACE 1: prompt "quer ver como funciona?" -->
   <div id="atd-face-prompt" class="atd-face" style="padding:20px 16px">
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+    <div class="atd-section-label">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;pointer-events:none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-      <span style="font-family:'Space Mono',monospace;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--gold)">Local de atendimento</span>
+      <span>Local de atendimento</span>
     </div>
     <p style="font-size:14px;font-weight:300;color:#bbb;line-height:1.65;margin-bottom:14px">Atendo na sua casa ou você pode deixar o equipamento na bancada. Quer ver como cada opção funciona?</p>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button onclick="atdStartTutorial()" style="-webkit-tap-highlight-color:transparent;padding:9px 18px;background:rgba(200,169,110,.12);border:1px solid var(--gold-dim);border-radius:3px;color:var(--gold);font-family:'Space Mono',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all .2s" onmouseenter="this.style.background='rgba(200,169,110,.2)'" onmouseleave="this.style.background='rgba(200,169,110,.12)'">Ver como funciona</button>
-      <button onclick="atdSkipToReal()" style="-webkit-tap-highlight-color:transparent;padding:9px 18px;background:none;border:1px solid var(--border2);border-radius:3px;color:var(--muted);font-family:'Space Mono',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all .2s" onmouseenter="this.style.borderColor='var(--border2)';this.style.color='var(--text)'" onmouseleave="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'">Pular</button>
+      <button onclick="atdStartTutorial()" style="-webkit-tap-highlight-color:transparent;padding:9px 18px;background:rgba(200,169,110,.12);border:1px solid var(--gold-dim);border-radius:4px;color:var(--gold);font-family:'Space Mono',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all .2s;box-shadow:0 0 14px rgba(200,169,110,0.08)" onmouseenter="this.style.background='rgba(200,169,110,.2)';this.style.boxShadow='0 0 22px rgba(200,169,110,0.16)'" onmouseleave="this.style.background='rgba(200,169,110,.12)';this.style.boxShadow='0 0 14px rgba(200,169,110,0.08)'">Ver como funciona</button>
+      <button onclick="atdSkipToReal()" class="atd-skip-btn" style="padding:9px 18px;font-size:11px">Pular</button>
     </div>
   </div>
 
   <!-- FACE 2: tutorial animado -->
   <div id="atd-face-tutorial" class="atd-face atd-hidden" style="padding:14px 16px 16px">
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+    <div class="atd-section-label">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;pointer-events:none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-      <span style="font-family:'Space Mono',monospace;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--gold)">Como funciona</span>
+      <span>Como funciona</span>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:14px;position:relative">
-      <div id="tut-btn-domicilio" style="padding:11px 8px;background:rgba(200,169,110,.08);border:1px solid var(--border2);border-radius:3px;color:var(--muted);font-family:'Space Mono',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:72px;transition:all .3s">
+      <div id="tut-btn-domicilio" class="atd-loc-btn">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
         <span>Na sua casa</span>
         <span id="tut-dom-sub" style="font-size:11px;color:var(--muted);letter-spacing:.5px;display:block;text-align:center;transition:color .3s">grátis até 1,5 km</span>
       </div>
-      <div id="tut-btn-bancada" style="padding:11px 8px;background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:3px;color:var(--muted);font-family:'Space Mono',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:72px;transition:all .3s">
+      <div id="tut-btn-bancada" class="atd-loc-btn">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
         <span>Deixar na bancada</span>
         <span id="tut-ban-sub" style="font-size:11px;color:var(--gold-dim);letter-spacing:.3px;display:block;text-align:center;transition:color .3s">disponível · ver detalhes</span>
@@ -2651,17 +3216,17 @@ body.view-mobile .view-toggle{display:none!important}
       <div id="tut-msg-left"  style="font-family:'Space Mono',monospace;font-size:12px;color:#aaa;letter-spacing:.5px;line-height:1.6"><span id="tut-msg-text"></span></div>
       <div id="tut-msg-right" style="font-family:'Space Mono',monospace;font-size:12px;color:#aaa;letter-spacing:.5px;line-height:1.6"></div>
     </div>
-    <button onclick="atdSkipToReal()" style="-webkit-tap-highlight-color:transparent;position:absolute;bottom:10px;right:12px;background:none;border:1px solid var(--border2);border-radius:2px;color:var(--muted);font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 9px;cursor:pointer;transition:all .2s" onmouseenter="this.style.borderColor='var(--gold-dim)';this.style.color='var(--gold)'" onmouseleave="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'">Skip</button>
+    <button onclick="atdSkipToReal()" class="atd-skip-btn" style="position:absolute;bottom:10px;right:12px">Skip</button>
   </div>
 
   <!-- FACE 3: banner real de seleção -->
   <div id="atendimento-banner" class="atd-face atd-hidden" style="padding:14px 16px 14px 13px">
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+    <div class="atd-section-label">
       <svg width="15px" height="15px" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;user-select:none;-webkit-user-select:none;pointer-events:none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-      <span style="font-family:'Space Mono',monospace;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--gold)">Local de atendimento</span>
+      <span>Local de atendimento</span>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;width:100%" id="atendimento-btns">
-      <button id="btn-domicilio" onclick="setAtendimento('domicilio')" style="width:100%;padding:11px 8px;background:rgba(200,169,110,.15);border:1px solid var(--gold);border-radius:3px;color:var(--gold);font-family:'Space Mono',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;position:relative;min-height:76px">
+      <button id="btn-domicilio" onclick="setAtendimento('domicilio')" class="atd-loc-btn atd-active-dom">
         <svg width="18px" height="18px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:block;user-select:none;-webkit-user-select:none;pointer-events:none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
         <span>Na sua casa</span>
         <span style="font-size:11px;color:var(--green);letter-spacing:.5px;white-space:nowrap;line-height:1.2;display:block;text-align:center">grátis até 1,5 km</span>
@@ -2669,7 +3234,7 @@ body.view-mobile .view-toggle{display:none!important}
           <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="user-select:none;-webkit-user-select:none;pointer-events:none"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
         </span>
       </button>
-      <button id="btn-tecnica" onclick="showBancadaUnavailable()" style="width:100%;padding:11px 8px;background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:3px;color:var(--muted);font-family:'Space Mono',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;position:relative;min-height:76px">
+      <button id="btn-tecnica" onclick="showBancadaUnavailable()" class="atd-loc-btn">
         <svg width="18px" height="18px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:block;user-select:none;-webkit-user-select:none;pointer-events:none"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
         <span>Deixar na bancada</span>
         <span style="font-size:11px;color:var(--gold-dim);letter-spacing:.5px;white-space:nowrap;line-height:1.2;display:block;text-align:center">disponível · ver detalhes</span>
@@ -2682,14 +3247,15 @@ body.view-mobile .view-toggle{display:none!important}
         <div style="display:flex;gap:7px;align-items:stretch">
           <input id="dist-input" type="text" placeholder="Digite seu bairro, rua ou CEP..."
             autocomplete="off"
-            style="flex:1;background:var(--surface);border:1px solid var(--border2);border-radius:3px;padding:9px 11px;font-family:'Space Mono',monospace;font-size:12px;color:var(--text);outline:none;min-width:0;transition:border-color .2s"
+            style="flex:1;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:6px;padding:9px 11px;font-family:'Space Mono',monospace;font-size:12px;color:var(--text);outline:none;min-width:0;transition:border-color .2s,box-shadow .2s;backdrop-filter:blur(4px)"
             onkeydown="distKeydown(event)"
             oninput="distAutocomplete(this.value)"
-            onfocus="this.style.borderColor='rgba(200,169,110,.5)'"
+            onfocus="this.style.borderColor='rgba(200,169,110,.5)';this.style.boxShadow='0 0 12px rgba(200,169,110,0.08)'"
+            onblur="this.style.borderColor='rgba(255,255,255,0.09)';this.style.boxShadow='none'"
           />
-          <button onclick="calcDist()" style="padding:9px 13px;background:rgba(200,169,110,.1);border:1px solid rgba(200,169,110,.3);border-radius:3px;color:var(--gold);font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1px;cursor:pointer;white-space:nowrap;-webkit-tap-highlight-color:transparent;transition:all .2s">CALCULAR</button>
+          <button onclick="calcDist()" style="padding:9px 13px;background:rgba(200,169,110,.1);border:1px solid rgba(200,169,110,.28);border-radius:6px;color:var(--gold);font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1px;cursor:pointer;white-space:nowrap;-webkit-tap-highlight-color:transparent;transition:all .2s;backdrop-filter:blur(4px)" onmouseenter="this.style.background='rgba(200,169,110,.18)';this.style.boxShadow='0 0 16px rgba(200,169,110,0.1)'" onmouseleave="this.style.background='rgba(200,169,110,.1)';this.style.boxShadow='none'">CALCULAR</button>
         </div>
-        <div id="dist-suggestions" style="display:none;position:absolute;top:100%;left:0;right:44px;background:#1a1a1a;border:1px solid rgba(200,169,110,.25);border-top:none;border-radius:0 0 4px 4px;z-index:999;max-height:200px;overflow-y:auto"></div>
+        <div id="dist-suggestions" style="display:none;position:absolute;top:100%;left:0;right:44px;background:rgba(14,14,16,0.95);backdrop-filter:blur(16px);border:1px solid rgba(200,169,110,.25);border-top:none;border-radius:0 0 6px 6px;z-index:999;max-height:200px;overflow-y:auto"></div>
       </div>
       <div id="dist-result" style="margin-top:8px;font-family:'Space Mono',monospace;font-size:12px;min-height:18px"></div>
     </div>
@@ -2714,20 +3280,21 @@ body.view-mobile .view-toggle{display:none!important}
   function morphTransition(fromFace, toFace, cb){
     var fromH = fromFace.offsetHeight;
 
-    /* mede altura da face destino sem mostrar */
+    /* trava altura ANTES de toFace entrar no fluxo, evitando flash de expansão */
+    card.style.height = fromH + 'px';
+
+    /* mede altura da face destino: remove height:0 temporariamente para scrollHeight ser real */
     toFace.classList.remove('atd-hidden');
+    toFace.style.height     = 'auto';
+    toFace.style.overflow   = '';
     toFace.style.visibility = 'hidden';
-    toFace.style.position   = 'relative';
-    var toH = toFace.offsetHeight;
+    toFace.style.position   = 'absolute';
+    toFace.style.top = '0'; toFace.style.left = '0'; toFace.style.right = '0';
+    var toH = toFace.scrollHeight;
 
     /* posiciona destino absolutamente sobre a face atual */
-    toFace.style.position = 'absolute';
-    toFace.style.top = '0'; toFace.style.left = '0'; toFace.style.right = '0';
     toFace.style.visibility = '';
     toFace.style.opacity = '0';
-
-    /* trava altura e anima suavemente para a nova */
-    card.style.height = fromH + 'px';
     requestAnimationFrame(function(){
       requestAnimationFrame(function(){
         card.style.height = toH + 'px';
@@ -2749,10 +3316,14 @@ body.view-mobile .view-toggle{display:none!important}
       fromFace.classList.add('atd-hidden');
       fromFace.style.position = '';
       fromFace.style.opacity  = '';
+      fromFace.style.height   = '';
+      fromFace.style.overflow = '';
       toFace.classList.remove('atd-entering');
       toFace.style.position = 'relative';
       toFace.style.top = ''; toFace.style.left = ''; toFace.style.right = '';
-      toFace.style.opacity = '';
+      toFace.style.opacity  = '';
+      toFace.style.height   = 'auto';
+      toFace.style.overflow = '';
       card.style.height = '';
       if(cb) cb();
     }, 900);
@@ -2858,13 +3429,9 @@ body.view-mobile .view-toggle{display:none!important}
 
   function hl(btn, on){
     if(on){
-      btn.style.background  = btn===btnDom ? 'rgba(200,169,110,.18)' : 'rgba(74,158,107,.12)';
-      btn.style.borderColor = btn===btnDom ? 'var(--gold)' : 'var(--green)';
-      btn.style.color       = btn===btnDom ? 'var(--gold)' : 'var(--green)';
+      btn.classList.add('tut-hl');
     } else {
-      btn.style.background  = 'rgba(255,255,255,.04)';
-      btn.style.borderColor = 'var(--border2)';
-      btn.style.color       = 'var(--muted)';
+      btn.classList.remove('tut-hl');
     }
   }
 
@@ -3155,34 +3722,59 @@ body.view-mobile .view-toggle{display:none!important}
   
   <div id="thermal-pad-warning" style="display:none;margin:0 13px 14px;opacity:0;transition:opacity .35s ease">
     <div style="
-      background:rgba(158,74,74,.07);
-      border:1px solid rgba(158,74,74,.28);
-      border-left:2px solid var(--red);
-      border-radius:3px;
-      padding:12px 13px;
+      position:relative;
+      background:linear-gradient(135deg,#1a0d0d 0%,#0d0a0a 60%,#120c0c 100%);
+      border:1px solid rgba(158,74,74,.22);
+      border-radius:6px;
+      padding:0;
+      overflow:hidden;
+      box-shadow:0 0 0 1px rgba(158,74,74,.06),0 4px 24px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.03);
     ">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;user-select:none;-webkit-user-select:none;pointer-events:none"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-        <span style="font-family:'Space Mono',monospace;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--red)">Atenção - Thermal Pads da GPU</span>
+      <!-- grid overlay -->
+      <div style="position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(158,74,74,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(158,74,74,.04) 1px,transparent 1px);background-size:28px 28px;border-radius:6px"></div>
+      <!-- top accent line -->
+      <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent 0%,rgba(158,74,74,.7) 30%,rgba(200,120,80,.9) 50%,rgba(158,74,74,.7) 70%,transparent 100%)"></div>
+      <!-- corner brackets -->
+      <div style="position:absolute;top:6px;left:6px;width:10px;height:10px;border-top:1px solid rgba(158,74,74,.6);border-left:1px solid rgba(158,74,74,.6);pointer-events:none"></div>
+      <div style="position:absolute;top:6px;right:6px;width:10px;height:10px;border-top:1px solid rgba(158,74,74,.6);border-right:1px solid rgba(158,74,74,.6);pointer-events:none"></div>
+      <div style="position:absolute;bottom:6px;left:6px;width:10px;height:10px;border-bottom:1px solid rgba(158,74,74,.6);border-left:1px solid rgba(158,74,74,.6);pointer-events:none"></div>
+      <div style="position:absolute;bottom:6px;right:6px;width:10px;height:10px;border-bottom:1px solid rgba(158,74,74,.6);border-right:1px solid rgba(158,74,74,.6);pointer-events:none"></div>
+
+      <!-- header bar -->
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 14px 8px;border-bottom:1px solid rgba(158,74,74,.15);background:rgba(158,74,74,.05)">
+        <div style="display:flex;align-items:center;gap:9px">
+          <div style="display:flex;align-items:center;justify-content:center;width:22px;height:22px;background:rgba(158,74,74,.15);border:1px solid rgba(158,74,74,.35);border-radius:4px;flex-shrink:0">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--red);font-weight:700">Atenção · Thermal Pads da GPU</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:5px;flex-shrink:0">
+          <div style="width:5px;height:5px;border-radius:50%;background:var(--red);box-shadow:0 0 5px var(--red);animation:tp-blink 1.6s ease-in-out infinite"></div>
+          <span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(158,74,74,.7)">AVISO</span>
+        </div>
       </div>
-      <p style="font-size:13.2px;color:#aaa;font-weight:300;line-height:1.75;margin-bottom:9px">
-        A desmontagem da GPU exige a remoção dos <strong style="color:var(--text);font-weight:400">thermal pads</strong> - mantas condutoras responsáveis pela dissipação térmica da VRAM e dos componentes de potência. Com o uso prolongado, esses materiais perdem elasticidade e podem se romper durante o processo de abertura.
-      </p>
-      <p style="font-size:13.2px;color:#aaa;font-weight:300;line-height:1.75;margin-bottom:10px">
-        Caso isso ocorra, a substituição é <strong style="color:var(--text);font-weight:400">imprescindível</strong> - operar sem eles compromete seriamente a estabilidade térmica do equipamento. Por se tratar de uma condição interna <strong style="color:var(--text);font-weight:400">impossível de avaliar externamente</strong> antes da abertura, esse custo eventual não está coberto pelo valor do serviço.
-      </p>
-      <div style="
-        background:rgba(0,0,0,.35);
-        border:1px solid var(--border2);
-        border-radius:2px;
-        padding:9px 11px;
-        display:flex;align-items:flex-start;gap:9px;
-      ">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;user-select:none;-webkit-user-select:none;pointer-events:none"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        <span style="font-family:'Space Mono',monospace;font-size:14.4px;color:var(--muted);line-height:1.65;letter-spacing:.2px">
-          Caso necessário, você será <span style="color:var(--text)">avisado imediatamente</span> antes de qualquer custo adicional. O valor cobrado corresponde exatamente ao material utilizado - thermal pads são vendidos por folha e o custo varia conforme a área necessária para cobrir os chips da sua placa. <span style="color:var(--text)">Tudo com total transparência e honestidade, sem nada omitido.</span>
+
+      <!-- body -->
+      <div style="padding:12px 14px 0">
+        <p style="font-size:13px;color:#999;font-weight:300;line-height:1.72;margin-bottom:8px">
+          A desmontagem da GPU exige a remoção dos <strong style="color:var(--text);font-weight:500">thermal pads</strong> — mantas condutoras responsáveis pela dissipação térmica da VRAM e dos componentes de potência. Com o uso prolongado, esses materiais perdem elasticidade e podem se romper durante o processo de abertura.
+        </p>
+        <p style="font-size:13px;color:#999;font-weight:300;line-height:1.72;margin-bottom:12px">
+          Caso isso ocorra, a substituição é <strong style="color:var(--text);font-weight:500">imprescindível</strong> — operar sem eles compromete seriamente a estabilidade térmica do equipamento. Por se tratar de uma condição interna <strong style="color:var(--text);font-weight:500">impossível de avaliar externamente</strong> antes da abertura, esse custo eventual não está coberto pelo valor do serviço.
+        </p>
+      </div>
+
+      <!-- info row -->
+      <div style="margin:0 14px 14px;background:rgba(0,0,0,.45);border:1px solid rgba(200,169,110,.12);border-radius:4px;padding:10px 12px;display:flex;align-items:flex-start;gap:10px;position:relative;overflow:hidden">
+        <div style="position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(180deg,transparent,var(--amber) 40%,var(--amber) 60%,transparent)"></div>
+        <div style="display:flex;align-items:center;justify-content:center;width:18px;height:18px;background:rgba(184,132,42,.12);border:1px solid rgba(184,132,42,.3);border-radius:3px;flex-shrink:0;margin-top:1px">
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <span style="font-size:12.5px;color:#777;line-height:1.68;letter-spacing:.1px">
+          Caso necessário, você será <span style="color:var(--amber);font-weight:500">avisado imediatamente</span> antes de qualquer custo adicional. O valor cobrado corresponde exatamente ao material utilizado — thermal pads são vendidos por folha e o custo varia conforme a área necessária para cobrir os chips da sua placa. <span style="color:#bbb;font-weight:400">Tudo com total transparência e honestidade, sem nada omitido.</span>
         </span>
       </div>
+      <style>@keyframes tp-blink{0%,100%{opacity:1}50%{opacity:.25}}</style>
     </div>
   </div>
 
@@ -3632,7 +4224,7 @@ body.view-mobile .view-toggle{display:none!important}
         <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>SSD + Fonte + Fans</li>
         <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Cable management básico</li>
         <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Teste de vídeo e boot</li>
-        <li class="spc-feat"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;pointer-events:none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span style="color:var(--muted)">Pasta térmica inclusa</span></li>
+        <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Pasta térmica inclusa</li>
         <li class="spc-feat"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;pointer-events:none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span style="color:var(--muted)">Windows + drivers</span></li>
         <li class="spc-feat"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;pointer-events:none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span style="color:var(--muted)">BIOS + XMP/EXPO</span></li>
         <li class="spc-feat"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;pointer-events:none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span style="color:var(--muted)">Benchmark completo</span></li>
@@ -3683,7 +4275,7 @@ body.view-mobile .view-toggle{display:none!important}
         <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Cable management completo</li>
         <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Pasta térmica inclusa</li>
         <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>BIOS + XMP/EXPO</li>
-        <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Windows + DDU limpo</li>
+        <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Windows + drivers atualizados</li>
         <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>OC/UV avançado CPU + GPU</li>
         <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>OC de memória avançado</li>
         <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>BIOS avançada + curva de fan</li>
@@ -3697,11 +4289,8 @@ body.view-mobile .view-toggle{display:none!important}
   <div id="sec-build" class="cmp-sec-head" style="padding-top:18px;opacity:0;animation:fu .55s ease forwards .33s">
     <div style="display:flex;align-items:center;gap:8px">
       <div class="cmp-sec-title" style="margin-bottom:0">Consultoria de <em>Build</em></div>
-      <button onclick="openBuildInfo()" aria-label="Saiba mais sobre Consultoria de Build" style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;background:rgba(200,169,110,.08);border:1px solid var(--gold-dim);border-radius:50%;cursor:pointer;flex-shrink:0;-webkit-tap-highlight-color:transparent;outline:none;transition:background .2s,border-color .2s" onmouseenter="this.style.background='rgba(200,169,110,.18)'" onmouseleave="this.style.background='rgba(200,169,110,.08)'">
-        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;user-select:none;-webkit-user-select:none"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      </button>
     </div>
-    <div class="cmp-sec-sub">ORIENTAÇÃO TÉCNICA · VOCÊ COMPRA · EU ORIENTO</div>
+    <div class="cmp-sec-sub">ORIENTAÇÃO TÉCNICA · PEÇAS E COMPATIBILIDADE</div>
   </div>
 
   
@@ -3719,7 +4308,6 @@ body.view-mobile .view-toggle{display:none!important}
         <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Custo-benefício analisado</li>
         <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Verificação de compatibilidade total</li>
         <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Orientação por WhatsApp</li>
-        <li class="spc-feat"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;pointer-events:none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span style="color:var(--muted)">Acompanhamento na compra ao vivo</span></li>
         <li class="spc-feat"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;pointer-events:none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span style="color:var(--muted)">Confirmação de anúncios e vendedores</span></li>
         <li class="spc-feat"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;pointer-events:none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span style="color:var(--muted)">Alerta de queda de preço (7 dias)</span></li>
         <li class="spc-feat"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;pointer-events:none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span style="color:var(--muted)">Aviso de promoção relâmpago (7 dias)</span></li>
@@ -3742,7 +4330,6 @@ body.view-mobile .view-toggle{display:none!important}
         <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Custo-benefício analisado</li>
         <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Verificação de compatibilidade total</li>
         <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Orientação por WhatsApp</li>
-        <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Acompanhamento na compra ao vivo</li>
         <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Confirmação de anúncios e vendedores</li>
         <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Alerta de queda de preço (7 dias)</li>
         <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Aviso de promoção relâmpago (7 dias)</li>
@@ -3754,162 +4341,6 @@ body.view-mobile .view-toggle{display:none!important}
   </div>
 
   
-  <!-- BUILD INFO OVERLAY -->
-  <style>
-  #build-info-overlay{position:fixed;top:0;left:0;right:0;bottom:0;width:100%;height:100%;z-index:5000;background:rgba(0,0,0,.76);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .48s ease;-webkit-tap-highlight-color:transparent;touch-action:none}
-  #build-info-card{width:calc(100% - 48px);max-width:540px;max-height:88vh;background:var(--surface);border:1px solid var(--border2);border-top:2px solid var(--gold-dim);border-radius:8px;display:flex;flex-direction:column;transform:scale(.94) translateY(14px);opacity:0;transition:transform .75s cubic-bezier(.22,1,.36,1),opacity .48s ease}
-  #build-info-card .bi-drag{display:none}
-  @keyframes bi-fade-up{
-    from{opacity:0;transform:translateY(13px)}
-    to{opacity:1;transform:translateY(0)}
-  }
-  #build-info-overlay.bi-open .bi-head,
-  #build-info-overlay.bi-open .bi-body-p,
-  #build-info-overlay.bi-open .acomp-grid,
-  #build-info-overlay.bi-open .bi-checklist,
-  #build-info-overlay.bi-open .bi-disclaimer,
-  #build-info-overlay.bi-open .bi-close-btn{
-    animation:bi-fade-up .42s cubic-bezier(.22,1,.36,1) both;
-  }
-  #build-info-overlay.bi-open .bi-head       {animation-delay:.22s}
-  #build-info-overlay.bi-open .bi-body-p     {animation-delay:.30s}
-  #build-info-overlay.bi-open .acomp-grid    {animation-delay:.38s}
-  #build-info-overlay.bi-open .bi-checklist  {animation-delay:.48s}
-  #build-info-overlay.bi-open .bi-disclaimer {animation-delay:.58s}
-  #build-info-overlay.bi-open .bi-close-btn  {animation-delay:.65s}
-  </style>
-  <div id="build-info-overlay" onclick="if(event.target===this)closeBuildInfo()">
-    <div id="build-info-card">
-      <div class="bi-drag" style="width:36px;height:3px;background:var(--border2);border-radius:2px;margin:14px auto 4px;flex-shrink:0"></div>
-      <div style="overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 16px 24px;flex:1">
-
-  <div style="margin:0 0 14px">
-
-    
-    <div style="background:var(--surface);border:1px solid rgba(200,169,110,.22);border-left:3px solid var(--gold);border-radius:3px;padding:12px 13px;margin-bottom:7px">
-      <div class="bi-head" style="display:flex;align-items:center;gap:7px;margin-bottom:10px">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;user-select:none;-webkit-user-select:none;pointer-events:none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        <span style="font-family:'Space Mono',monospace;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--gold)">Acompanhamento de compra</span>
-      </div>
-
-      <p class="bi-body-p" style="font-size:13px;color:#999;font-weight:300;line-height:1.65;margin-bottom:10px">
-        Eu fico ao seu lado <strong style="color:var(--text);font-weight:400">no momento exato da compra</strong> - presencialmente ou via WhatsApp/videochamada - orientando qual loja escolher, qual vendedor evitar, qual opção de frete vale a pena e quando confirmar o pedido.
-      </p>
-
-      
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px" class="acomp-grid">
-        <div style="background:rgba(0,0,0,.35);border:1px solid var(--border2);border-radius:2px;padding:8px 9px;text-align:center">
-          <div style="margin-bottom:4px;display:flex;justify-content:center"><svg width="18px" height="18px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:block;user-select:none;-webkit-user-select:none;pointer-events:none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-          <div style="font-family:'Space Mono',monospace;font-size:13.2px;color:var(--gold);letter-spacing:.8px;text-transform:uppercase;margin-bottom:3px">WhatsApp</div>
-          <div style="font-size:13px;color:#777;font-weight:300;line-height:1.4">Você compartilha a tela e eu oriento em tempo real</div>
-        </div>
-        <div style="background:rgba(0,0,0,.35);border:1px solid var(--border2);border-radius:2px;padding:8px 9px;text-align:center">
-          <div style="margin-bottom:4px;display:flex;justify-content:center"><svg width="18px" height="18px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:block;user-select:none;-webkit-user-select:none;pointer-events:none"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></div>
-          <div style="font-family:'Space Mono',monospace;font-size:13.2px;color:var(--gold);letter-spacing:.8px;text-transform:uppercase;margin-bottom:3px">Videochamada</div>
-          <div style="font-size:13px;color:#777;font-weight:300;line-height:1.4">Google Meet ou Zoom, vejo sua tela ao vivo</div>
-        </div>
-        <div style="background:rgba(0,0,0,.35);border:1px solid var(--border2);border-radius:2px;padding:8px 9px;text-align:center">
-          <div style="margin-bottom:4px;display:flex;justify-content:center"><svg width="18px" height="18px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:block;user-select:none;-webkit-user-select:none;pointer-events:none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
-          <div style="font-family:'Space Mono',monospace;font-size:13.2px;color:var(--gold);letter-spacing:.8px;text-transform:uppercase;margin-bottom:3px">Presencial</div>
-          <div style="font-size:13px;color:#777;font-weight:300;line-height:1.4">Vou até você ou você vem até mim</div>
-        </div>
-      </div>
-
-      
-      <div class="bi-checklist" style="background:rgba(0,0,0,.3);border:1px solid var(--border2);border-radius:2px;padding:9px 11px;margin-bottom:8px">
-        <div style="font-family:'Space Mono',monospace;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:7px">O que eu faço durante a compra</div>
-        <div style="display:flex;flex-direction:column;gap:5px">
-          <div style="display:flex;align-items:flex-start;gap:8px">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;user-select:none;-webkit-user-select:none;pointer-events:none"><polyline points="20 6 9 17 4 12"/></svg>
-            <span style="font-size:13px;color:#999;font-weight:300;line-height:1.45">Indico a loja mais confiável com o menor preço do dia</span>
-          </div>
-          <div style="display:flex;align-items:flex-start;gap:8px">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;user-select:none;-webkit-user-select:none;pointer-events:none"><polyline points="20 6 9 17 4 12"/></svg>
-            <span style="font-size:13px;color:#999;font-weight:300;line-height:1.45">Confirmo se a peça do anúncio é exatamente a da lista</span>
-          </div>
-          <div style="display:flex;align-items:flex-start;gap:8px">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;user-select:none;-webkit-user-select:none;pointer-events:none"><polyline points="20 6 9 17 4 12"/></svg>
-            <span style="font-size:13px;color:#999;font-weight:300;line-height:1.45">Oriento qual vendedor evitar e qual tem melhor reputação</span>
-          </div>
-          <div style="display:flex;align-items:flex-start;gap:8px">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;user-select:none;-webkit-user-select:none;pointer-events:none"><polyline points="20 6 9 17 4 12"/></svg>
-            <span style="font-size:13px;color:#999;font-weight:300;line-height:1.45">Digo se vale esperar frete grátis ou se compensa pagar</span>
-          </div>
-          <div style="display:flex;align-items:flex-start;gap:8px">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;user-select:none;-webkit-user-select:none;pointer-events:none"><polyline points="20 6 9 17 4 12"/></svg>
-            <span style="font-size:13px;color:#999;font-weight:300;line-height:1.45">Confirmo o clique final antes de você fechar o pedido</span>
-          </div>
-        </div>
-      </div>
-
-      
-      <div class="bi-disclaimer" style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
-        <div style="background:rgba(158,74,74,.22);border:1px solid rgba(158,74,74,.35);border-radius:2px;padding:8px 10px">
-          <div style="display:flex;align-items:center;gap:5px;margin-bottom:4px">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#c96d6d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;user-select:none;-webkit-user-select:none;pointer-events:none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-            <span style="font-family:'Space Mono',monospace;font-size:13.2px;font-weight:700;color:#c96d6d;letter-spacing:.5px">Não compro por você</span>
-          </div>
-          <div style="font-size:13px;color:#888;font-weight:300;line-height:1.5">A responsabilidade financeira é sempre sua. Zero risco pra ambos.</div>
-        </div>
-        <div style="background:rgba(74,158,107,.22);border:1px solid rgba(74,158,107,.35);border-radius:2px;padding:8px 10px">
-          <div style="display:flex;align-items:center;gap:5px;margin-bottom:4px">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#6dc993" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;user-select:none;-webkit-user-select:none;pointer-events:none"><polyline points="20 6 9 17 4 12"/></svg>
-            <span style="font-family:'Space Mono',monospace;font-size:13.2px;font-weight:700;color:#6dc993;letter-spacing:.5px">Oriento cada passo</span>
-          </div>
-          <div style="font-size:13px;color:#888;font-weight:300;line-height:1.5">Você tem segurança total sem abrir mão do conhecimento técnico.</div>
-        </div>
-      </div>
-
-      </div>
-
-    </div>
-
-        <!-- botão fechar -->
-        <button class="bi-close-btn" onclick="closeBuildInfo()" style="margin:0 16px 16px;padding:11px;width:calc(100% - 32px);background:rgba(200,169,110,.08);border:1px solid var(--gold-dim);border-radius:3px;color:var(--gold);font-family:'Space Mono',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;-webkit-tap-highlight-color:transparent;outline:none;transition:background .2s" onmouseenter="this.style.background='rgba(200,169,110,.18)'" onmouseleave="this.style.background='rgba(200,169,110,.08)'">Fechar</button>
-      </div>
-    </div>
-  </div>
-  <script>
-  function openBuildInfo(){
-    var o=document.getElementById('build-info-overlay');
-    var c=document.getElementById('build-info-card');
-    var isMobile=window.innerWidth<=599;
-    /* ancora na viewport atual para corrigir bug de scroll no mobile */
-    o.style.top=window.scrollY+'px';
-    o.style.height=window.innerHeight+'px';
-    o.style.opacity='1';
-    o.style.pointerEvents='all';
-    if(isMobile){
-      c.style.transform='translateY(0)';
-      c.style.opacity='1';
-    } else {
-      c.style.transform='scale(1) translateY(0)';
-      c.style.opacity='1';
-    }
-    document.body.style.overflow='hidden';
-    document.documentElement.style.overflow='hidden';
-    /* reset + trigger inner animations */
-    o.classList.remove('bi-open');
-    void o.offsetWidth;
-    o.classList.add('bi-open');
-  }
-  function closeBuildInfo(){
-    var o=document.getElementById('build-info-overlay');
-    var c=document.getElementById('build-info-card');
-    var isMobile=window.innerWidth<=599;
-    o.style.opacity='0';
-    o.style.pointerEvents='none';
-    o.classList.remove('bi-open');
-    if(isMobile){
-      c.style.transform='translateY(100%)';
-    } else {
-      c.style.transform='scale(.94) translateY(14px)';
-      c.style.opacity='0';
-    }
-    document.body.style.overflow='';
-    document.documentElement.style.overflow='';
-  }
-  </script>
   <div id="sec-formatacao"></div>
   <div id="sec-so"></div>
   <style>
@@ -4268,7 +4699,7 @@ body.view-mobile .view-toggle{display:none!important}
       <div class="spc-divider"></div>
             <ul class="spc-features">
         <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Windows limpo (ISO oficial)</li>
-        <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Drivers via DDU</li>
+        <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Drivers baixados manualmente</li>
         <li class="spc-feat"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;pointer-events:none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span style="color:var(--muted)">Backup: docs, fotos, desktop</span></li>
         <li class="spc-feat"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;pointer-events:none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span style="color:var(--muted)">Favoritos + saves + lista de programas</span></li>
         <li class="spc-feat"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;pointer-events:none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span style="color:var(--muted)">Relatório organizado</span></li>
@@ -4284,7 +4715,7 @@ body.view-mobile .view-toggle{display:none!important}
       <div class="spc-divider"></div>
             <ul class="spc-features">
         <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Windows limpo (ISO oficial)</li>
-        <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Drivers via DDU</li>
+        <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Drivers baixados manualmente</li>
         <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Backup: docs, fotos, desktop</li>
         <li class="spc-feat"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;pointer-events:none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span style="color:var(--muted)">Favoritos + saves + lista de programas</span></li>
         <li class="spc-feat"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;pointer-events:none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span style="color:var(--muted)">Relatório organizado</span></li>
@@ -4300,7 +4731,7 @@ body.view-mobile .view-toggle{display:none!important}
       <div class="spc-divider"></div>
             <ul class="spc-features">
         <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Windows limpo (ISO oficial)</li>
-        <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Drivers via DDU</li>
+        <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Drivers baixados manualmente</li>
         <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Backup: docs, fotos, desktop</li>
         <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Favoritos + saves + lista de programas</li>
         <li class="spc-feat spc-feat-gold"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Relatório organizado</li>
@@ -4327,7 +4758,7 @@ body.view-mobile .view-toggle{display:none!important}
       <div class="spc-divider"></div>
             <ul class="spc-features">
         <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Windows limpo (ISO oficial)</li>
-        <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Drivers via DDU + atualizados</li>
+        <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Drivers baixados manualmente para a versão mais recente</li>
         <li class="spc-feat"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;pointer-events:none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span style="color:var(--muted)">Relatório do que foi removido</span></li>
         <li class="spc-feat"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;pointer-events:none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span style="color:var(--muted)">Debloat simples (apps nativos inúteis)</span></li>
         <li class="spc-feat"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;pointer-events:none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span style="color:var(--muted)">Remoção de telemetria básica</span></li>
@@ -4346,7 +4777,7 @@ body.view-mobile .view-toggle{display:none!important}
       <div class="spc-divider"></div>
             <ul class="spc-features">
         <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Windows limpo (ISO oficial)</li>
-        <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Drivers via DDU + atualizados</li>
+        <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Drivers baixados manualmente para a versão mais recente</li>
         <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Relatório do que foi removido</li>
         <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Debloat simples (apps nativos inúteis)</li>
         <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Remoção de telemetria básica</li>
@@ -4365,7 +4796,7 @@ body.view-mobile .view-toggle{display:none!important}
       <div class="spc-divider"></div>
             <ul class="spc-features">
         <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Windows limpo (ISO oficial)</li>
-        <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Drivers via DDU + atualizados</li>
+        <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Drivers baixados manualmente para a versão mais recente</li>
         <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Relatório do que foi removido</li>
         <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Debloat simples (apps nativos inúteis)</li>
         <li class="spc-feat"><span class="kt-check-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="20 6 9 17 4 12"/></svg></span>Remoção de telemetria básica</li>
@@ -5126,7 +5557,7 @@ body.view-mobile .view-toggle{display:none!important}
       <div class="rdm-item-status"><span style="display:flex;flex-direction:column;gap:2px;align-items:center"><span style="display:block;width:5px;height:5px;border-radius:2px;background:#222222"></span><span style="display:block;width:5px;height:5px;border-radius:2px;background:#222222"></span><span style="display:block;width:5px;height:5px;border-radius:2px;background:#222222"></span><span style="display:block;width:5px;height:5px;border-radius:2px;background:#222222"></span><span style="display:block;width:5px;height:5px;border-radius:2px;background:#7ab84a"></span><span style="display:block;width:5px;height:5px;border-radius:2px;background:#4a9e6b"></span></span></div>
       <div class="rdm-item-body">
         <div class="rdm-item-name">Formatação Completa</div>
-        <div class="rdm-item-desc">Windows limpo + drivers DDU. Com backup simples ou completo com relatório.</div>
+        <div class="rdm-item-desc">Windows limpo + drivers baixados manualmente. Com backup simples ou completo com relatório.</div>
       </div>
       <div class="rdm-item-right">
         <span class="rdm-item-price">R$&nbsp;80–155</span>
@@ -5893,7 +6324,7 @@ const SEARCH_DATA = [
   {name:'Tunagem de Peças',price:'R$ 10/peça',tags:'tunagem tunar overclocking oc undervolt uv xmp expo performance extração máxima hardware ram cpu gpu ssd',section:'#sec-instalacao',planId:'plan-instalacao-2',page:'page-main',cat:'Hardware',svcPanel:''},
   {name:'Montagem Simples',price:'R$ 150',tags:'montagem simples montar pc computador peças gabinete fonte placa mãe setup básico boot teste vídeo',section:'#sec-montagem',planId:'plan-montagem-0',page:'page-main',cat:'Hardware',svcPanel:''},
   {name:'Montagem Avançada',price:'R$ 200',tags:'montagem avançada montar pc computador pasta térmica windows drivers bios xmp expo benchmark temperatura',section:'#sec-montagem',planId:'plan-montagem-1',page:'page-main',cat:'Hardware',svcPanel:''},
-  {name:'Montagem Premium',price:'R$ 250',tags:'montagem premium completa oc uv overclock undervolt memoria curva fan ddu benchmark completo otimização ssd hdd',section:'#sec-montagem',planId:'plan-montagem-2',page:'page-main',cat:'Hardware',svcPanel:''},
+  {name:'Montagem Premium',price:'R$ 250',tags:'montagem premium completa oc uv overclock undervolt memoria curva fan drivers atualizados benchmark completo otimização ssd hdd',section:'#sec-montagem',planId:'plan-montagem-2',page:'page-main',cat:'Hardware',svcPanel:''},
   {name:'Consultoria de Build',price:'R$ 10+',tags:'build setup orçamento peças custo benefício montar pc escolher componente',section:'#sec-build',planId:'plan-build-0',page:'page-main',cat:'Consultoria',svcPanel:''},
   {name:'Formatação Windows',price:'R$ 80+',tags:'formatar formatação reinstalar windows sistema lento vírus travando backup dados',section:'#sec-formatacao',planId:'plan-format-0',page:'page-main',cat:'Sistema',svcPanel:'format'},
   {name:'Formatação com Backup Simples',price:'R$ 120+',tags:'backup dados fotos documentos formatar windows salvar arquivos',section:'#sec-formatacao',planId:'plan-format-1',page:'page-main',cat:'Sistema',svcPanel:'format'},
@@ -6809,7 +7240,7 @@ function pastaSelectLocal(el){
       priceEl.textContent = 'Incluso';
       priceEl.style.color = 'var(--green)';
     } else {
-      priceEl.textContent = '+R\u00a0' + extra;
+      priceEl.textContent = '+R$\u00a0' + extra;
       priceEl.style.color = '';
     }
   });
@@ -7015,23 +7446,19 @@ function setAtendimento(mode){
   }
 
   if(mode === 'domicilio'){
-    btnD.style.background = 'rgba(200,169,110,.15)';
-    btnD.style.border = '1px solid var(--gold)';
-    btnD.style.color = 'var(--gold)';
-    btnT.style.background = 'rgba(255,255,255,.04)';
-    btnT.style.border = '1px solid var(--border2)';
-    btnT.style.color = 'var(--muted)';
+    btnD.classList.add('atd-active-dom');    btnD.classList.remove('atd-active-ban');
+    btnT.classList.remove('atd-active-dom'); btnT.classList.remove('atd-active-ban');
+    btnD.style.background=''; btnD.style.border=''; btnD.style.color='';
+    btnT.style.background=''; btnT.style.border=''; btnT.style.color='';
     info.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-.12em;flex-shrink:0"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> <span style="color:var(--text)">Atendimento domiciliar</span> - taxa de deslocamento conforme distância. Até 1,5 km é <span style="color:var(--green)">gratuito</span>.';
     info.style.color = 'var(--muted)';
     var dcw = document.getElementById('dist-calc-wrap');
     if(dcw) dcw.style.display = 'block';
   } else {
-    btnT.style.background = 'rgba(74,158,107,.15)';
-    btnT.style.border = '1px solid var(--green)';
-    btnT.style.color = 'var(--green)';
-    btnD.style.background = 'rgba(255,255,255,.04)';
-    btnD.style.border = '1px solid var(--border2)';
-    btnD.style.color = 'var(--muted)';
+    btnT.classList.add('atd-active-ban');    btnT.classList.remove('atd-active-dom');
+    btnD.classList.remove('atd-active-dom'); btnD.classList.remove('atd-active-ban');
+    btnD.style.background=''; btnD.style.border=''; btnD.style.color='';
+    btnT.style.background=''; btnT.style.border=''; btnT.style.color='';
     info.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-.12em;flex-shrink:0"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg> <span style="color:var(--green)">Desconto de R$&nbsp;20 por serviço</span> - você entrega o equipamento na bancada e busca quando estiver pronto. Cidade Nova 5, Ananindeua&nbsp;PA.';
     info.style.color = 'var(--green)';
     var dcw = document.getElementById('dist-calc-wrap');
@@ -8421,6 +8848,32 @@ function closeSvcInfo(){ document.getElementById('svc-info-overlay').classList.r
 </script>
 
 <script>
+
+
+function dsSidebarToggle(){
+  var s = document.getElementById('dt-sidebar');
+  var collapsed = s.classList.contains('ds-collapsed');
+  if(collapsed){
+    s.classList.remove('ds-collapsed');
+    s.classList.add('ds-expanded');
+    document.body.classList.add('ds-sidebar-expanded');
+    localStorage.setItem('ds-sidebar','expanded');
+  } else {
+    s.classList.remove('ds-expanded');
+    s.classList.add('ds-collapsed');
+    document.body.classList.remove('ds-sidebar-expanded');
+    localStorage.setItem('ds-sidebar','collapsed');
+  }
+}
+(function(){
+  var saved = localStorage.getItem('ds-sidebar');
+  var s = document.getElementById('dt-sidebar');
+  if(s && saved === 'expanded'){
+    s.classList.remove('ds-collapsed');
+    s.classList.add('ds-expanded');
+    document.body.classList.add('ds-sidebar-expanded');
+  }
+})();
 
 function dsToggleGroup(groupId){
   var g = document.getElementById(groupId);
@@ -10584,6 +11037,362 @@ function closeWIP(){
 })();
 </script>
 
+<script id="kt-sidebar-orbs">
+/* ── Sidebar: large blurry slow golden orbs ── */
+(function(){
+  var canvas = document.getElementById('sidebar-orbs-canvas');
+  if(!canvas) return;
+  var ctx = canvas.getContext('2d');
+
+  /* Blur grande + screen blend. SEM contrast (contrast cria banding).
+     Saturação moderada para a cor não "estourar" em faixas. */
+  canvas.style.filter = 'blur(56px) saturate(1.45)';
+  canvas.style.mixBlendMode = 'screen';
+  canvas.style.willChange = 'transform';
+
+  var COLORS = [
+    {h:36,  s:96, l:40},
+    {h:33,  s:96, l:38},
+    {h:30,  s:95, l:36},
+    {h:39,  s:94, l:42},
+  ];
+
+  function rng(a,b){ return a + Math.random()*(b-a); }
+  function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+  var W=0, H=0;
+
+  function resize(){
+    var sidebar = document.getElementById('dt-sidebar');
+    W = sidebar ? (sidebar.getBoundingClientRect().width || 220) : 220;
+    H = window.innerHeight;
+    canvas.width  = W;
+    canvas.height = H;
+  }
+
+  /* ── Orb ── */
+  function Orb(){
+    var c = pick(COLORS);
+    this.x    = rng(0, W);
+    this.y    = rng(0, H);
+    this.r    = rng(90, 180);
+    this.vx   = rng(-0.018, 0.018);   /* muito lento */
+    this.vy   = rng(-0.012, 0.012);
+    this.hue  = c.h + rng(-6,6);
+    this.sat  = c.s;
+    this.lit  = c.l;
+    this.alpha    = 0;
+    this.alphaMax = rng(0.22, 0.38);   /* mais brilho no screen blend */
+    this.state    = 'in';
+    this.holdLeft = rng(800, 2000);    /* fica visível por muito tempo */
+    this.speed    = rng(0.0005, 0.0012); /* fade extremamente lento */
+    this.wander = rng(0, Math.PI*2);
+    this.wanderSpeed = rng(0.0008, 0.002);
+  }
+  Orb.prototype.update = function(){
+    this.wander += this.wanderSpeed;
+    this.x += this.vx + Math.sin(this.wander) * 0.04;
+    this.y += this.vy + Math.cos(this.wander * 0.7) * 0.03;
+
+    var pad = this.r * 0.4;
+    if(this.x < -pad) this.x = W + pad;
+    if(this.x > W + pad) this.x = -pad;
+    if(this.y < -pad) this.y = H + pad;
+    if(this.y > H + pad) this.y = -pad;
+
+    if(this.state === 'in'){
+      this.alpha += this.speed;
+      if(this.alpha >= this.alphaMax){ this.alpha = this.alphaMax; this.state = 'hold'; }
+    } else if(this.state === 'hold'){
+      this.holdLeft--;
+      if(this.holdLeft <= 0) this.state = 'out';
+    } else {
+      this.alpha -= this.speed;
+      if(this.alpha <= 0){ this.alpha = 0; this.respawn(); }
+    }
+  };
+  Orb.prototype.respawn = function(){
+    var c = pick(COLORS);
+    this.x    = rng(0, W);
+    this.y    = rng(0, H);
+    this.r    = rng(90, 180);
+    this.vx   = rng(-0.018, 0.018);
+    this.vy   = rng(-0.012, 0.012);
+    this.hue  = c.h + rng(-6,6);
+    this.sat  = c.s;
+    this.lit  = c.l;
+    this.alphaMax = rng(0.22, 0.38);
+    this.holdLeft = rng(800, 2000);
+    this.speed = rng(0.0005, 0.0012);
+    this.state = 'in';
+    this.wander = rng(0, Math.PI*2);
+    this.wanderSpeed = rng(0.0008, 0.002);
+  };
+  Orb.prototype.draw = function(){
+    if(this.alpha <= 0) return;
+    var grd = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.r);
+    var h = this.hue, s = this.sat, l = this.lit, a = this.alpha;
+    /* Many stops with a smooth ease-out curve eliminate visible banding */
+    grd.addColorStop(0.00, 'hsla('+h+','+s+'%,'+l+'%,'+(a).toFixed(4)+')');
+    grd.addColorStop(0.12, 'hsla('+h+','+s+'%,'+(l-3)+'%,'+(a*0.88).toFixed(4)+')');
+    grd.addColorStop(0.25, 'hsla('+h+','+s+'%,'+(l-6)+'%,'+(a*0.72).toFixed(4)+')');
+    grd.addColorStop(0.40, 'hsla('+h+','+s+'%,'+(l-9)+'%,'+(a*0.54).toFixed(4)+')');
+    grd.addColorStop(0.55, 'hsla('+h+','+s+'%,'+(l-12)+'%,'+(a*0.37).toFixed(4)+')');
+    grd.addColorStop(0.70, 'hsla('+h+','+s+'%,'+(l-15)+'%,'+(a*0.22).toFixed(4)+')');
+    grd.addColorStop(0.84, 'hsla('+h+','+s+'%,'+(l-18)+'%,'+(a*0.10).toFixed(4)+')');
+    grd.addColorStop(0.94, 'hsla('+h+','+s+'%,'+(l-20)+'%,'+(a*0.03).toFixed(4)+')');
+    grd.addColorStop(1.00, 'hsla('+h+','+s+'%,'+(l-22)+'%,0)');
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.r, 0, Math.PI*2);
+    ctx.fillStyle = grd;
+    ctx.fill();
+  };
+
+  /* stagger initial states so not all orbs fade in at once */
+  var orbs = [];
+  function init(){
+    resize();
+    var count = Math.floor(rng(1, 4)); /* 1 to 3 */
+    for(var i = 0; i < count; i++){
+      var o = new Orb();
+      if(Math.random() > 0.4){
+        o.alpha = rng(0, o.alphaMax);
+        o.state = Math.random() > 0.5 ? 'hold' : 'in';
+      }
+      orbs.push(o);
+    }
+  }
+
+  function loop(){
+    ctx.clearRect(0, 0, W, H);
+    for(var i = 0; i < orbs.length; i++){
+      orbs[i].update();
+      orbs[i].draw();
+    }
+    requestAnimationFrame(loop);
+  }
+
+  /* ── Dithering overlay: subtle static noise quebra o banding ── */
+  function buildNoise(){
+    var sidebar = document.getElementById('dt-sidebar');
+    if(!sidebar) return;
+    var n = document.createElement('div');
+    n.id = 'sidebar-orbs-noise';
+    n.setAttribute('aria-hidden','true');
+    var c = document.createElement('canvas');
+    var size = 90;
+    c.width = size; c.height = size;
+    var nctx = c.getContext('2d');
+    var img = nctx.createImageData(size, size);
+    for(var p = 0; p < img.data.length; p += 4){
+      var v = (Math.random() * 255) | 0;
+      img.data[p] = img.data[p+1] = img.data[p+2] = v;
+      img.data[p+3] = 6; /* opacidade bem baixa - dithering fino */
+    }
+    nctx.putImageData(img, 0, 0);
+    n.style.cssText =
+      'position:absolute;inset:0;z-index:0;pointer-events:none;'+
+      'background-image:url('+c.toDataURL()+');background-repeat:repeat;'+
+      'mix-blend-mode:soft-light;opacity:.22;';
+    /* inserir logo após o canvas dos orbs */
+    if(canvas.nextSibling) sidebar.insertBefore(n, canvas.nextSibling);
+    else sidebar.appendChild(n);
+  }
+
+  window.addEventListener('resize', resize);
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', function(){ init(); buildNoise(); loop(); });
+  } else {
+    init(); buildNoise(); loop();
+  }
+})();
+</script>
+
+<style id="kt-svc-group-card">
+/* ═══ Card-container que agrupa os 3 planos (básico/avançado/premium) ═══ */
+.svc-group-card{
+  position:relative;
+  margin:10px 13px 18px;
+  padding:8px 6px 12px;
+  border-radius:20px;
+  background:rgba(10,10,12,0.34);
+  border:1px solid rgba(255,255,255,0.08);
+  backdrop-filter:blur(20px) saturate(135%);
+  -webkit-backdrop-filter:blur(20px) saturate(135%);
+  box-shadow:0 10px 44px rgba(0,0,0,0.5),
+             inset 0 1px 0 rgba(255,255,255,0.07),
+             inset 0 0 60px rgba(0,0,0,0.25);
+  overflow:hidden;
+  isolation:isolate;
+}
+@media(min-width:600px){
+  .svc-group-card{
+    margin:14px 20px 22px;
+    padding:14px 14px 16px;
+    border-radius:26px;
+  }
+}
+/* Granulado bem sutil via SVG turbulence */
+.svc-group-card::after{
+  content:'';
+  position:absolute;inset:0;
+  border-radius:inherit;
+  pointer-events:none;
+  z-index:0;
+  opacity:.12;
+  mix-blend-mode:soft-light;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:200px 200px;
+}
+/* Conteúdo acima do granulado */
+.svc-group-card > *{position:relative;z-index:1}
+/* Zera as margens internas do row e do título (a margem agora é do wrapper) */
+.svc-group-card .svc-plan-row{margin-left:0!important;margin-right:0!important;margin-top:2px!important}
+.svc-group-card .cmp-sec-head{padding-left:14px!important;padding-right:14px!important}
+@media(min-width:600px){
+  .svc-group-card .cmp-sec-head{padding-left:8px!important;padding-right:8px!important}
+}
+</style>
+
+<script id="kt-bg-orbs">
+/* ── Orbs de fundo (atrás do conteúdo, vistos borrados pelo card) ── */
+(function(){
+  var canvas = document.getElementById('bg-orbs-canvas');
+  if(!canvas) return;
+  var ctx = canvas.getContext('2d');
+
+  /* ── posicionamento dinâmico: o canvas vai DENTRO da svc-group-card
+     da limpeza, não no viewport global ── */
+  canvas.style.position='absolute';
+  canvas.style.left='-80px';
+  canvas.style.top='-80px';
+  canvas.style.zIndex='0';
+  canvas.style.pointerEvents='none';
+  canvas.style.filter='blur(64px) saturate(1.5)';
+  canvas.style.willChange='transform';
+
+  var COLORS=[
+    {h:36,s:96,l:42},{h:30,s:96,l:38},{h:22,s:95,l:36},
+    {h:40,s:94,l:44},{h:16,s:94,l:34}
+  ];
+  function rng(a,b){return a+Math.random()*(b-a);}
+  function pick(a){return a[Math.floor(Math.random()*a.length)];}
+
+  var W=0,H=0;
+
+  /* redimensiona relativo ao container pai, não ao viewport */
+  function resize(){
+    var cont=canvas.parentNode;
+    var cW=(cont&&cont!==document.body)?cont.offsetWidth:window.innerWidth;
+    var cH=(cont&&cont!==document.body)?cont.offsetHeight:window.innerHeight;
+    W=cW+160; H=cH+160;
+    canvas.style.width=W+'px';
+    canvas.style.height=H+'px';
+    canvas.width=W; canvas.height=H;
+  }
+
+  /* move o canvas para dentro da svc-group-card da limpeza */
+  function attachToSection(){
+    var row=document.querySelector('.svc-plan-row[data-svc-row="limpeza"]');
+    var grp=row?row.closest('.svc-group-card'):null;
+    /* fallback: usar #sec-limpeza se svc-group-card ainda não existe */
+    if(!grp){
+      var secEl=document.getElementById('sec-limpeza');
+      grp=secEl?secEl.parentNode:null;
+    }
+    if(grp){
+      grp.style.position='relative';
+      grp.style.overflow='hidden';
+      grp.insertBefore(canvas,grp.firstChild);
+      canvas.style.display='block';
+      resize();
+    }
+    window.addEventListener('resize',resize);
+  }
+
+  function Orb(){this.spawn(true);}
+  Orb.prototype.spawn=function(init){
+    var c=pick(COLORS);
+    this.x=rng(0,W); this.y=rng(0,H);
+    this.r=rng(160,340);
+    this.vx=rng(-0.02,0.02); this.vy=rng(-0.016,0.016);
+    this.hue=c.h+rng(-6,6); this.sat=c.s; this.lit=c.l;
+    this.alpha=init?rng(0,0.14):0;
+    this.alphaMax=rng(0.12,0.22);
+    this.state=init&&Math.random()>0.4?'hold':'in';
+    this.holdLeft=rng(700,1800);
+    this.speed=rng(0.0006,0.0014);
+    this.wander=rng(0,Math.PI*2);
+    this.wanderSpeed=rng(0.0008,0.0018);
+  };
+  Orb.prototype.update=function(){
+    this.wander+=this.wanderSpeed;
+    this.x+=this.vx+Math.sin(this.wander)*0.05;
+    this.y+=this.vy+Math.cos(this.wander*0.7)*0.04;
+    var pad=this.r*0.5;
+    if(this.x<-pad)this.x=W+pad; if(this.x>W+pad)this.x=-pad;
+    if(this.y<-pad)this.y=H+pad; if(this.y>H+pad)this.y=-pad;
+    if(this.state==='in'){this.alpha+=this.speed;if(this.alpha>=this.alphaMax){this.alpha=this.alphaMax;this.state='hold';}}
+    else if(this.state==='hold'){this.holdLeft--;if(this.holdLeft<=0)this.state='out';}
+    else{this.alpha-=this.speed;if(this.alpha<=0){this.alpha=0;this.spawn(false);}}
+  };
+  Orb.prototype.draw=function(){
+    if(this.alpha<=0)return;
+    var h=this.hue,s=this.sat,l=this.lit,a=this.alpha;
+    var g=ctx.createRadialGradient(this.x,this.y,0,this.x,this.y,this.r);
+    g.addColorStop(0.00,'hsla('+h+','+s+'%,'+l+'%,'+a.toFixed(4)+')');
+    g.addColorStop(0.30,'hsla('+h+','+s+'%,'+(l-4)+'%,'+(a*0.62).toFixed(4)+')');
+    g.addColorStop(0.60,'hsla('+h+','+s+'%,'+(l-9)+'%,'+(a*0.30).toFixed(4)+')');
+    g.addColorStop(0.82,'hsla('+h+','+s+'%,'+(l-14)+'%,'+(a*0.10).toFixed(4)+')');
+    g.addColorStop(1.00,'hsla('+h+','+s+'%,'+(l-18)+'%,0)');
+    ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
+  };
+
+  var orbs=[];
+  function init(){
+    for(var i=0;i<4;i++) orbs.push(new Orb());
+  }
+  function loop(){
+    ctx.clearRect(0,0,W,H);
+    for(var i=0;i<orbs.length;i++){orbs[i].update();orbs[i].draw();}
+    requestAnimationFrame(loop);
+  }
+  function setup(){
+    /* setTimeout(0) garante que kt-svc-group-wrapper já rodou e criou .svc-group-card */
+    setTimeout(function(){
+      attachToSection();
+      init();
+      loop();
+    },0);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',setup);
+  else setup();
+})();
+</script>
+
+<script id="kt-svc-group-wrapper">
+/* ── Envolve cada (título + row de planos) num card-container ── */
+(function(){
+  function wrapGroups(){
+    var rows=document.querySelectorAll('.svc-plan-row');
+    rows.forEach(function(row){
+      if(row.closest('.svc-group-card'))return;
+      var prev=row.previousElementSibling;
+      var includeTitle=prev&&prev.classList.contains('cmp-sec-head');
+      var wrap=document.createElement('div');
+      wrap.className='svc-group-card';
+      var anchor=includeTitle?prev:row;
+      anchor.parentNode.insertBefore(wrap,anchor);
+      if(includeTitle)wrap.appendChild(prev);
+      wrap.appendChild(row);
+    });
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',wrapGroups);
+  else wrapGroups();
+})();
+</script>
+
 </body>
 </html>
 <style>
@@ -11475,6 +12284,70 @@ function closeWIP(){
   background:radial-gradient(circle at top right, rgba(200,169,110,.15) 0%, transparent 70%)!important;
   pointer-events:none!important;
   z-index:0!important;
+}
+</style>
+<style id="kt-premium-jump-fix">
+/* ── Fix: kt-card-jump nos cards premium ──
+   Especificidade (0,3,0) > (0,2,0) do kt-premium-final,
+   garantindo que gold-pulse não sobrescreva kt-card-jump-seq */
+.svc-plan-card.spc-tier-premium.kt-card-jump,
+.svc-plan-card.spc-featured.spc-tier-premium.kt-card-jump{
+  animation:kt-card-jump-seq .68s cubic-bezier(.16,1,.3,1) var(--kt-jump-delay,0ms) both!important;
+  transform-origin:center!important;
+  opacity:1!important;
+  position:relative!important;
+  z-index:5!important;
+}
+</style>
+<style id="kt-glassmorphism-sidebar">
+/* ── Glassmorphism @supports fallback ── */
+@supports not (backdrop-filter: blur(1px)) {
+  #dt-sidebar,
+  .side-menu{
+    background:rgba(8,8,10,0.96)!important;
+  }
+}
+
+/* ── Glassmorphism: ds-nav fundo transparente para não bloquear vidro ── */
+#dt-sidebar .ds-nav{
+  background:transparent!important;
+}
+#dt-sidebar .ds-mode{
+  background:transparent!important;
+}
+.vm-bar{
+  background:transparent!important;
+}
+#dt-sidebar .ds-bottom{
+  background:transparent!important;
+}
+
+/* ── Hover dos botões: caixa flutuante arredondada (::after), fundo do botão transparente ── */
+#dt-sidebar .ds-btn:hover{
+  background:transparent!important;
+  border-left-color:transparent!important;
+}
+#dt-sidebar .ds-btn.active{
+  background:transparent!important;
+  border-left-color:transparent!important;
+  border-left-width:0!important;
+}
+@media(hover:hover){
+  #dt-sidebar .ds-btn:hover::after{
+    opacity:1!important;transform:scale(1)!important;
+  }
+}
+#dt-sidebar .ds-btn.active::after{
+  opacity:1!important;transform:scale(1)!important;
+  background:linear-gradient(90deg,
+    rgba(0,0,0,0) 0%,
+    rgba(50,36,10,0.22) 42%,
+    rgba(140,100,34,0.52) 78%,
+    rgba(210,178,118,0.88) 100%)!important;
+  border:none!important;
+}
+.ds-sub-btn:hover{
+  background:rgba(255,255,255,0.035)!important;
 }
 </style>
 <script>
