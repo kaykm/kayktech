@@ -11064,10 +11064,19 @@ function closeWIP(){
 
   function resize(){
     var sidebar = document.getElementById('dt-sidebar');
-    W = sidebar ? (sidebar.getBoundingClientRect().width || 220) : 220;
+    var w = 0;
+    if(sidebar){
+      w = sidebar.getBoundingClientRect().width;
+      if(!w) w = sidebar.offsetWidth;
+    }
+    W = w || 220;
     H = window.innerHeight;
     canvas.width  = W;
     canvas.height = H;
+    /* reposicionar orbs que ficaram fora dos novos limites */
+    for(var i = 0; i < orbs.length; i++){
+      if(orbs[i].x > W) orbs[i].x = rng(0, W);
+    }
   }
 
   /* ── Orb ── */
@@ -11199,12 +11208,19 @@ function closeWIP(){
     else sidebar.appendChild(n);
   }
 
+  function start(){ init(); buildNoise(); loop(); }
+
   window.addEventListener('resize', resize);
 
+  /* double rAF garante que o browser terminou o layout antes de ler
+     as dimensões do sidebar — evita o bug onde os orbs nascem em
+     largura incorreta no primeiro load */
   if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', function(){ init(); buildNoise(); loop(); });
+    document.addEventListener('DOMContentLoaded', function(){
+      requestAnimationFrame(function(){ requestAnimationFrame(start); });
+    });
   } else {
-    init(); buildNoise(); loop();
+    requestAnimationFrame(function(){ requestAnimationFrame(start); });
   }
 })();
 </script>
