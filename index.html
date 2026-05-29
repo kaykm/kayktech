@@ -2343,8 +2343,24 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
     </defs>
     <ellipse cx="960" cy="540" rx="240" ry="240" fill="white" fill-opacity="0.04" filter="url(#kt_orb_blur)"/>
     <rect x="0" y="0" width="1920" height="1080" fill="url(#kt_grid)" mask="url(#kt_mask)"/>
-    <!-- Animated highlights — injected by JS, inherit radial fade via mask -->
-    <g id="kt_highlights" mask="url(#kt_mask)"></g>
+    <!-- CSS-animated highlight cells — no JS, works on any host -->
+    <g mask="url(#kt_mask)">
+      <rect style="animation:kt-pulse 7.3s ease-in-out -1.4s infinite;--pk:.11" x="644"  y="105.5" width="79" height="79" fill="white"/>
+      <rect style="animation:kt-pulse 5.8s ease-in-out -3.7s infinite;--pk:.13" x="960"  y="263.5" width="79" height="79" fill="white"/>
+      <rect style="animation:kt-pulse 8.1s ease-in-out -5.9s infinite;--pk:.09" x="486"  y="342.5" width="79" height="79" fill="white"/>
+      <rect style="animation:kt-pulse 6.4s ease-in-out -2.1s infinite;--pk:.10" x="1276" y="184.5" width="79" height="79" fill="white"/>
+      <rect style="animation:kt-pulse 9.2s ease-in-out -4.8s infinite;--pk:.12" x="802"  y="421.5" width="79" height="79" fill="white"/>
+      <rect style="animation:kt-pulse 5.5s ease-in-out -0.8s infinite;--pk:.08" x="328"  y="184.5" width="79" height="79" fill="white"/>
+      <rect style="animation:kt-pulse 7.8s ease-in-out -6.3s infinite;--pk:.11" x="1118" y="342.5" width="79" height="79" fill="white"/>
+      <rect style="animation:kt-pulse 6.7s ease-in-out -3.2s infinite;--pk:.09" x="1434" y="263.5" width="79" height="79" fill="white"/>
+      <rect style="animation:kt-pulse 8.5s ease-in-out -1.7s infinite;--pk:.10" x="565"  y="500.5" width="79" height="79" fill="white"/>
+      <rect style="animation:kt-pulse 5.2s ease-in-out -4.4s infinite;--pk:.12" x="1039" y="184.5" width="79" height="79" fill="white"/>
+      <rect style="animation:kt-pulse 7.0s ease-in-out -2.6s infinite;--pk:.09" x="723"  y="342.5" width="79" height="79" fill="white"/>
+      <rect style="animation:kt-pulse 6.2s ease-in-out -5.5s infinite;--pk:.10" x="1197" y="421.5" width="79" height="79" fill="white"/>
+      <rect style="animation:kt-pulse 8.8s ease-in-out -0.3s infinite;--pk:.11" x="407"  y="421.5" width="79" height="79" fill="white"/>
+      <rect style="animation:kt-pulse 5.9s ease-in-out -7.1s infinite;--pk:.13" x="881"  y="263.5" width="79" height="79" fill="white"/>
+      <rect style="animation:kt-pulse 7.5s ease-in-out -3.9s infinite;--pk:.08" x="1355" y="342.5" width="79" height="79" fill="white"/>
+    </g>
   </svg>
 </div>
 <script>
@@ -2361,77 +2377,10 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
   document.addEventListener('ktPerfChanged', applyPerf);
 })();
 </script>
-<script id="kt-bg-cells">
-(function(){
-  var hlGroup = document.getElementById('kt_highlights');
-  if(!hlGroup) return;
-  try{ var p = localStorage.getItem('kt_perf_mode')||''; if(p==='leve'||p==='ultra-leve') return; }catch(e){}
-
-  var CELL   = 79;
-  var BASE_X = 12;
-  var BASE_Y = 26.5;
-  var COLS   = Math.floor((1920 - BASE_X) / CELL);
-  var ROWS   = Math.floor((1080 - BASE_Y) / CELL);
-  var MAX_HL = 8;
-  var NS     = 'http://www.w3.org/2000/svg';
-  var cells  = [];
-
-  function spawnCell() {
-    if(cells.length >= MAX_HL) return;
-    var col = Math.floor(Math.random() * COLS);
-    var row = Math.floor(Math.random() * ROWS);
-    var el  = document.createElementNS(NS, 'rect');
-    el.setAttribute('x',            BASE_X + col * CELL);
-    el.setAttribute('y',            BASE_Y + row * CELL);
-    el.setAttribute('width',        CELL);
-    el.setAttribute('height',       CELL);
-    el.setAttribute('fill',         'white');
-    el.setAttribute('fill-opacity', '0');
-    hlGroup.appendChild(el);
-    cells.push({
-      el:      el,
-      fadeIn:  900 + Math.random() * 600,
-      hold:    1400 + Math.random() * 2200,
-      fadeOut: 900 + Math.random() * 600,
-      maxOp:   0.07 + Math.random() * 0.10,
-      birthTs: null,
-      dead:    false
-    });
-  }
-
-  function frame(ts) {
-    for(var i = cells.length - 1; i >= 0; i--) {
-      var c = cells[i];
-      if(c.birthTs === null) c.birthTs = ts;
-      var age = ts - c.birthTs;
-      var op;
-      if(age < c.fadeIn) {
-        op = (age / c.fadeIn) * c.maxOp;
-      } else if(age < c.fadeIn + c.hold) {
-        op = c.maxOp;
-      } else {
-        var e = age - c.fadeIn - c.hold;
-        op = Math.max(0, 1 - e / c.fadeOut) * c.maxOp;
-        if(e >= c.fadeOut) c.dead = true;
-      }
-      c.el.setAttribute('fill-opacity', Math.max(0, op).toFixed(3));
-      if(c.dead){ hlGroup.removeChild(c.el); cells.splice(i,1); }
-    }
-    requestAnimationFrame(frame);
-  }
-
-  /* Seed a few cells staggered so they don't all appear at once */
-  for(var s = 0; s < 5; s++) setTimeout(spawnCell, s * 600 + Math.random() * 400);
-
-  /* Ongoing: spawn a new cell whenever there's room */
-  (function sched(){
-    spawnCell();
-    setTimeout(sched, 700 + Math.random() * 1100);
-  })();
-
-  requestAnimationFrame(frame);
-})();
-</script>
+<style>
+@keyframes kt-pulse{0%,100%{opacity:0}45%,55%{opacity:var(--pk,.10)}}
+#bg-spline-wrap svg g rect{opacity:0}
+</style>
 
 <aside id="dt-sidebar" class="ds-collapsed">
 
