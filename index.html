@@ -43,7 +43,6 @@ Economias aplicadas: comentários removidos, CSS unido e compactado legível, SV
     var perf  = localStorage.getItem('kt_perf_mode') || (isMobileDefault ? 'leve' : 'medio');
     if(!validTheme[theme]) theme = 'escuro';
     if(!validPerf[perf]) perf = (isMobileDefault ? 'leve' : 'medio');
-    if(perf === 'ultra-leve' && !isMobileDefault) perf = 'medio';
     document.documentElement.classList.add('kt-theme-' + theme, 'kt-perf-' + perf);
     document.documentElement.setAttribute('data-kt-theme', theme);
     document.documentElement.setAttribute('data-kt-perf', perf);
@@ -807,26 +806,12 @@ body.view-desktop .vm-menu-bar{display:none!important}
 body.view-mobile .mode-switch-wrap{display:flex!important;justify-content:flex-end!important;padding:7px 12px 7px 13px!important;gap:0!important}
 body.view-mobile .mode-switch-wrap .mode-label,body.view-mobile .mode-switch-wrap .mode-switch{display:none!important}
 body.view-mobile .menu-btn{display:flex!important;margin-left:auto!important}
-/* ── Carrossel: view-mobile em janela larga (sem sidebar) ── */
-body.view-mobile .svc-plan-row{display:flex!important;flex-direction:row!important;overflow-x:auto!important;scroll-snap-type:x proximity!important;-webkit-overflow-scrolling:touch!important;gap:10px!important;margin:0 0 6px!important;padding:32px 13px 36px!important;scrollbar-width:none!important;-ms-overflow-style:none!important;align-items:stretch!important;background:transparent!important}
-body.view-mobile .svc-plan-row::-webkit-scrollbar{display:none!important}
-body.view-mobile .svc-plan-row .svc-plan-card{flex:0 0 min(82vw,360px)!important;width:min(82vw,360px)!important;min-width:min(82vw,360px)!important;max-width:min(82vw,360px)!important;scroll-snap-align:center!important;transform:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
-body.view-mobile .svc-plan-row .svc-plan-card:last-child{margin-right:13px!important}
-body.view-mobile .svc-plan-row .svc-plan-card:first-child{margin-left:0!important}
-body.view-mobile .svc-plan-row .spc-featured,body.view-mobile .svc-plan-row .spc-tier-premium{box-shadow:0 2px 16px rgba(200,169,110,.12),0 0 0 1px rgba(200,169,110,.18)!important}
-body.view-mobile .svc-plan-row.has-selection{background:transparent!important}
-/* ── Carrossel desktop estreito: JS aplica .kt-carousel-active ── */
-.svc-plan-row.kt-carousel-active{display:flex!important;flex-direction:row!important;overflow-x:auto!important;scroll-snap-type:x proximity!important;-webkit-overflow-scrolling:touch!important;gap:10px!important;margin:0 20px 6px!important;padding:4px 2px 16px!important;scrollbar-width:none!important;-ms-overflow-style:none!important;align-items:stretch!important}
-.svc-plan-row.kt-carousel-active::-webkit-scrollbar{display:none!important}
-.svc-plan-row.kt-carousel-active .svc-plan-card{flex:0 0 var(--kt-card-w,220px)!important;width:var(--kt-card-w,220px)!important;min-width:var(--kt-card-w,220px)!important;max-width:var(--kt-card-w,220px)!important;scroll-snap-align:center!important;transform:none!important}
-/* ── Dots globais (fora do @media(max-width:599px)) ── */
-.svc-plan-dots{display:none;justify-content:center;gap:6px;margin:2px 0 10px;height:8px}
-.svc-plan-dot{width:6px;height:6px;border-radius:50%;background:var(--border2);transition:background .25s,transform .25s;flex-shrink:0}
-.svc-plan-dot.active{background:var(--green);transform:scale(1.25)}
-body.view-mobile .svc-plan-dots,.svc-plan-row.kt-carousel-active+.svc-plan-dots{display:flex!important}
 @media(max-width:599px){.orc-glass,.orc-shell,.orc-chip,.orc-note,.orc-cta-secondary,#terms-modal,#terms-overlay,#bancada-modal-overlay,.cmp-disc-tag::after,.disc-tooltip,.bm-icon,.tm-icon,.tm-table,.tm-footer{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
 .orc-glass{background:rgba(26,26,26,.92)!important}
 .orc-shell{background:rgba(14,14,14,.96)!important}
+#terms-modal{background:rgba(17,17,17,.97)!important}
+html.kt-theme-noturno #terms-modal{background:rgba(9,11,16,.97)!important}
+html.kt-theme-branco #terms-modal{background:rgba(249,244,234,.99)!important}
 html.kt-theme-noturno .orc-glass{background:rgba(20,27,42,.94)!important}
 html.kt-theme-noturno .orc-shell{background:rgba(9,13,22,.96)!important}
 html.kt-theme-branco .orc-glass{background:rgba(255,250,240,.96)!important}
@@ -851,18 +836,6 @@ body{padding-left:0!important;font-size:inherit!important}
 .info-banner{margin:6px 13px}
 .footer{padding:14px 16px;margin-top:10px}
 .legend-wrap,body.view-mobile .legend-wrap{display:none!important}
-.svc-plan-row{display:flex!important;flex-direction:row!important;overflow-x:auto!important;scroll-snap-type:x proximity!important;-webkit-overflow-scrolling:touch!important;gap:10px!important;margin:0 0 6px!important;padding:32px 13px 36px!important;scrollbar-width:none!important;-ms-overflow-style:none!important;align-items:stretch!important;background:transparent!important}
-.svc-plan-row::-webkit-scrollbar{display:none!important}
-.svc-plan-row .svc-plan-card{flex:0 0 82vw!important;width:82vw!important;min-width:82vw!important;max-width:82vw!important;scroll-snap-align:center!important;transform:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
-.svc-plan-row .svc-plan-card:last-child{margin-right:13px!important}
-.svc-plan-row .svc-plan-card:first-child{margin-left:0!important}
-.svc-plan-dots{display:flex;justify-content:center;gap:6px;margin:2px 0 10px;height:8px}
-.svc-plan-dot{width:6px;height:6px;border-radius:50%;background:var(--border2);transition:background .25s,transform .25s;flex-shrink:0}
-.svc-plan-dot.active{background:var(--green);transform:scale(1.25)}
-.svc-plan-row .spc-featured,.svc-plan-row .spc-tier-premium{box-shadow:0 2px 16px rgba(200,169,110,.12),0 0 0 1px rgba(200,169,110,.18)!important}
-.svc-plan-row .svc-plan-card.orc-selected,.svc-plan-row .svc-plan-card.spc-selected{box-shadow:0 2px 14px rgba(200,169,110,.15),0 0 0 1px rgba(200,169,110,.30)!important;transform:none!important}
-.svc-plan-row.has-selection::before{display:none}
-.svc-plan-row.has-selection{background:transparent;border-radius:6px}
 .cmp-wrap{border-radius:10px!important;margin:0 13px 14px}
 .cmp-table{min-width:300px}
 .cmp-sec-title{font-size:18px!important}
@@ -1115,6 +1088,8 @@ html.kt-perf-ultra-leve .svc-plan-card,html.kt-perf-ultra-leve .svc-group-card,h
 .kt-setup-row-head{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:18px 0 8px}
 .kt-setup-row-head span{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:1.8px;text-transform:uppercase;color:var(--muted)}
 .kt-setup-matrix{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.kt-setup-perf-section .kt-setup-matrix{grid-template-columns:repeat(2,minmax(0,1fr))}
+.kt-setup-perf-section .kt-setup-row-head{grid-template-columns:1fr auto}
 .kt-setup-card{min-width:0;min-height:104px;padding:13px 9px 12px;border-radius:16px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--muted);background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.09);box-shadow:inset 0 1px 0 rgba(255,255,255,.06);transition:transform .18s cubic-bezier(.22,1,.36,1),border-color .2s,background .2s,color .2s,box-shadow .2s;position:relative;overflow:hidden}
 .kt-setup-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .2s;background:radial-gradient(circle at 50% 0%,rgba(200,169,110,.18),transparent 62%)}
 .kt-setup-card:hover{transform:translateY(-2px);color:var(--text);border-color:rgba(200,169,110,.28)}
@@ -1133,11 +1108,9 @@ html.kt-perf-ultra-leve .svc-plan-card,html.kt-perf-ultra-leve .svc-group-card,h
 .kt-setup-card[data-kt-pref-value="leve"].active{color:#67d295;border-color:rgba(103,210,149,.5);background:rgba(74,158,107,.10)}
 .kt-setup-card[data-kt-pref-value="ultra-leve"].active{color:#7cf0a7;border-color:rgba(124,240,167,.55);background:rgba(74,158,107,.16)}
 .kt-setup-card[data-kt-pref-value="pesado"].active{color:#e0bd77;border-color:rgba(224,189,119,.55);background:rgba(200,169,110,.12)}
-.kt-setup-card.kt-perf-mobile-only{display:none!important}
 body.view-mobile .kt-setup-card.kt-perf-mobile-only{display:flex!important}
 @media(max-width:599px){.kt-setup-card.kt-perf-mobile-only{display:flex!important}
 }
-body.view-desktop .kt-setup-card.kt-perf-mobile-only{display:none!important}
 body.view-mobile #kt-setup-overlay.manual .kt-setup-perf-section .kt-setup-matrix{grid-template-columns:repeat(2,minmax(0,1fr))}
 @media(max-width:720px){#kt-setup-overlay.manual .kt-setup-perf-section .kt-setup-matrix{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
@@ -1741,17 +1714,9 @@ to{opacity:1;transform:translateY(0)}
 .kt-check-circle.kt-pop-13{animation:kt-check-pop .46s cubic-bezier(.22,1,.36,1) 390ms both}
 .svc-plan-card.spc-tier-advanced:not(.spc-selected):not(.orc-selected) .kt-check-circle,.svc-plan-card.spc-featured.spc-tier-advanced:not(.spc-selected):not(.orc-selected) .kt-check-circle{background:#e09500 !important;box-shadow:none !important}
 .svc-plan-card.spc-tier-premium:not(.spc-selected):not(.orc-selected) .kt-check-circle,.svc-plan-card.spc-featured.spc-tier-premium:not(.spc-selected):not(.orc-selected) .kt-check-circle{background:#e8b840 !important;box-shadow:none !important}
-@media(max-width:599px){.svc-plan-row{scroll-snap-type:x proximity!important;scroll-padding-inline:13px!important;overscroll-behavior-x:auto!important}
-.svc-plan-row.is-dragging{scroll-snap-type:none!important;scroll-behavior:auto!important}
-.svc-plan-row .svc-plan-card{scroll-snap-stop:normal!important}
-}
-body.view-mobile .svc-plan-row{scroll-snap-type:x proximity!important;scroll-padding-inline:13px!important;overscroll-behavior-x:auto!important}
-body.view-mobile .svc-plan-row.is-dragging{scroll-snap-type:none!important;scroll-behavior:auto!important}
-body.view-mobile .svc-plan-row .svc-plan-card{scroll-snap-stop:normal!important}
 html.kt-perf-ultra-leve #bg-constellation,html.kt-perf-ultra-leve #sidebar-orbs-canvas,html.kt-perf-ultra-leve #bg-orbs-canvas{display:none!important;opacity:0!important}
 html.kt-perf-ultra-leve .svc-plan-row{scroll-behavior:auto!important}
-html.kt-perf-ultra-leve .svc-plan-row.is-dragging{scroll-snap-type:none!important}
-body.view-desktop .kt-setup-card[data-kt-pref-value="ultra-leve"]{display:none!important}
+body.view-desktop .kt-setup-card[data-kt-pref-value="ultra-leve"]{display:flex!important}
 body.view-mobile .kt-setup-card[data-kt-pref-value="ultra-leve"]{display:flex!important}
 @media(max-width:599px){.kt-setup-card[data-kt-pref-value="ultra-leve"]{display:flex!important}
 }
@@ -2091,25 +2056,12 @@ html.kt-theme-branco .side-menu #ktVisualCurrentMobile{color:rgba(55,40,15,.65)!
 html.kt-theme-branco .side-menu a[href*="wa.me"]{background:rgba(47,137,87,.10)!important;border-color:rgba(47,137,87,.28)!important;color:#1f7040!important}
 @supports not (backdrop-filter:blur(1px)){html.kt-theme-branco .side-menu{background:rgba(255,249,238,.98)!important}
 }
-@media(max-width:599px){.svc-plan-row{display:flex!important;flex-direction:row!important;overflow-x:auto!important;scroll-snap-type:x proximity!important;-webkit-overflow-scrolling:touch!important;gap:10px!important;margin:0 0 6px!important;padding:32px 13px 36px!important;scrollbar-width:none!important;-ms-overflow-style:none!important;align-items:stretch!important;touch-action:pan-y!important;overscroll-behavior-x:contain!important;cursor:grab;background:transparent!important}
-.svc-plan-row.is-dragging{scroll-snap-type:none!important;scroll-behavior:auto!important;cursor:grabbing!important}
-.svc-plan-row::-webkit-scrollbar{display:none!important}
-.svc-plan-row .svc-plan-card{flex:0 0 min(82vw,380px)!important;width:min(82vw,380px)!important;min-width:min(82vw,380px)!important;max-width:min(82vw,380px)!important;scroll-snap-align:center!important;touch-action:pan-y!important}
-}
-body.view-mobile .svc-plan-row{display:flex!important;flex-direction:row!important;overflow-x:auto!important;scroll-snap-type:x proximity!important;-webkit-overflow-scrolling:touch!important;gap:10px!important;margin:0 0 6px!important;padding:32px 13px 36px!important;scrollbar-width:none!important;-ms-overflow-style:none!important;align-items:stretch!important;touch-action:pan-y!important;overscroll-behavior-x:contain!important;cursor:grab;background:transparent!important}
-body.view-mobile .svc-plan-row.is-dragging{scroll-snap-type:none!important;scroll-behavior:auto!important;cursor:grabbing!important}
-body.view-mobile .svc-plan-row::-webkit-scrollbar{display:none!important}
-body.view-mobile .svc-plan-row .svc-plan-card{flex:0 0 min(82vw,380px)!important;width:min(82vw,380px)!important;min-width:min(82vw,380px)!important;max-width:min(82vw,380px)!important;scroll-snap-align:center!important;touch-action:pan-y!important}
-body.view-mobile .svc-plan-row.has-selection{background:transparent!important}
-body.view-mobile .svc-plan-dots{display:flex!important;justify-content:center;gap:6px;margin:2px 0 10px;height:8px}
-body.view-mobile .svc-plan-dot{width:6px;height:6px;border-radius:50%;background:var(--border2);transition:background .25s,transform .25s;flex-shrink:0}
-body.view-mobile .svc-plan-dot.active{background:var(--green);transform:scale(1.25)}
 html.kt-perf-ultra-leve #bg-constellation,html.kt-perf-ultra-leve #sidebar-orbs-canvas,html.kt-perf-ultra-leve #bg-orbs-canvas{display:none!important;opacity:0!important}
 html.kt-perf-ultra-leve *,html.kt-perf-ultra-leve *::before,html.kt-perf-ultra-leve *::after{animation-duration:.001ms!important;animation-delay:0s!important;transition-duration:.001ms!important;transition-delay:0s!important;filter:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;text-shadow:none!important}
 html.kt-perf-ultra-leve .svc-plan-card,html.kt-perf-ultra-leve .svc-plan-card:hover,html.kt-perf-ultra-leve .svc-plan-card.spc-featured,html.kt-perf-ultra-leve .svc-group-card,html.kt-perf-ultra-leve .uniq-svc-card,html.kt-perf-ultra-leve .side-menu,html.kt-perf-ultra-leve #dt-sidebar,html.kt-perf-ultra-leve .cmp-wrap,html.kt-perf-ultra-leve .bk-card,html.kt-perf-ultra-leve .tip-item,html.kt-perf-ultra-leve .info-banner{box-shadow:none!important;transform:none!important}
-body.view-desktop .kt-setup-card[data-kt-pref-value="ultra-leve"]{display:none!important}
+body.view-desktop .kt-setup-card[data-kt-pref-value="ultra-leve"]{display:flex!important}
 body.view-mobile .kt-setup-card[data-kt-pref-value="ultra-leve"]{display:flex!important}
-@media(max-width:599px){body:not(.view-desktop) .kt-setup-card[data-kt-pref-value="ultra-leve"]{display:flex!important}
+@media(max-width:599px){.kt-setup-card[data-kt-pref-value="ultra-leve"]{display:flex!important}
 }
 html.kt-perf-ultra-leve .hero-tag,html.kt-perf-ultra-leve .hero-title,html.kt-perf-ultra-leve .hero-desc,html.kt-perf-ultra-leve .hero-loc,html.kt-perf-ultra-leve .hero-chips,html.kt-perf-ultra-leve .view-toggle,html.kt-perf-ultra-leve .legend-wrap,html.kt-perf-ultra-leve .bk-card,html.kt-perf-ultra-leve .tip-item,html.kt-perf-ultra-leve .rdm-tag,html.kt-perf-ultra-leve .rdm-title,html.kt-perf-ultra-leve .rdm-sub,html.kt-perf-ultra-leve .rdm-stats,html.kt-perf-ultra-leve .rdm-phase,html.kt-perf-ultra-leve .rdm-tip,html.kt-perf-ultra-leve .rdm-chart-wrap,html.kt-perf-ultra-leve .svc-plan-row,html.kt-perf-ultra-leve .svc-switcher-wrap,html.kt-perf-ultra-leve .page.page-active,html.kt-perf-ultra-leve #atd-card,html.kt-perf-ultra-leve .hero-meta-item{opacity:1!important;transform:none!important}
 
@@ -2738,9 +2690,9 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
 <div class="kt-setup-perf-section">
 <div class="kt-setup-row-head" aria-hidden="true"><span>Desempenho</span><span></span><span></span></div>
 <div class="kt-setup-matrix">
-<button class="kt-setup-card kt-perf-mobile-only" type="button" data-kt-pref-kind="perf" data-kt-pref-value="ultra-leve" aria-label="Desempenho ultra leve — apenas mobile">
+<button class="kt-setup-card" type="button" data-kt-pref-kind="perf" data-kt-pref-value="ultra-leve" aria-label="Desempenho ultra leve">
 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14.5c3.7-6.8 8.7-10.2 15-10.2-1.1 6.2-4.6 10.9-10.6 14.1"/><path d="M7.2 17.8c-1.1.5-2.2.9-3.2 1.2.3-1 .7-2.1 1.2-3.2"/><path d="M10 14l4-4"/></svg>
-<strong>Ultra leve</strong><small>Apenas mobile</small>
+<strong>Ultra leve</strong><small>Máx. desempenho</small>
 </button>
 <button class="kt-setup-card" type="button" data-kt-pref-kind="perf" data-kt-pref-value="leve" aria-label="Desempenho leve">
 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.2 4.8c-4.5-.6-8.3.6-11.3 3.6-2.3 2.3-3.4 5-3.6 8.2"/><path d="M20.2 4.8c-.3 4-1.7 7.3-4.2 9.8-2.5 2.5-5.8 3.9-9.8 4.2"/><path d="M8 16l8-8"/></svg>
@@ -2789,20 +2741,10 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
     }
   }
 
-  function isUltraPerfAllowed(){
-    try{
-      var savedView = localStorage.getItem('kt_view_mode');
-      var mobileUA = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || '');
-      var mobileScreen = window.matchMedia && window.matchMedia('(max-width: 599px)').matches;
-      return (document.body && document.body.classList.contains('view-mobile')) || savedView === 'mobile' || (!savedView && (mobileScreen || mobileUA));
-    }catch(e){
-      return window.innerWidth < 600;
-    }
-  }
+  function isUltraPerfAllowed(){ return true; }
 
   function normalizePerfForCurrentView(perf){
     if(!validPerf[perf]) return 'medio';
-    if(perf === 'ultra-leve' && !isUltraPerfAllowed()) return 'medio';
     return perf;
   }
 
@@ -3213,16 +3155,6 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
 
     document.body.classList.remove('view-mobile','view-desktop');
     document.body.classList.add('view-' + mode);
-    /* Desktop switch: clean any lingering drag inline styles on plan rows */
-    if(mode === 'desktop'){
-      document.querySelectorAll('.svc-plan-row').forEach(function(r){
-        r.style.removeProperty('overflow-x');
-        r.style.removeProperty('scroll-snap-type');
-        r.style.removeProperty('scroll-behavior');
-        r.style.cursor = '';
-        r.style.userSelect = '';
-      });
-    }
 
     if(save !== false){
       try{
@@ -4675,27 +4607,28 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
 </button>
 </div>
 
-<div class="svc-cycle-row">
-<button class="svc-cycle-btn" id="svc-cycle-btn" onclick="cycleSvc()" aria-label="Alternar serviço">
-<span id="svc-cycle-icon" style="flex-shrink:0;display:flex;align-items:center">
-<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;user-select:none"><use href="#kt-icon-5"></use></svg>
-</span>
-<span class="svc-cycle-label-clip">
-<span id="svc-cycle-label">Formatação</span>
-</span>
-<span class="svc-cycle-dots">
-<span class="scd scd-active" id="scd-0"></span>
-<span class="scd" id="scd-1"></span>
-<span class="scd" id="scd-2"></span>
-</span>
-<svg class="svc-cycle-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;user-select:none"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg>
+<div class="svc-glass-switcher" role="tablist" aria-label="Selecionar serviço">
+<div class="sgs-track">
+<button class="sgs-tab active" id="sgs-format" data-svc="format" role="tab" aria-selected="true" onclick="switchSvc('format',this)" style="-webkit-tap-highlight-color:transparent;outline:none">
+<span class="sgs-icon-wrap sgs-icon-format"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;user-select:none;display:block"><use href="#kt-icon-5"></use></svg></span>
+<span class="sgs-label">Formatação</span>
+</button>
+<button class="sgs-tab" id="sgs-so" data-svc="so" role="tab" aria-selected="false" onclick="switchSvc('so',this)" style="-webkit-tap-highlight-color:transparent;outline:none">
+<span class="sgs-icon-wrap sgs-icon-so"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;user-select:none;display:block"><use href="#kt-icon-6"></use></svg></span>
+<span class="sgs-label">Inst. SO</span>
+</button>
+<button class="sgs-tab" id="sgs-backup" data-svc="backup" role="tab" aria-selected="false" onclick="switchSvc('backup',this)" style="-webkit-tap-highlight-color:transparent;outline:none">
+<span class="sgs-icon-wrap sgs-icon-backup"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;user-select:none;display:block"><use href="#kt-icon-13"></use></svg></span>
+<span class="sgs-label">Backup</span>
 </button>
 </div>
-
+</div>
+<!-- compatibilidade: elementos ocultos referenciados por JS existente -->
 <div style="display:none">
-<button class="svc-badge-btn active" id="badge-format" onclick="switchSvc('format',this)" style="-webkit-tap-highlight-color:transparent;outline:none"><span class="svc-badge-dot"></span>Formatação</button>
-<button class="svc-badge-btn" id="badge-so" onclick="switchSvc('so',this)" style="-webkit-tap-highlight-color:transparent;outline:none"><span class="svc-badge-dot"></span>Inst. SO</button>
-<button class="svc-badge-btn" id="badge-backup" onclick="switchSvc('backup',this)" style="-webkit-tap-highlight-color:transparent;outline:none"><span class="svc-badge-dot"></span>Backup</button>
+<button class="svc-cycle-btn" id="svc-cycle-btn"><span id="svc-cycle-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="pointer-events:none"><use href="#kt-icon-5"></use></svg></span><span class="svc-cycle-label-clip"><span id="svc-cycle-label">Formatação</span></span><span class="svc-cycle-dots"><span class="scd scd-active" id="scd-0"></span><span class="scd" id="scd-1"></span><span class="scd" id="scd-2"></span></span></button>
+<button class="svc-badge-btn active" id="badge-format"><span class="svc-badge-dot"></span>Formatação</button>
+<button class="svc-badge-btn" id="badge-so"><span class="svc-badge-dot"></span>Inst. SO</button>
+<button class="svc-badge-btn" id="badge-backup"><span class="svc-badge-dot"></span>Backup</button>
 </div>
 
 <script>
@@ -4771,8 +4704,9 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
 </div>
 
 <div id="panel-format" class="svc-panel visible">
-<div style="padding:0 13px 2px">
-<div class="sec-sub" style="font-family:'Space Mono',monospace;font-size:13px;color:var(--muted);letter-spacing:1px">SEM BACKUP · BACKUP SIMPLES · BACKUP COMPLETO</div>
+<div class="svc-panel-head cmp-sec-head">
+<div class="cmp-sec-title" style="display:flex;align-items:center;gap:9px"><span class="sph-icon-badge sph-icon-format"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><use href="#kt-icon-5"></use></svg></span>Formatação <em style="color:#c87058;font-style:normal">Completa</em></div>
+<div class="cmp-sec-sub">ESCOLHA O PLANO E ADICIONE AO ORÇAMENTO</div>
 </div>
 
 <div class="svc-plan-row" data-svc-row="format" style="margin-bottom:6px">
@@ -4828,10 +4762,10 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
 </div>
 
 <div id="panel-so" class="svc-panel">
-<div style="padding:0 13px 2px">
-<div class="sec-sub" style="font-family:'Space Mono',monospace;font-size:13px;color:var(--muted);letter-spacing:1px">WINDOWS LIMPO · DEBLOAT · PERSONALIZADO</div>
+<div class="svc-panel-head cmp-sec-head">
+<div class="cmp-sec-title" style="display:flex;align-items:center;gap:9px"><span class="sph-icon-badge sph-icon-so"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><use href="#kt-icon-6"></use></svg></span>Instalação de <em style="color:#7b9ee8;font-style:normal">SO</em></div>
+<div class="cmp-sec-sub">ESCOLHA O PLANO E ADICIONE AO ORÇAMENTO</div>
 </div>
-
 <div class="svc-plan-row" data-svc-row="so" style="margin-bottom:6px">
 <div class="svc-plan-card spc-tier-basic" data-svc="so" data-plan="0">
 <span class="spc-badge" style="color:var(--muted);border-color:var(--border2)">Básico</span>
@@ -4894,8 +4828,9 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
 </div>
 
 <div id="panel-backup" class="svc-panel">
-<div style="padding:0 13px 2px">
-<div class="sec-sub" style="font-family:'Space Mono',monospace;font-size:13px;color:var(--muted);letter-spacing:1px">EXTERNO · NUVEM · SEM FORMATAÇÃO</div>
+<div class="svc-panel-head cmp-sec-head">
+<div class="cmp-sec-title" style="display:flex;align-items:center;gap:9px"><span class="sph-icon-badge sph-icon-backup"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><use href="#kt-icon-13"></use></svg></span>Backup <em style="color:#4db87a;font-style:normal">de Dados</em></div>
+<div class="cmp-sec-sub">ESCOLHA O PLANO E ADICIONE AO ORÇAMENTO</div>
 </div>
 
 <div class="svc-plan-row" data-svc-row="backup" style="margin-bottom:6px">
@@ -4962,6 +4897,8 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
       document.getElementById('badge-format').classList.toggle('active', svc === 'format');
       document.getElementById('badge-so').classList.toggle('active', svc === 'so');
       document.getElementById('badge-backup').classList.toggle('active', svc === 'backup');
+      /* sync glass tabs */
+      document.querySelectorAll('.sgs-tab').forEach(function(t){ t.classList.toggle('active', t.getAttribute('data-svc') === svc); });
 
       var prevPanel = document.getElementById('panel-' + prev);
       prevPanel.classList.remove('visible','from-left');
@@ -4984,8 +4921,6 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
       document.getElementById('svc-context-text').textContent = contexts[svc];
 
       if(typeof window._initOrcColumns === 'function') setTimeout(window._initOrcColumns, 80);
-      // Re-init dots for newly visible panel
-      if(typeof window.initSvcDots === 'function') setTimeout(window.initSvcDots, 80);
       if(typeof window.initGreenDots === 'function') setTimeout(window.initGreenDots, 120);
     };
   })();
@@ -8970,187 +8905,6 @@ function buildQuickNav(pageId){
 </script>
 
 <script>
-/* ── Mobile swipe dots para svc-plan-rows ── */
-(function(){
-  if(window.innerWidth >= 600) return;
-
-  function initRow(row){
-    if(row.dataset.dotsInit === '1') return; // já inicializado
-    var cards = row.querySelectorAll('.svc-plan-card');
-    if(cards.length < 2) return;
-    row.dataset.dotsInit = '1';
-    /* guard: se outro script já injetou .svc-plan-dots, não duplicar */
-    var existingDots = row.nextElementSibling;
-    if(existingDots && existingDots.classList && existingDots.classList.contains('svc-plan-dots')) return;
-
-    var wrap = document.createElement('div');
-    wrap.className = 'svc-plan-dots';
-    for(var i=0;i<cards.length;i++){
-      var d = document.createElement('span');
-      d.className = 'svc-plan-dot' + (i===0?' active':'');
-      wrap.appendChild(d);
-    }
-    row.parentNode.insertBefore(wrap, row.nextSibling);
-
-    var dots = wrap.querySelectorAll('.svc-plan-dot');
-    var ticking = false;
-    row.addEventListener('scroll', function(){
-      if(ticking) return;
-      ticking = true;
-      requestAnimationFrame(function(){
-        var cx = row.scrollLeft + row.offsetWidth / 2;
-        var active = 0;
-        var best = Infinity;
-        cards.forEach(function(c,i){
-          var cardCx = c.offsetLeft + c.offsetWidth / 2;
-          var dist = Math.abs(cx - cardCx);
-          if(dist < best){ best = dist; active = i; }
-        });
-        dots.forEach(function(d,i){
-          d.classList.toggle('active', i === active);
-        });
-        ticking = false;
-      });
-    }, {passive:true});
-  }
-
-  /* ── Mouse drag: segue ponteiro 1:1, spring snap ao soltar ── */
-  function addMouseDrag(row){
-    if(row.dataset.mouseDrag) return;
-    row.dataset.mouseDrag = '1';
-
-    var down       = false;
-    var startX     = 0;
-    var baseScroll = 0;
-    var lastX      = 0;
-    var lastT      = 0;
-    var velX       = 0;
-    var moved      = 0;
-    var springId   = null;
-
-    function cancelSpring(){
-      if(springId){ cancelAnimationFrame(springId); springId = null; }
-    }
-
-    function springTo(dest){
-      cancelSpring();
-      function step(){
-        var diff = dest - row.scrollLeft;
-        if(Math.abs(diff) < 0.8){
-          row.scrollLeft = dest;
-          /* reativa snap só depois de pousar */
-          row.style.removeProperty('scroll-snap-type');
-          row.style.removeProperty('scroll-behavior');
-          return;
-        }
-        row.scrollLeft += diff * 0.16;
-        springId = requestAnimationFrame(step);
-      }
-      step();
-    }
-
-    function nearestCardLeft(){
-      var cards = Array.from(row.querySelectorAll('.svc-plan-card'));
-      /* destino projetado com inércia */
-      var projected = row.scrollLeft - velX * 160;
-      var best = cards[0];
-      var bestD = Infinity;
-      cards.forEach(function(card){
-        /* compara pelo centro do card vs centro do viewport */
-        var cardCenter = card.offsetLeft + card.offsetWidth / 2;
-        var d = Math.abs(cardCenter - projected - row.offsetWidth / 2);
-        if(d < bestD){ bestD = d; best = card; }
-      });
-      /* scroll para centralizar o card no viewport */
-      if(!best) return row.scrollLeft;
-      return best.offsetLeft + best.offsetWidth / 2 - row.offsetWidth / 2;
-    }
-
-    function onDown(e){
-      /* Hard guard: never drag in desktop view, even if listener was pre-registered */
-      if(!isMobileView()) return;
-      cancelSpring();
-      down       = true;
-      startX     = e.pageX;
-      lastX      = e.pageX;
-      lastT      = performance.now();
-      baseScroll = row.scrollLeft;
-      moved      = 0;
-      velX       = 0;
-      /* neutraliza TODOS os comportamentos que interferem */
-      row.style.setProperty('scroll-snap-type',  'none', 'important');
-      row.style.setProperty('scroll-behavior',   'auto', 'important');
-      row.style.setProperty('overflow-x',        'scroll', 'important');
-      row.style.cursor     = 'grabbing';
-      row.style.userSelect = 'none';
-      e.preventDefault();
-    }
-
-    function onMove(e){
-      if(!down) return;
-      var now = performance.now();
-      var dt  = Math.max(now - lastT, 1);
-      velX    = (e.pageX - lastX) / dt;
-      lastX   = e.pageX;
-      lastT   = now;
-      var dx  = startX - e.pageX;
-      moved   = Math.abs(dx);
-      /* direto - sem lerp, sem delay */
-      row.scrollLeft = baseScroll + dx;
-    }
-
-    function onUp(){
-      if(!down) return;
-      down             = false;
-      row.style.cursor = '';
-      row.style.userSelect = '';
-      row.style.removeProperty('overflow-x');
-      row.style.removeProperty('scroll-snap-type');
-      row.style.removeProperty('scroll-behavior');
-      springTo(nearestCardLeft());
-    }
-
-    row.addEventListener('mousedown',  onDown,  {passive:false});
-    document.addEventListener('mousemove', onMove);
-    document.addEventListener('mouseup',   onUp);
-    document.addEventListener('mouseleave', onUp);
-
-    row.addEventListener('click', function(e){
-      if(moved > 6) e.stopPropagation();
-    }, true);
-  }
-
-  function isMobileView(){
-    return window.innerWidth < 600 ||
-      document.body.classList.contains('view-mobile') ||
-      document.documentElement.getAttribute('data-kt-view') === 'mobile';
-  }
-
-  function initAll(){
-    document.querySelectorAll('.svc-plan-row').forEach(function(row){
-      initRow(row);
-      if(isMobileView()) addMouseDrag(row);
-    });
-  }
-  window.initSvcDots = initAll;
-
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', function(){ setTimeout(initAll, 600); });
-  } else {
-    setTimeout(initAll, 600);
-  }
-
-  window.addEventListener('resize', function(){
-    if(window.innerWidth < 600){
-      document.querySelectorAll('.svc-plan-dots').forEach(function(d){ d.remove(); });
-      document.querySelectorAll('.svc-plan-row').forEach(function(r){ delete r.dataset.dotsInit; });
-      setTimeout(initAll, 100);
-    }
-  });
-})();
-</script>
-
-<script>
 /* ═══════════════════════════════════════════════════
    BANCADA DISCOUNT - animação suave nos svc-plan-cards
    ═══════════════════════════════════════════════════ */
@@ -10279,7 +10033,7 @@ function closeWIP(){
     rows.forEach(function(row){
       if(row.closest('.svc-group-card'))return;
       var prev=row.previousElementSibling;
-      var includeTitle=prev&&prev.classList.contains('cmp-sec-head');
+      var includeTitle=prev&&(prev.classList.contains('cmp-sec-head')||prev.classList.contains('svc-panel-head'));
       var wrap=document.createElement('div');
       wrap.className='svc-group-card';
       var anchor=includeTitle?prev:row;
@@ -10420,18 +10174,10 @@ function closeWIP(){
 
 <script id="kt-ultra-leve-mobile-only-script">
 (function(){
+  /* Ultra-leve liberado para todos os modos (desktop + mobile) */
   var PERF_KEY = 'kt_perf_mode';
   var PERF_MANUAL_KEY = 'kt_perf_manual';
-  function storageGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
   function storageSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
-  function isMobileView(){
-    if(document.body && document.body.classList.contains('view-mobile')) return true;
-    if(document.body && document.body.classList.contains('view-desktop')) return false;
-    var saved = storageGet('kt_view_mode');
-    if(saved === 'mobile') return true;
-    if(saved === 'desktop') return false;
-    return window.innerWidth < 600 || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || '');
-  }
   function removePerfClasses(){
     ['leve','medio','pesado','ultra-leve'].forEach(function(p){
       document.documentElement.classList.remove('kt-perf-' + p);
@@ -10446,42 +10192,13 @@ function closeWIP(){
     if(document.body) document.body.setAttribute('data-kt-perf', p);
     try{document.dispatchEvent(new CustomEvent('ktPerfChanged',{detail:{perf:p}}))}catch(e){}
   }
-  function enforceUltraOnlyMobile(){
-    var p = storageGet(PERF_KEY) || document.documentElement.getAttribute('data-kt-perf');
-    if(p === 'ultra-leve' && !isMobileView()){
-      storageSet(PERF_KEY, 'medio');
-      storageSet(PERF_MANUAL_KEY, '0');
-      if(typeof window.applyKtVisualPrefs === 'function') window.applyKtVisualPrefs(document.documentElement.getAttribute('data-kt-theme') || 'escuro', 'medio', true);
-      else applyPerfClass('medio');
-    }else if(p === 'ultra-leve' && isMobileView()){
-      applyPerfClass('ultra-leve');
-    }
-  }
   document.addEventListener('click', function(e){
     var btn = e.target && e.target.closest ? e.target.closest('[data-kt-pref-kind="perf"][data-kt-pref-value="ultra-leve"]') : null;
     if(!btn) return;
-    if(!isMobileView()){
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      return;
-    }
     storageSet(PERF_MANUAL_KEY, '1');
     storageSet(PERF_KEY, 'ultra-leve');
     setTimeout(function(){applyPerfClass('ultra-leve'); if(typeof window.syncKtVisualUI === 'function') window.syncKtVisualUI();}, 0);
   }, true);
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', enforceUltraOnlyMobile);
-  else enforceUltraOnlyMobile();
-  window.addEventListener('resize', function(){setTimeout(enforceUltraOnlyMobile, 60)}, {passive:true});
-  if(typeof window.setViewMode === 'function' && !window.setViewMode.__ktUltraLeveMobileOnly){
-    var old = window.setViewMode;
-    var wrapped = function(mode, save){
-      var r = old.apply(this, arguments);
-      setTimeout(enforceUltraOnlyMobile, 40);
-      return r;
-    };
-    wrapped.__ktUltraLeveMobileOnly = true;
-    window.setViewMode = wrapped;
-  }
 })();
 </script>
 
@@ -10655,23 +10372,7 @@ function closeWIP(){
   }
   function forcePerfForView(mode){
     var savedPerf = storageGet(PERF_KEY);
-    if(mode !== 'mobile' && savedPerf === 'ultra-leve'){
-      storageSet(PERF_MANUAL_KEY, '0');
-      if(typeof window.applyKtVisualPrefs === 'function'){
-        window.applyKtVisualPrefs(getTheme(), 'medio', true);
-      }else{
-        ['leve','medio','pesado','ultra-leve'].forEach(function(p){
-          document.documentElement.classList.remove('kt-perf-' + p);
-          if(document.body) document.body.classList.remove('kt-perf-' + p);
-        });
-        document.documentElement.classList.add('kt-perf-medio');
-        if(document.body) document.body.classList.add('kt-perf-medio');
-        document.documentElement.setAttribute('data-kt-perf', 'medio');
-        if(document.body) document.body.setAttribute('data-kt-perf', 'medio');
-        storageSet(PERF_KEY, 'medio');
-      }
-      return;
-    }
+    /* ultra-leve agora permitido em todos os modos — não forçar reset para medio */
     if(hasManualPerf()) return;
     var perf = mode === 'mobile' ? 'leve' : 'medio';
     if(!validPerf(perf)) return;
@@ -10706,212 +10407,10 @@ function closeWIP(){
     var wrapped = function(mode, save){
       var result = oldSetViewMode.apply(this, arguments);
       setTimeout(function(){ forcePerfForView(mode); }, 20);
-      setTimeout(function(){ if(window.ktFixInitSvcSwipe) window.ktFixInitSvcSwipe(true); }, 80);
       return result;
     };
     wrapped.__ktMobilePerfFix = true;
     window.setViewMode = wrapped;
-  }
-
-  /* ── Carrossel de serviços v3: snap/swipe robusto ── */
-  var _KT_MIN_CARD = 155, _KT_CARD_GAP = 8;
-
-  function getCards(row){ return Array.prototype.slice.call(row.querySelectorAll('.svc-plan-card')); }
-
-  function shouldCarousel(row){
-    /* Ativa em: modo mobile, janela < 600px, ou row muito estreita para caber os cards */
-    var mode = getViewMode();
-    if(mode === 'mobile' || window.innerWidth < 600) return true;
-    if(!row) return false;
-    var cards = getCards(row);
-    if(cards.length < 2) return false;
-    var needed = cards.length * _KT_MIN_CARD + (cards.length - 1) * _KT_CARD_GAP + 4;
-    return row.clientWidth < needed;
-  }
-
-  function applyCarouselState(row){
-    var use  = shouldCarousel(row);
-    var mode = getViewMode();
-    /* Desktop estreito: JS aplica classe + propriedade de largura do card */
-    var isDesktopNarrow = use && mode !== 'mobile' && window.innerWidth >= 600;
-    if(isDesktopNarrow){
-      var w = Math.max(Math.round(row.clientWidth * 0.78), 160);
-      row.style.setProperty('--kt-card-w', w + 'px');
-      row.classList.add('kt-carousel-active');
-    } else {
-      row.classList.remove('kt-carousel-active');
-      row.style.removeProperty('--kt-card-w');
-    }
-    /* Sincroniza visibilidade dos dots */
-    var dots = row.nextElementSibling;
-    if(dots && dots.classList && dots.classList.contains('svc-plan-dots')){
-      dots.style.display = use ? '' : 'none';
-    }
-    if(use){ ensureDots(row); updateDots(row); }
-  }
-
-  function ensureDots(row){
-    var cards = getCards(row);
-    if(cards.length < 2) return null;
-    var next = row.nextElementSibling;
-    if(!next || !next.classList || !next.classList.contains('svc-plan-dots')){
-      next = document.createElement('div');
-      next.className = 'svc-plan-dots';
-      row.parentNode.insertBefore(next, row.nextSibling);
-    }
-    row.dataset.dotsInit = '1';
-    if(next.children.length !== cards.length){
-      next.innerHTML = '';
-      cards.forEach(function(_, i){
-        var dot = document.createElement('span');
-        dot.className = 'svc-plan-dot' + (i === 0 ? ' active' : '');
-        dot.addEventListener('click', function(){ centerCard(row, i, true); });
-        next.appendChild(dot);
-      });
-    }
-    return next;
-  }
-
-  function updateDots(row){
-    if(!shouldCarousel(row)) return;
-    var dotsWrap = row.nextElementSibling;
-    if(!dotsWrap || !dotsWrap.classList || !dotsWrap.classList.contains('svc-plan-dots')) return;
-    var cards = getCards(row), dots = Array.prototype.slice.call(dotsWrap.children);
-    if(!cards.length || !dots.length) return;
-    var center = row.scrollLeft + row.clientWidth / 2;
-    var active = 0, best = Infinity;
-    cards.forEach(function(card, i){
-      var c = card.offsetLeft + card.offsetWidth / 2, d = Math.abs(c - center);
-      if(d < best){ best = d; active = i; }
-    });
-    dots.forEach(function(dot, i){ dot.classList.toggle('active', i === active); });
-  }
-
-  function centerCard(row, index, smooth){
-    var cards = getCards(row), card = cards[index];
-    if(!card) return;
-    var dest = card.offsetLeft + card.offsetWidth / 2 - row.clientWidth / 2;
-    dest = Math.max(0, Math.min(dest, row.scrollWidth - row.clientWidth));
-    try{ row.scrollTo({left: dest, behavior: smooth ? 'smooth' : 'auto'}); }
-    catch(e){ row.scrollLeft = dest; }
-  }
-
-  function nearestIndex(row, scrollLeft){
-    var cards = getCards(row);
-    var center = scrollLeft + row.clientWidth / 2;
-    var active = 0, best = Infinity;
-    cards.forEach(function(card, i){
-      var c = card.offsetLeft + card.offsetWidth / 2, d = Math.abs(c - center);
-      if(d < best){ best = d; active = i; }
-    });
-    return active;
-  }
-
-  function attachSwipeHandlers(row){
-    if(row.dataset.ktSwipeV3 === '1') return;
-    row.dataset.ktSwipeV3 = '1';
-    row.style.touchAction = 'pan-y';
-    row.style.overscrollBehaviorX = 'contain';
-
-    var raf = 0;
-    row.addEventListener('scroll', function(){
-      if(raf) return;
-      raf = requestAnimationFrame(function(){ raf = 0; updateDots(row); });
-    }, {passive: true});
-
-    var dragging = false, ptId = null, startX = 0, startScroll = 0;
-    var lastX = 0, lastT = 0, velocity = 0, moved = 0, suppressClick = false;
-
-    row.addEventListener('pointerdown', function(e){
-      if(!shouldCarousel(row) || row.scrollWidth <= row.clientWidth + 6) return;
-      if(e.pointerType === 'mouse' && e.button !== 0) return;
-      dragging = true; ptId = e.pointerId;
-      startX = lastX = e.clientX; startScroll = row.scrollLeft;
-      lastT = performance.now(); velocity = 0; moved = 0;
-      row.classList.add('is-dragging');
-      try{ row.setPointerCapture(ptId); }catch(err){}
-    }, {passive: true});
-
-    row.addEventListener('pointermove', function(e){
-      if(!dragging || e.pointerId !== ptId) return;
-      var now = performance.now(), dt = Math.max(now - lastT, 1);
-      var dxTotal = e.clientX - startX;
-      velocity = (e.clientX - lastX) / dt;
-      lastX = e.clientX; lastT = now;
-      moved = Math.max(moved, Math.abs(dxTotal));
-      if(moved > 3){ row.scrollLeft = startScroll - dxTotal; if(e.cancelable) e.preventDefault(); }
-    }, {passive: false});
-
-    function endDrag(e){
-      if(!dragging || (e && e.pointerId !== ptId)) return;
-      dragging = false;
-      try{ row.releasePointerCapture(ptId); }catch(err){}
-      ptId = null; row.classList.remove('is-dragging');
-      if(moved > 8){
-        suppressClick = true;
-        setTimeout(function(){ suppressClick = false; }, 180);
-        var cards = getCards(row);
-        var cardW = cards.length > 0 ? cards[0].offsetWidth + 10 : row.clientWidth;
-        var dx = row.scrollLeft - startScroll;
-        var maxScroll = Math.max(0, row.scrollWidth - row.clientWidth);
-        var projected = Math.max(0, Math.min(row.scrollLeft - velocity * 300, maxScroll));
-        var curIdx = nearestIndex(row, startScroll);
-        var flingIdx = nearestIndex(row, projected);
-        var dir = dx !== 0 ? (dx > 0 ? 1 : -1) : (velocity < 0 ? 1 : -1);
-        if(Math.abs(dx) >= cardW * 0.20 || Math.abs(velocity) >= 0.28){
-          if((dir > 0 && flingIdx <= curIdx) || (dir < 0 && flingIdx >= curIdx)){
-            flingIdx = Math.max(0, Math.min(cards.length - 1, curIdx + dir));
-          }
-        } else { flingIdx = curIdx; }
-        row.style.setProperty('scroll-snap-type', 'none', 'important');
-        centerCard(row, flingIdx, true);
-        setTimeout(function(){ row.style.removeProperty('scroll-snap-type'); updateDots(row); }, 440);
-      }
-    }
-    row.addEventListener('pointerup', endDrag, {passive: true});
-    row.addEventListener('pointercancel', endDrag, {passive: true});
-    row.addEventListener('lostpointercapture', function(){ if(dragging) endDrag({pointerId: ptId}); }, {passive: true});
-    row.addEventListener('click', function(e){ if(suppressClick || moved > 8){ e.preventDefault(); e.stopPropagation(); } }, true);
-  }
-
-  function initRow(row){ attachSwipeHandlers(row); applyCarouselState(row); }
-
-  function initAll(){
-    document.querySelectorAll('.svc-plan-row').forEach(function(row){ initRow(row); });
-  }
-  function refreshAll(){
-    document.querySelectorAll('.svc-plan-row').forEach(function(row){ applyCarouselState(row); });
-  }
-
-  window.ktFixInitSvcSwipe = initAll;
-  window.ktRefreshSvcCarousel = refreshAll;
-
-  /* Arranque */
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', function(){ setTimeout(initAll, 100); });
-  } else {
-    setTimeout(initAll, 100);
-  }
-  /* Resize da janela */
-  var _ktRTimer;
-  window.addEventListener('resize', function(){
-    clearTimeout(_ktRTimer);
-    _ktRTimer = setTimeout(function(){ initAll(); refreshAll(); }, 120);
-  }, {passive: true});
-  /* Troca de página via clique de nav */
-  document.addEventListener('click', function(){ setTimeout(initAll, 120); }, true);
-  /* ResizeObserver: detecta toggle do sidebar sem resize de janela */
-  if(window.ResizeObserver){
-    var _ktRO = new ResizeObserver(function(){
-      clearTimeout(_ktRTimer);
-      _ktRTimer = setTimeout(refreshAll, 90);
-    });
-    function _ktROBind(){
-      var t = document.getElementById('content-wrap') || document.body;
-      if(t) _ktRO.observe(t);
-    }
-    if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', _ktROBind);
-    else _ktROBind();
   }
 })();
 </script>
@@ -10932,18 +10431,12 @@ function closeWIP(){
   function setPerf(p){clean();document.documentElement.classList.add('kt-perf-'+p);document.documentElement.setAttribute('data-kt-perf',p);if(document.body){document.body.classList.add('kt-perf-'+p);document.body.setAttribute('data-kt-perf',p)}}
   function enforce(){
     var p=g('kt_perf_mode') || document.documentElement.getAttribute('data-kt-perf');
-    if(p==='ultra-leve' && !mobile()){
-      s('kt_perf_mode','medio');s('kt_perf_manual','0');
-      if(typeof window.applyKtVisualPrefs==='function') window.applyKtVisualPrefs(document.documentElement.getAttribute('data-kt-theme')||'escuro','medio',true);
-      else setPerf('medio');
-    }else if(p==='ultra-leve' && mobile()){
-      setPerf('ultra-leve');
-    }
+    /* ultra-leve liberado para todos os modos */
+    if(p==='ultra-leve'){ setPerf('ultra-leve'); }
   }
   document.addEventListener('click',function(e){
     var b=e.target&&e.target.closest?e.target.closest('[data-kt-pref-kind="perf"][data-kt-pref-value="ultra-leve"]'):null;
     if(!b)return;
-    if(!mobile()){e.preventDefault();e.stopImmediatePropagation();return;}
     s('kt_perf_mode','ultra-leve');s('kt_perf_manual','1');setTimeout(enforce,0);
   },true);
   enforce();
@@ -11057,6 +10550,435 @@ function closeWIP(){
   document.addEventListener('DOMContentLoaded', dsCfgSyncPills);
 })();
 </script>
+
+<style id="kt-plan-nav-style">
+/* ── Navegação de plano: botões dentro do card ─────────────── */
+.svc-nav-wrap{display:block}
+/* Faixa de navegação injeta-se antes do .spc-btn */
+.svc-card-nav{
+  display:none;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  border-top:1px solid rgba(255,255,255,.07)
+}
+.svc-nav-wrap.kt-nav-active .svc-card-nav{
+  display:flex;
+  margin-top:auto;
+  margin-bottom:auto;
+  padding-top:20px;
+  padding-bottom:18px
+}
+/* spc-btn tem margin-top:auto nativo — zerar quando nav ativo p/ centrar corretamente */
+.svc-nav-wrap.kt-nav-active>.svc-plan-row>.svc-plan-card>.spc-btn{margin-top:0!important}
+html.kt-theme-noturno .svc-card-nav{border-top-color:rgba(200,169,110,.08)}
+html.kt-theme-branco .svc-card-nav{border-top-color:rgba(155,109,38,.14)}
+/* Botões de seta */
+.svc-card-nav .svc-nav-btn{
+  width:34px;height:34px;border-radius:50%;flex-shrink:0;
+  background:rgba(6,6,8,.80);
+  border:1px solid rgba(200,169,110,.28);
+  color:var(--gold);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  padding:0;
+  transition:background .18s,border-color .18s,opacity .22s,transform .19s cubic-bezier(.34,1.22,.64,1);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  box-shadow:0 2px 12px rgba(0,0,0,.55);
+  -webkit-tap-highlight-color:transparent;outline:none;
+  user-select:none;-webkit-user-select:none
+}
+.svc-card-nav .svc-nav-btn.kt-nav-hidden{
+  opacity:0!important;pointer-events:none!important;transform:scale(.74)!important
+}
+.svc-card-nav .svc-nav-btn:not(.kt-nav-hidden):hover{
+  background:rgba(200,169,110,.16);border-color:rgba(200,169,110,.60);
+  box-shadow:0 0 0 1px rgba(200,169,110,.16),0 3px 14px rgba(200,169,110,.12);
+  transform:scale(1.10)
+}
+.svc-card-nav .svc-nav-btn:not(.kt-nav-hidden):active{transform:scale(.90);background:rgba(200,169,110,.24)}
+/* Indicador central */
+.svc-nav-counter{
+  font-family:'Space Mono',monospace;font-size:11px;letter-spacing:1.5px;
+  color:var(--muted);flex:1;text-align:center;user-select:none;-webkit-user-select:none
+}
+/* Temas */
+html.kt-theme-noturno .svc-card-nav .svc-nav-btn{background:rgba(3,5,12,.84);border-color:rgba(200,169,110,.22)}
+html.kt-theme-branco .svc-card-nav .svc-nav-btn{background:rgba(250,244,228,.90);border-color:rgba(155,109,38,.34);color:rgba(118,78,14,1);box-shadow:0 2px 10px rgba(91,65,23,.18)}
+html.kt-theme-branco .svc-nav-counter{color:rgba(120,80,20,.50)}
+html.kt-perf-ultra-leve .svc-card-nav .svc-nav-btn{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+/* Row em modo ativo */
+.svc-nav-wrap.kt-nav-active>.svc-plan-row{
+  display:flex!important;flex-direction:row!important;
+  overflow-x:hidden!important;gap:0!important;
+  align-items:stretch!important;
+  padding-left:0!important;padding-right:0!important
+}
+.svc-nav-wrap.kt-nav-active>.svc-plan-row>.svc-plan-card{
+  flex:0 0 100%!important;width:100%!important;
+  min-width:100%!important;max-width:100%!important
+}
+@media(prefers-reduced-motion:reduce){
+  .svc-card-nav .svc-nav-btn{transition:opacity .08s,background .08s!important}
+}
+</style>
+
+<script id="kt-plan-nav-script">
+(function(){
+  'use strict';
+
+  var SVG = {
+    prev: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="15,18 9,12 15,6"/></svg>',
+    next: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="9,18 15,12 9,6"/></svg>'
+  };
+
+  function isMobileOrNarrow(){
+    if(window.innerWidth < 600) return true;
+    if(!document.body) return false;
+    if(document.body.classList.contains('view-mobile')) return true;
+    if(document.body.classList.contains('view-desktop')) return false;
+    return false;
+  }
+
+  function getCards(row){
+    return Array.prototype.slice.call(row.children).filter(function(el){
+      return el.classList && el.classList.contains('svc-plan-card');
+    });
+  }
+
+  function shouldActivate(row){
+    var cards = getCards(row);
+    if(cards.length < 2) return false;
+    if(isMobileOrNarrow()) return true;
+    var rw = row.clientWidth;
+    var needed = cards.length * 155 + (cards.length - 1) * 8;
+    return rw > 0 && rw < needed;
+  }
+
+  function prefersReducedMotion(){
+    return window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  }
+
+  function injectCardNav(card){
+    if(card.querySelector('.svc-card-nav')) return;
+    var spcBtn = card.querySelector('.spc-btn');
+    if(!spcBtn) return;
+
+    var nav = document.createElement('div');
+    nav.className = 'svc-card-nav';
+
+    var pb = document.createElement('button');
+    pb.type = 'button'; pb.className = 'svc-nav-btn svc-nav-prev';
+    pb.setAttribute('aria-label', 'Plano anterior');
+    pb.innerHTML = SVG.prev;
+
+    var ct = document.createElement('span');
+    ct.className = 'svc-nav-counter';
+
+    var nb = document.createElement('button');
+    nb.type = 'button'; nb.className = 'svc-nav-btn svc-nav-next';
+    nb.setAttribute('aria-label', 'Próximo plano');
+    nb.innerHTML = SVG.next;
+
+    nav.appendChild(pb);
+    nav.appendChild(ct);
+    nav.appendChild(nb);
+    card.insertBefore(nav, spcBtn);
+  }
+
+  function wrapRow(row){
+    if(row.dataset.ktNavInit === '1') return;
+    row.dataset.ktNavInit = '1';
+    var cards = getCards(row);
+    if(cards.length < 2) return;
+
+    /* Wrapper posicionador */
+    var wrap = document.createElement('div');
+    wrap.className = 'svc-nav-wrap';
+    row.parentNode.insertBefore(wrap, row);
+    wrap.appendChild(row);
+
+    /* Injeta controles em cada card */
+    cards.forEach(injectCardNav);
+
+    var idx = 0, animId = 0;
+
+    function animateTo(target){
+      if(animId){ cancelAnimationFrame(animId); animId = 0; }
+      var start = row.scrollLeft, dist = target - start;
+      if(Math.abs(dist) < 1 || prefersReducedMotion()){ row.scrollLeft = target; return; }
+      var dur = 290, t0 = null;
+      function ease(t){ return 1 - Math.pow(1 - t, 3); }
+      function step(ts){
+        if(!t0) t0 = ts;
+        var p = Math.min((ts - t0) / dur, 1);
+        row.scrollLeft = start + dist * ease(p);
+        if(p < 1) animId = requestAnimationFrame(step);
+        else { row.scrollLeft = target; animId = 0; }
+      }
+      animId = requestAnimationFrame(step);
+    }
+
+    function syncNavs(){
+      var cards_now = getCards(row), n = cards_now.length;
+      cards_now.forEach(function(card){
+        var nav = card.querySelector('.svc-card-nav');
+        if(!nav) return;
+        var pb = nav.querySelector('.svc-nav-prev');
+        var nb = nav.querySelector('.svc-nav-next');
+        var ct = nav.querySelector('.svc-nav-counter');
+        if(pb) pb.classList.toggle('kt-nav-hidden', idx <= 0);
+        if(nb) nb.classList.toggle('kt-nav-hidden', idx >= n - 1);
+        if(ct) ct.textContent = (idx + 1) + ' / ' + n;
+      });
+    }
+
+    /* Delegação: captura cliques em qualquer .svc-card-nav btn */
+    wrap.addEventListener('click', function(e){
+      var btn = e.target && e.target.closest ? e.target.closest('.svc-card-nav .svc-nav-btn') : null;
+      if(!btn || btn.classList.contains('kt-nav-hidden')) return;
+      e.stopPropagation();
+      if(btn.classList.contains('svc-nav-prev')) goTo(idx - 1);
+      else if(btn.classList.contains('svc-nav-next')) goTo(idx + 1);
+    });
+
+    function goTo(i, instant){
+      var cards_now = getCards(row);
+      idx = Math.max(0, Math.min(i, cards_now.length - 1));
+      var card = cards_now[idx];
+      if(!card) return;
+      if(instant){
+        if(animId){ cancelAnimationFrame(animId); animId = 0; }
+        row.scrollLeft = card.offsetLeft;
+      } else {
+        animateTo(card.offsetLeft);
+      }
+      syncNavs();
+    }
+
+    function refresh(){
+      var active = shouldActivate(row);
+      var wasActive = wrap.classList.contains('kt-nav-active');
+      wrap.classList.toggle('kt-nav-active', active);
+      if(active){
+        if(!wasActive) idx = 0;
+        goTo(idx, true);
+      } else {
+        if(animId){ cancelAnimationFrame(animId); animId = 0; }
+        row.scrollLeft = 0;
+      }
+    }
+
+    syncNavs();
+    wrap._ktNavRefresh = refresh;
+    wrap._ktNavGoTo    = goTo;
+    refresh();
+  }
+
+  function initAll(){
+    document.querySelectorAll('.svc-plan-row').forEach(function(row){
+      if(row.dataset.ktNavInit !== '1'){
+        wrapRow(row);
+      } else {
+        var wrap = row.parentElement;
+        if(wrap && typeof wrap._ktNavRefresh === 'function') wrap._ktNavRefresh();
+      }
+    });
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(initAll, 200); });
+  } else {
+    setTimeout(initAll, 200);
+  }
+
+  var _rTimer;
+  window.addEventListener('resize', function(){
+    clearTimeout(_rTimer);
+    _rTimer = setTimeout(initAll, 110);
+  }, {passive: true});
+
+  if(window.MutationObserver){
+    new MutationObserver(function(){ setTimeout(initAll, 60); })
+      .observe(document.body, {attributes: true, attributeFilter: ['class']});
+  }
+
+  window.ktNavRefresh = initAll;
+})();
+</script>
+
+<style id="kt-glass-switcher-style">
+/* ══════════════════════════════════════════════════════
+   GLASS + NEUMORPHIC SERVICE SWITCHER
+   ══════════════════════════════════════════════════════ */
+
+/* ── Wrapper geral ────────────────────────────────────── */
+.svc-glass-switcher{
+  display:flex;
+  margin-bottom:14px
+}
+
+/* ── Track: glassmorphic pill ─────────────────────────── */
+.sgs-track{
+  display:flex;gap:5px;padding:5px;
+  border-radius:20px;width:100%;
+  background:#0d0d10;
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow:
+    -5px -5px 12px rgba(255,255,255,.04),
+     5px  5px 14px rgba(0,0,0,.55),
+    inset 0 1px 0 rgba(255,255,255,.06),
+    inset 0 -1px 0 rgba(0,0,0,.2)
+}
+
+/* ── Cada aba ──────────────────────────────────────────── */
+.sgs-tab{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:6px;padding:13px 6px 11px;
+  border-radius:15px;border:1px solid transparent;
+  cursor:pointer;font-family:'Space Mono',monospace;
+  font-size:8.5px;letter-spacing:.9px;text-transform:uppercase;
+  color:var(--muted);
+  background:#141418;
+  -webkit-tap-highlight-color:transparent;outline:none;
+  transition:color .22s,background .22s,border-color .22s,
+    box-shadow .22s,transform .18s cubic-bezier(.34,1.2,.64,1);
+  position:relative;overflow:hidden;
+  /* neumorphic raised (inativo) */
+  box-shadow:
+    -3px -3px 8px rgba(255,255,255,.04),
+     3px  3px 9px rgba(0,0,0,.48)
+}
+/* shimmer glass no hover */
+.sgs-tab::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.07) 0%,transparent 55%);
+  opacity:0;transition:opacity .22s;pointer-events:none;border-radius:inherit
+}
+.sgs-tab:hover{color:rgba(200,190,170,.75)}
+.sgs-tab:hover::before{opacity:1}
+.sgs-tab:active{transform:scale(.96)}
+
+/* ── Aba ATIVA: inset pressed + cor do serviço ─────────── */
+.sgs-tab.active{
+  color:var(--text);
+  box-shadow:
+    inset -3px -3px 7px rgba(255,255,255,.04),
+    inset  3px  3px 9px rgba(0,0,0,.52)
+}
+
+/* Formatação (terracota) */
+.sgs-tab[data-svc="format"].active{
+  background:rgba(201,112,88,.14);
+  border-color:rgba(201,112,88,.22);
+  color:#d0896a;
+  box-shadow:
+    inset -3px -3px 7px rgba(255,255,255,.03),
+    inset  3px  3px 9px rgba(0,0,0,.52),
+    0 0 20px rgba(201,112,88,.10)
+}
+/* Inst. SO (azul) */
+.sgs-tab[data-svc="so"].active{
+  background:rgba(100,140,222,.14);
+  border-color:rgba(100,140,222,.22);
+  color:#8aade8;
+  box-shadow:
+    inset -3px -3px 7px rgba(255,255,255,.03),
+    inset  3px  3px 9px rgba(0,0,0,.52),
+    0 0 20px rgba(100,140,222,.10)
+}
+/* Backup (verde) */
+.sgs-tab[data-svc="backup"].active{
+  background:rgba(60,168,100,.14);
+  border-color:rgba(60,168,100,.22);
+  color:#5cc488;
+  box-shadow:
+    inset -3px -3px 7px rgba(255,255,255,.03),
+    inset  3px  3px 9px rgba(0,0,0,.52),
+    0 0 20px rgba(60,168,100,.10)
+}
+
+/* ── Ícone dentro da aba ───────────────────────────────── */
+.sgs-icon-wrap{
+  display:flex;align-items:center;justify-content:center;
+  width:30px;height:30px;border-radius:9px;flex-shrink:0;
+  transition:transform .22s cubic-bezier(.34,1.2,.64,1)
+}
+.sgs-tab.active .sgs-icon-wrap{transform:scale(1.10)}
+/* cores de fundo do ícone */
+.sgs-icon-format{
+  background:rgba(201,112,88,.15);color:#c87058;
+  border:1px solid rgba(201,112,88,.2)
+}
+.sgs-icon-so{
+  background:rgba(100,140,222,.15);color:#7b9ee8;
+  border:1px solid rgba(100,140,222,.2)
+}
+.sgs-icon-backup{
+  background:rgba(60,168,100,.15);color:#4db87a;
+  border:1px solid rgba(60,168,100,.2)
+}
+/* ícone inativo: dessatura */
+.sgs-tab:not(.active) .sgs-icon-wrap{
+  filter:saturate(.35) brightness(.7)
+}
+.sgs-tab.active .sgs-icon-wrap{filter:none}
+
+/* ── Label ─────────────────────────────────────────────── */
+.sgs-label{
+  font-family:'Space Mono',monospace;font-size:8.5px;
+  letter-spacing:.9px;text-transform:uppercase;white-space:nowrap;
+  transition:color .22s
+}
+
+/* ── Variante Desktop (min 600px): tabs um pouco maiores ─ */
+@media(min-width:600px){
+  .sgs-track{padding:6px;gap:6px;border-radius:22px}
+  .sgs-tab{padding:14px 8px 12px;border-radius:16px;gap:7px;font-size:9px}
+  .sgs-icon-wrap{width:32px;height:32px;border-radius:10px}
+  .sgs-label{font-size:9px}
+}
+
+/* ── Temas ─────────────────────────────────────────────── */
+html.kt-theme-noturno .sgs-track{
+  background:rgba(255,255,255,.03);
+  border-color:rgba(200,169,110,.08);
+  box-shadow:-5px -5px 12px rgba(255,255,255,.025),5px 5px 14px rgba(0,0,0,.65),inset 0 1px 0 rgba(255,255,255,.04)
+}
+html.kt-theme-branco .sgs-track{
+  background:rgba(245,238,225,.88);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-color:rgba(155,109,38,.18);
+  box-shadow:-5px -5px 12px rgba(255,255,255,.9),5px 5px 12px rgba(155,109,38,.18),inset 0 1px 0 rgba(255,255,255,.8)
+}
+html.kt-theme-branco .sgs-tab{
+  background:rgba(245,238,225,.5);
+  box-shadow:-3px -3px 7px rgba(255,255,255,.85),3px 3px 8px rgba(155,109,38,.18)
+}
+html.kt-theme-branco .sgs-tab.active{
+  box-shadow:inset -3px -3px 6px rgba(255,255,255,.8),inset 3px 3px 8px rgba(155,109,38,.2)
+}
+html.kt-theme-branco .sgs-tab:hover{color:rgba(100,70,20,.6)}
+html.kt-perf-ultra-leve .sgs-track{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+
+/* ── Cabeçalho do panel dentro do svc-group-card ────────── */
+.svc-panel-head{
+  display:flex!important;flex-direction:column;
+  padding:14px 16px 8px!important
+}
+.sph-icon-badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:26px;height:26px;border-radius:7px;flex-shrink:0
+}
+.sph-icon-format{background:rgba(201,112,88,.16);color:#c87058;border:1px solid rgba(201,112,88,.25)}
+.sph-icon-so{background:rgba(100,140,222,.16);color:#7b9ee8;border:1px solid rgba(100,140,222,.25)}
+.sph-icon-backup{background:rgba(60,168,100,.16);color:#4db87a;border:1px solid rgba(60,168,100,.25)}
+
+/* ── Reduced motion ────────────────────────────────────── */
+@media(prefers-reduced-motion:reduce){
+  .sgs-tab,.sgs-icon-wrap,.sgs-tab::before{transition:none!important}
+}
+</style>
 
 </body>
 </html>
