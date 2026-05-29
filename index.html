@@ -3503,22 +3503,48 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
 </div>
 <div id="atendimento-info" style="margin-top:8px;font-family:'Space Mono',monospace;font-size:13px;color:var(--muted);line-height:1.6">Selecione onde quer ser atendido para calcular o orçamento correto.</div>
 <div id="dist-calc-wrap" style="display:block;margin-top:10px">
-<div style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Calcular distância até você</div>
-<div style="position:relative">
-<div style="display:flex;gap:7px;align-items:stretch">
-<input id="dist-input" type="text" placeholder="Digite seu bairro, rua ou CEP..."
-            autocomplete="off"
-            style="flex:1;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:6px;padding:9px 11px;font-family:'Space Mono',monospace;font-size:12px;color:var(--text);outline:none;min-width:0;transition:border-color .2s,box-shadow .2s;backdrop-filter:blur(4px)"
-            onkeydown="distKeydown(event)"
-            oninput="distAutocomplete(this.value)"
-            onfocus="this.style.borderColor='rgba(200,169,110,.5)';this.style.boxShadow='0 0 12px rgba(200,169,110,0.08)'"
-            onblur="this.style.borderColor='rgba(255,255,255,0.09)';this.style.boxShadow='none'"
-          />
-<button onclick="calcDist()" style="padding:9px 13px;background:rgba(200,169,110,.1);border:1px solid rgba(200,169,110,.28);border-radius:6px;color:var(--gold);font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1px;cursor:pointer;white-space:nowrap;-webkit-tap-highlight-color:transparent;transition:all .2s;backdrop-filter:blur(4px)" onmouseenter="this.style.background='rgba(200,169,110,.18)';this.style.boxShadow='0 0 16px rgba(200,169,110,0.1)'" onmouseleave="this.style.background='rgba(200,169,110,.1)';this.style.boxShadow='none'">CALCULAR</button>
-</div>
-<div id="dist-suggestions" style="display:none;position:absolute;top:100%;left:0;right:44px;background:rgba(14,14,16,0.95);backdrop-filter:blur(16px);border:1px solid rgba(200,169,110,.25);border-top:none;border-radius:0 0 6px 6px;z-index:999;max-height:200px;overflow-y:auto"></div>
-</div>
-<div id="dist-result" style="margin-top:8px;font-family:'Space Mono',monospace;font-size:12px;min-height:18px"></div>
+<div style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Calcular distância até você</div>
+<button id="dist-map-btn" onclick="openDistMap()" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:rgba(200,169,110,.08);border:1px solid rgba(200,169,110,.30);border-radius:8px;color:var(--gold);font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1.2px;cursor:pointer;width:100%;transition:all .2s;backdrop-filter:blur(4px)" onmouseenter="this.style.background='rgba(200,169,110,.16)';this.style.boxShadow='0 0 18px rgba(200,169,110,.08)'" onmouseleave="this.style.background='rgba(200,169,110,.08)';this.style.boxShadow='none'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>MARCAR MINHA LOCALIZAÇÃO NO MAPA</button>
+<div id="dist-result" style="display:none"></div>
+
+  <!-- ── Mini-map card (glassmorphism) ── -->
+  <div id="dist-card-map-wrap" style="display:none;margin-top:12px;border-radius:14px;overflow:hidden;position:relative;
+    background:rgba(255,255,255,.035);
+    border:1px solid rgba(255,255,255,.09);
+    box-shadow:0 12px 40px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.07);
+    backdrop-filter:blur(18px)">
+
+    <!-- map -->
+    <div id="dist-mini-map" style="height:168px;width:100%;display:block;position:relative;background:#111115"></div>
+
+    <!-- glass divider -->
+    <div style="height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.1),transparent)"></div>
+
+    <!-- stats + action row -->
+    <div style="padding:11px 13px;display:flex;align-items:center;justify-content:space-between;gap:8px;background:rgba(0,0,0,.18)">
+      <div style="display:flex;gap:7px;flex-shrink:0">
+
+        <!-- distance chip -->
+        <div style="background:rgba(200,169,110,.1);border:1px solid rgba(200,169,110,.22);border-radius:8px;padding:5px 11px;min-width:72px">
+          <div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin-bottom:3px">Distância</div>
+          <div id="dist-card-dist" style="font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:var(--gold);white-space:nowrap;line-height:1"></div>
+        </div>
+
+        <!-- taxa chip -->
+        <div id="dist-card-taxa-wrap" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:8px;padding:5px 11px;min-width:72px">
+          <div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin-bottom:3px">Taxa</div>
+          <div id="dist-card-taxa" style="font-family:'Space Mono',monospace;font-size:14px;font-weight:700;white-space:nowrap;line-height:1"></div>
+        </div>
+
+      </div>
+
+      <!-- alter button -->
+      <button onclick="openDistMap()" style="display:flex;align-items:center;gap:6px;padding:7px 13px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:var(--muted);font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.8px;cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0" onmouseenter="this.style.background='rgba(200,169,110,.12)';this.style.borderColor='rgba(200,169,110,.3)';this.style.color='var(--gold)'" onmouseleave="this.style.background='rgba(255,255,255,.06)';this.style.borderColor='rgba(255,255,255,.1)';this.style.color='var(--muted)'">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        Alterar
+      </button>
+    </div>
+  </div>
 </div>
 </div>
 
@@ -8953,232 +8979,443 @@ function buildQuickNav(pageId){
 </script>
 
 <script>
-/* ── Calculadora de distância domiciliar ── */
+/* ── Calculadora de distância domiciliar — mapa interativo ── */
 (function(){
-  /* Coordenadas do técnico - Tv We 31, Cidade Nova 5, Ananindeua PA */
-  var TECH_LAT = -1.3692;
-  var TECH_LNG = -48.4080;
 
-  /* Tabela de taxas progressiva - incrementos de 1km, +R$7,50 a cada faixa */
+  /* ── Destino fixo: WE 31, 1061, Cidade Nova 5, Ananindeua-PA ── */
+  var TECH_LAT = -1.361428;
+  var TECH_LNG = -48.394952;
+  var TECH_LABEL = 'Tv. WE 31, 1061 — Cidade Nova V, Ananindeua';
+
   var TAXA = [
-    { max: 1.5,  label: 'até 1,5 km',      taxa: 0,    cor: 'var(--green)' },
-    { max: 3,    label: '1,6 – 3 km',      taxa: 15,   cor: 'var(--gold)'  },
-    { max: 5,    label: '3,1 – 5 km',      taxa: 25,   cor: 'var(--gold)'  },
-    { max: 7,    label: '5,1 – 7 km',      taxa: 35,   cor: '#c8922a'      },
-    { max: 10,   label: '7,1 – 10 km',     taxa: 45,   cor: '#c8922a'      },
-    { max: 999,  label: 'acima de 10 km',  taxa: null, cor: 'var(--red)'   },
+    { max: 1.5, label: 'até 1,5 km',     taxa: 0,    cor: 'var(--green)' },
+    { max: 3,   label: '1,6 – 3 km',     taxa: 15,   cor: 'var(--gold)'  },
+    { max: 5,   label: '3,1 – 5 km',     taxa: 25,   cor: 'var(--gold)'  },
+    { max: 7,   label: '5,1 – 7 km',     taxa: 35,   cor: '#c8922a'      },
+    { max: 10,  label: '7,1 – 10 km',    taxa: 45,   cor: '#c8922a'      },
+    { max: 999, label: 'acima de 10 km', taxa: null, cor: 'var(--red)'   }
   ];
 
-  function haversine(lat1, lng1, lat2, lng2){
-    var R = 6371; /* km */
-    var dLat = (lat2 - lat1) * Math.PI / 180;
-    var dLng = (lng2 - lng1) * Math.PI / 180;
-    var a = Math.sin(dLat/2)*Math.sin(dLat/2) +
-            Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*
-            Math.sin(dLng/2)*Math.sin(dLng/2);
-    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-  }
+  function getTaxa(km){ for(var i=0;i<TAXA.length;i++) if(km<=TAXA[i].max) return TAXA[i]; return TAXA[TAXA.length-1]; }
+  function fmtDist(m){ if(m<1000) return Math.round(m)+' m'; return (m/1000).toFixed(1).replace('.',',')+' km'; }
 
-  function fmtDist(km){
-    if(km < 1) return Math.round(km * 1000) + ' m';
-    return km.toFixed(1).replace('.', ',') + ' km';
-  }
+  /* ── Inject modal ── */
+  function injectModal(){
+    if(document.getElementById('dist-map-modal')) return;
 
-  function getTaxa(km){
-    for(var i = 0; i < TAXA.length; i++){
-      if(km <= TAXA[i].max) return TAXA[i];
+    if(!document.querySelector('link[href*="leaflet"]')){
+      var lnk = document.createElement('link');
+      lnk.rel = 'stylesheet';
+      lnk.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+      document.head.appendChild(lnk);
     }
-    return TAXA[TAXA.length - 1];
+
+    var sty = document.createElement('style');
+    sty.textContent =
+      '.dist-tt{background:#1a1a1f!important;border:1px solid rgba(200,169,110,.4)!important;color:#c8a96e!important;font-family:"Space Mono",monospace!important;font-size:11px!important;padding:5px 10px!important;border-radius:6px!important;box-shadow:0 4px 16px rgba(0,0,0,.5)!important;white-space:nowrap!important}' +
+      '#dist-map-modal .leaflet-control-zoom a{background:#fff!important;color:#333!important;border-color:#ccc!important;box-shadow:0 1px 4px rgba(0,0,0,.2)!important}' +
+      '#dist-map-modal .leaflet-control-zoom a:hover{background:#f0f0f0!important}' +
+      '#dist-map-modal .leaflet-control-scale-line{background:rgba(255,255,255,.85)!important;font-family:"Space Mono",monospace!important;font-size:10px!important}' +
+      '#dist-map-modal .leaflet-attribution-flag{display:none!important}' +
+      '#dist-map-modal .leaflet-control-attribution{font-size:9px!important;background:rgba(255,255,255,.6)!important}' +
+      '.dsr-item:hover{background:rgba(200,169,110,.1)!important}' +
+      '@keyframes dist-pulse{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.8);opacity:0}}';
+    document.head.appendChild(sty);
+
+    var modal = document.createElement('div');
+    modal.id = 'dist-map-modal';
+    modal.style.cssText = 'display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.72);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:14px;box-sizing:border-box';
+
+    modal.innerHTML = [
+      '<div style="position:relative;width:100%;max-width:880px;height:88vh;background:#0d0d10;border:1px solid rgba(200,169,110,.22);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 40px 100px rgba(0,0,0,.8)">',
+
+        /* Header */
+        '<div style="display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid rgba(255,255,255,.07);flex-shrink:0">',
+          '<div style="flex-shrink:0;min-width:0">',
+            '<div style="font-family:\'Space Mono\',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:2px">Marque sua localização</div>',
+            '<div style="font-size:11px;color:var(--muted);white-space:nowrap">Pesquise ou clique no mapa para definir o ponto de partida</div>',
+          '</div>',
+
+          /* Search */
+          '<div style="flex:1;position:relative;max-width:420px;margin-left:auto">',
+            '<div style="display:flex;gap:6px">',
+              '<div style="position:relative;flex:1">',
+                '<svg style="position:absolute;left:9px;top:50%;transform:translateY(-50%);pointer-events:none;flex-shrink:0" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
+                '<input id="dist-search-input" type="text" placeholder="Pesquisar endereço, bairro ou CEP..." autocomplete="off"',
+                ' style="width:100%;padding:8px 10px 8px 28px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.11);border-radius:7px;color:var(--text);font-family:\'Space Mono\',monospace;font-size:11px;outline:none;box-sizing:border-box;transition:border-color .2s"',
+                ' onfocus="this.style.borderColor=\'rgba(200,169,110,.5)\'"',
+                ' onblur="this.style.borderColor=\'rgba(255,255,255,.11)\'"',
+                ' onkeydown="if(event.key===\'Enter\'){event.preventDefault();distMapSearch();}"',
+                ' oninput="distMapSearchLive(this.value)"',
+                '/>',
+                '<div id="dist-search-results" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:#16161c;border:1px solid rgba(200,169,110,.22);border-radius:8px;z-index:9999;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.65);max-height:220px;overflow-y:auto"></div>',
+              '</div>',
+              '<button onclick="distMapSearch()" style="padding:8px 14px;background:rgba(200,169,110,.1);border:1px solid rgba(200,169,110,.3);border-radius:7px;color:var(--gold);font-family:\'Space Mono\',monospace;font-size:10px;letter-spacing:1px;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .2s" onmouseenter="this.style.background=\'rgba(200,169,110,.2)\'" onmouseleave="this.style.background=\'rgba(200,169,110,.1)\'">BUSCAR</button>',
+            '</div>',
+          '</div>',
+
+          '<button onclick="closeDistMap()" style="flex-shrink:0;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:7px;color:var(--text);width:32px;height:32px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:background .15s" onmouseenter="this.style.background=\'rgba(255,255,255,.14)\'" onmouseleave="this.style.background=\'rgba(255,255,255,.06)\'">×</button>',
+        '</div>',
+
+        /* Map */
+        '<div id="dist-leaflet-map" style="flex:1;min-height:0"></div>',
+
+        /* Footer */
+        '<div style="padding:12px 16px;border-top:1px solid rgba(255,255,255,.07);background:#0a0a0c;flex-shrink:0">',
+          '<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">',
+            '<div id="dist-map-hint" style="flex:1;font-family:\'Space Mono\',monospace;font-size:11px;color:var(--muted)">Toque em qualquer ponto do mapa para marcar sua localização</div>',
+            '<div id="dist-map-info" style="display:none;flex:1;font-family:\'Space Mono\',monospace;font-size:12px;gap:16px;flex-wrap:wrap;align-items:center"></div>',
+            '<button id="dist-map-confirm" onclick="confirmDistMap()" style="display:none;padding:10px 20px;background:rgba(200,169,110,.12);border:1px solid rgba(200,169,110,.35);border-radius:8px;color:var(--gold);font-family:\'Space Mono\',monospace;font-size:10px;letter-spacing:1.2px;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .2s" onmouseenter="this.style.background=\'rgba(200,169,110,.22)\'" onmouseleave="this.style.background=\'rgba(200,169,110,.12)\'">CONFIRMAR ✓</button>',
+          '</div>',
+        '</div>',
+      '</div>'
+    ].join('');
+
+    modal.addEventListener('click', function(e){ if(e.target===modal) closeDistMap(); });
+    document.body.appendChild(modal);
   }
 
-  /* ── Autocomplete de endereços ── */
-  var _acTimer = null;
-  var _acSelected = null; /* {lat, lon, label} */
+  var _map = null, _miniMap = null, _userMarker = null, _routeLine = null, _pendingResult = null, _searchTimer = null;
+  var _userLat = null, _userLng = null, _routeCoords = null;
 
-  window.distAutocomplete = function(val){
-    var sug = document.getElementById('dist-suggestions');
-    clearTimeout(_acTimer);
-    _acSelected = null;
-    if(!val || val.length < 4){ sug.style.display='none'; sug.innerHTML=''; return; }
+  function buildMap(){
+    if(_map) return;
+    if(typeof L === 'undefined'){
+      var s = document.createElement('script');
+      s.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+      s.onload = function(){ buildMap(); };
+      document.head.appendChild(s);
+      return;
+    }
 
-    _acTimer = setTimeout(function(){
-      /* detectar CEP */
-      var cepOnly = val.replace(/\D/g,'');
-      if(cepOnly.length === 8){
-        /* CEP: mostrar única sugestão via ViaCEP */
-        fetch('https://viacep.com.br/ws/'+cepOnly+'/json/')
-          .then(function(r){ return r.json(); })
-          .then(function(d){
-            if(d.erro){ sug.style.display='none'; return; }
-            var label = [d.logradouro, d.bairro, d.localidade+' - '+d.uf, d.cep].filter(Boolean).join(', ');
-            var div = document.createElement('div');
-            div.className = 'dist-sug-item';
-            div.style.cssText = 'padding:9px 12px;cursor:pointer;font-size:11px;color:var(--text);border-bottom:1px solid rgba(255,255,255,.05);transition:background .15s';
-            div.innerHTML = '<span style="color:var(--gold);margin-right:6px">\uD83D\uDCCD</span>' + label;
-            div.dataset.cep = cepOnly;
-            div.dataset.label = label;
-            div.addEventListener('mousedown', function(){ distPickCep(this.dataset.cep, this.dataset.label); });
-            sug.innerHTML = '';
-            sug.appendChild(div);
-            sug.style.display = 'block';
-          }).catch(function(){ sug.style.display='none'; });
-        return;
-      }
+    _map = L.map('dist-leaflet-map', {
+      zoomControl: true, attributionControl: true, scrollWheelZoom: true
+    }).setView([TECH_LAT, TECH_LNG], 16);
 
-      /* Endereço livre: Nominatim autocomplete */
-      var url = 'https://nominatim.openstreetmap.org/search?format=json&limit=5&countrycodes=br&addressdetails=1&q='
-        + encodeURIComponent(val + ', Pará, Brasil');
-      fetch(url, {headers:{'Accept-Language':'pt-BR'}})
-        .then(function(r){ return r.json(); })
-        .then(function(data){
-          if(!data || !data.length){ sug.style.display='none'; return; }
-          sug.innerHTML = '';
-          data.forEach(function(p){
-            var parts = p.display_name.split(',').slice(0,5).join(',');
-            var div = document.createElement('div');
-            div.className = 'dist-sug-item';
-            div.style.cssText = 'padding:9px 12px;cursor:pointer;font-size:11px;color:var(--text);border-bottom:1px solid rgba(255,255,255,.05);transition:background .15s;line-height:1.4';
-            div.innerHTML = '<span style="color:var(--gold);margin-right:6px">\uD83D\uDCCD</span>' + parts;
-            div.dataset.lat = p.lat;
-            div.dataset.lon = p.lon;
-            div.dataset.label = parts;
-            div.addEventListener('mousedown', function(){ distPickPlace(parseFloat(this.dataset.lat), parseFloat(this.dataset.lon), this.dataset.label); });
-            sug.appendChild(div);
-          });
-          sug.style.display = 'block';
-        }).catch(function(){ sug.style.display='none'; });
-    }, 400);
-  };
+    /* Theme-aware tiles */
+    function getKtTheme(){
+      try{
+        var t = localStorage.getItem('kt_theme_mode') || 'escuro';
+        return ['escuro','noturno','branco'].indexOf(t) !== -1 ? t : 'escuro';
+      }catch(e){ return 'escuro'; }
+    }
 
-  window.distPickPlace = function(lat, lon, label){
-    var input = document.getElementById('dist-input');
-    var sug   = document.getElementById('dist-suggestions');
-    if(input) input.value = label;
-    sug.style.display = 'none';
-    _acSelected = {lat: parseFloat(lat), lon: parseFloat(lon), label: label};
-    /* calcular imediatamente */
-    var km = haversine(TECH_LAT, TECH_LNG, _acSelected.lat, _acSelected.lon);
-    showResult(_acSelected.lat, _acSelected.lon, label);
-  };
+    var TILES = {
+      branco:  'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+      escuro:  'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+      noturno: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+    };
+    var TILE_FILTER = {
+      branco:  'none',
+      escuro:  'none',
+      noturno: 'hue-rotate(210deg) saturate(0.65) brightness(0.72)'
+    };
+    var ATTRIB = '© <a href="https://carto.com/" target="_blank">CARTO</a> © <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>';
 
-  window.distPickCep = function(cep, label){
-    var input = document.getElementById('dist-input');
-    var sug   = document.getElementById('dist-suggestions');
-    if(input) input.value = label;
-    sug.style.display = 'none';
-    /* geocodificar o CEP via Nominatim */
-    var parts = label.split(',');
-    var queries = [
-      encodeURIComponent(parts[0]+', '+parts[1]+', '+parts[2]),
-      encodeURIComponent(parts[1]+', '+parts[2]),
-      encodeURIComponent('CEP '+cep+', Brasil'),
-    ];
-    tryNominatim(queries, function(place){
-      if(!place){ document.getElementById('dist-result').innerHTML='<span style="color:var(--red)">Não foi possível localizar. Tente pelo nome do bairro.</span>'; return; }
-      showResult(parseFloat(place.lat), parseFloat(place.lon), label);
+    var _tileLayer = null;
+    var _mapEl = document.getElementById('dist-leaflet-map');
+
+    function applyMapTheme(theme){
+      if(_tileLayer){ _map.removeLayer(_tileLayer); }
+      _tileLayer = L.tileLayer(TILES[theme] || TILES.escuro, {
+        maxZoom: 20, attribution: ATTRIB
+      }).addTo(_map);
+      if(_mapEl) _mapEl.style.filter = TILE_FILTER[theme] || 'none';
+    }
+
+    applyMapTheme(getKtTheme());
+    L.control.scale({ imperial: false, metric: true, position: 'bottomright' }).addTo(_map);
+
+    /* Watch for theme class change on <html> */
+    (new MutationObserver(function(muts){
+      muts.forEach(function(m){
+        if(m.attributeName === 'class' || m.attributeName === 'data-kt-theme'){
+          var t = getKtTheme();
+          applyMapTheme(t);
+        }
+      });
+    })).observe(document.documentElement, {attributes:true, attributeFilter:['class','data-kt-theme']});
+
+    /* Tech pin — animated gold */
+    var techIcon = L.divIcon({
+      html: '<div style="position:relative;width:24px;height:24px">'
+          + '<div style="position:absolute;inset:0;background:rgba(200,169,110,.3);border-radius:50%;animation:dist-pulse 2.4s ease-in-out infinite"></div>'
+          + '<div style="position:absolute;inset:5px;background:#c8a96e;border:2.5px solid #fff;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,.35)"></div>'
+          + '</div>',
+      iconSize: [24,24], iconAnchor:[12,12], className:''
     });
+    L.marker([TECH_LAT, TECH_LNG], {icon: techIcon, interactive:false, zIndexOffset:1000})
+      .addTo(_map)
+      .bindTooltip('<b>Kayk Tech</b><br><span style="font-size:10px">Tv. WE 31, 1061 — Cidade Nova V, Ananindeua</span>', {
+        permanent: false, direction: 'top', className: 'dist-tt', offset:[0,-8]
+      });
+
+    _map.on('click', function(e){ placeUserPin(e.latlng.lat, e.latlng.lng); });
+  }
+
+  /* ── Search ── */
+  window.distMapSearchLive = function(val){
+    clearTimeout(_searchTimer);
+    var res = document.getElementById('dist-search-results');
+    if(!val || val.length < 3){ if(res) res.style.display='none'; return; }
+    _searchTimer = setTimeout(function(){ distMapSearch(); }, 420);
   };
 
-  window.distKeydown = function(e){
-    var sug = document.getElementById('dist-suggestions');
-    if(e.key === 'Escape'){ sug.style.display='none'; return; }
-    if(e.key === 'Enter'){
-      sug.style.display='none';
-      calcDist();
-    }
-    if(e.key === 'ArrowDown'){
-      e.preventDefault();
-      var items = sug.querySelectorAll('.dist-sug-item');
-      var active = sug.querySelector('.dist-sug-active');
-      if(!active && items.length){ items[0].classList.add('dist-sug-active'); items[0].style.background='rgba(200,169,110,.1)'; }
-    }
+  window.distMapSearch = function(){
+    var input = document.getElementById('dist-search-input');
+    var res   = document.getElementById('dist-search-results');
+    if(!input || !res) return;
+    var q = input.value.trim();
+    if(!q){ res.style.display='none'; return; }
+    res.style.display = 'block';
+    res.innerHTML = '<div style="padding:10px 14px;font-family:\'Space Mono\',monospace;font-size:11px;color:var(--muted)">Buscando…</div>';
+    var url = 'https://nominatim.openstreetmap.org/search?format=json&limit=6&countrycodes=br&addressdetails=1&q='
+      + encodeURIComponent(q + ', Pará, Brasil');
+    fetch(url, {headers:{'Accept-Language':'pt-BR','User-Agent':'KaykTech/1.0'}})
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        if(!data || !data.length){
+          res.innerHTML = '<div style="padding:10px 14px;font-family:\'Space Mono\',monospace;font-size:11px;color:var(--muted)">Nenhum resultado. Tente um bairro ou cidade.</div>';
+          return;
+        }
+        res.innerHTML = '';
+        data.forEach(function(p){
+          var parts = p.display_name.split(',');
+          var main  = parts.slice(0,2).join(',').trim();
+          var sub   = parts.slice(2,5).join(',').trim();
+          var div   = document.createElement('div');
+          div.className = 'dsr-item';
+          div.style.cssText = 'padding:9px 14px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.05);transition:background .12s';
+          div.innerHTML =
+            '<div style="font-family:\'Space Mono\',monospace;font-size:11px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">📍 '+main+'</div>' +
+            (sub ? '<div style="font-size:10px;color:var(--muted);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+sub+'</div>' : '');
+          (function(lat,lng){
+            div.addEventListener('mousedown', function(e){
+              e.preventDefault();
+              input.value = main;
+              res.style.display = 'none';
+              if(_map) _map.setView([lat,lng], 16, {animate:true});
+              placeUserPin(lat, lng);
+            });
+          })(parseFloat(p.lat), parseFloat(p.lon));
+          res.appendChild(div);
+        });
+      })
+      .catch(function(){ res.innerHTML = '<div style="padding:10px 14px;font-size:11px;color:var(--muted)">Erro ao buscar. Tente novamente.</div>'; });
   };
 
-  /* Fechar sugestões ao clicar fora */
-  document.addEventListener('click', function(e){
-    var sug = document.getElementById('dist-suggestions');
-    var input = document.getElementById('dist-input');
-    if(sug && !sug.contains(e.target) && e.target !== input) sug.style.display='none';
+  document.addEventListener('mousedown', function(e){
+    var res = document.getElementById('dist-search-results');
+    var inp = document.getElementById('dist-search-input');
+    if(res && !res.contains(e.target) && e.target !== inp) res.style.display='none';
   });
 
-  window.calcDist = function(){
-    var input = document.getElementById('dist-input');
-    var result = document.getElementById('dist-result');
-    var q = (input ? input.value.trim() : '');
-    if(!q){ result.innerHTML = '<span style="color:var(--red)">Digite um endereço.</span>'; return; }
+  function placeUserPin(lat, lng){
+    if(!_map) return;
+    _userLat = lat; _userLng = lng;
+    var userIcon = L.divIcon({
+      html: '<div style="position:relative;width:24px;height:24px">'
+          + '<div style="position:absolute;inset:5px;background:#3b82f6;border:2.5px solid #fff;border-radius:50%;box-shadow:0 2px 8px rgba(59,130,246,.5)"></div>'
+          + '</div>',
+      iconSize: [24,24], iconAnchor:[12,12], className:''
+    });
+    if(_userMarker) _map.removeLayer(_userMarker);
+    _userMarker = L.marker([lat, lng], {icon: userIcon}).addTo(_map);
 
-    result.innerHTML = '<span style="color:var(--muted);animation:pulse 1s infinite">Buscando localização...</span>';
+    if(_routeLine){ _map.removeLayer(_routeLine); _routeLine = null; }
 
-    var cepMatch = q.replace(/\D/g,'');
-    var isCep = cepMatch.length === 8;
+    var hint  = document.getElementById('dist-map-hint');
+    var info  = document.getElementById('dist-map-info');
+    var btn   = document.getElementById('dist-map-confirm');
+    hint.textContent = 'Calculando rota…';
+    info.style.display = 'none';
+    btn.style.display  = 'none';
+    _pendingResult = null;
 
-    function showResult(lat, lng, label){
-      var km = haversine(TECH_LAT, TECH_LNG, lat, lng);
-      var t  = getTaxa(km);
-      /* armazena taxa globalmente para o orçamento */
-      window._distTaxaVal   = (t.taxa !== null && t.taxa > 0) ? t.taxa : 0;
-      window._distTaxaLabel = t.label;
-      if(typeof orcUpdatePanel === 'function') orcUpdatePanel();
-      var distStr = fmtDist(km);
-      var taxaStr = t.taxa === 0
-        ? '<span style="color:var(--green)">Grátis ✓</span>'
-        : t.taxa === null
-          ? '<span style="color:var(--red)">Consultar</span>'
-          : '<span style="color:'+t.cor+'">R$ '+t.taxa+'</span>';
-      result.innerHTML =
-        '<div style="display:flex;flex-direction:column;gap:6px">' +
-        '<div style="color:var(--muted);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">📍 '+label+'</div>' +
-        '<div style="display:flex;gap:18px;flex-wrap:wrap;align-items:center">' +
-          '<span>📏 <strong style="color:var(--gold)">'+distStr+'</strong></span>' +
+    /* OSRM route */
+    var url = 'https://router.project-osrm.org/route/v1/driving/'
+      + lng+','+lat+';'+TECH_LNG+','+TECH_LAT
+      + '?overview=full&geometries=geojson';
+
+    fetch(url)
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        if(!d.routes || !d.routes.length) throw new Error('sem rota');
+        var dist = d.routes[0].distance; /* metros */
+        var km   = dist / 1000;
+        var t    = getTaxa(km);
+        _pendingResult = { km: km, dist: dist, taxa: t };
+
+        /* Draw route */
+        var coords = d.routes[0].geometry.coordinates.map(function(c){ return [c[1],c[0]]; });
+        _routeCoords = coords;
+        _routeLine = L.polyline(coords, {
+          color: '#c8a96e', weight: 3, opacity: .75,
+          dashArray: null
+        }).addTo(_map);
+        _map.fitBounds(_routeLine.getBounds(), {padding:[32,32]});
+
+        var taxaStr = t.taxa === 0
+          ? '<span style="color:var(--green)">Grátis ✓</span>'
+          : t.taxa === null
+            ? '<span style="color:var(--red)">Consultar</span>'
+            : '<span style="color:'+t.cor+'">R$ '+t.taxa+'</span>';
+
+        info.style.display = 'flex';
+        info.style.cssText = 'display:flex;gap:20px;flex-wrap:wrap;align-items:center;font-family:\'Space Mono\',monospace;font-size:12px;margin-top:4px';
+        info.innerHTML =
+          '<span>📏 <strong style="color:var(--gold)">'+fmtDist(dist)+'</strong></span>' +
           '<span>🚗 Taxa: <strong>'+taxaStr+'</strong></span>' +
-        '</div>' +
-        (t.taxa === null ? '<div style="color:var(--red);font-size:11px">Acima de 18 km - entre em contato para combinar.</div>' : '') +
-        (t.taxa === 0 ? '' : '<div style="color:var(--muted);font-size:10px;margin-top:2px">* distância em linha reta - pode variar pelo trajeto real</div>') +
-        '</div>';
-    }
+          (t.taxa === null ? '<span style="color:var(--red);font-size:11px">Acima de 10 km — entre em contato.</span>' : '');
 
-    function tryNominatim(queries, cb){
-      if(!queries.length){ cb(null); return; }
-      var url = 'https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=br&q=' + queries[0];
-      fetch(url, {headers:{'Accept-Language':'pt-BR','User-Agent':'KaykTech/1.0'}})
-        .then(function(r){ return r.json(); })
-        .then(function(d){
-          if(d && d.length) cb(d[0]);
-          else tryNominatim(queries.slice(1), cb);
-        }).catch(function(){ tryNominatim(queries.slice(1), cb); });
-    }
-
-    if(isCep){
-      /* Via CEP → coordenadas via Nominatim com bairro+cidade */
-      fetch('https://viacep.com.br/ws/'+cepMatch+'/json/')
-        .then(function(r){ return r.json(); })
-        .then(function(d){
-          if(d.erro){ result.innerHTML='<span style="color:var(--red)">CEP não encontrado.</span>'; return; }
-          var label = [d.logradouro, d.bairro, d.localidade, d.uf].filter(Boolean).join(', ');
-          var queries = [
-            encodeURIComponent((d.logradouro?d.logradouro+', ':'')+d.bairro+', '+d.localidade+', '+d.uf),
-            encodeURIComponent(d.bairro+', '+d.localidade+', '+d.uf),
-            encodeURIComponent(d.localidade+', '+d.uf+', Brasil'),
-          ];
-          tryNominatim(queries, function(place){
-            if(!place){ result.innerHTML='<span style="color:var(--red)">Não foi possível localizar o CEP. Tente pelo nome do bairro.</span>'; return; }
-            showResult(parseFloat(place.lat), parseFloat(place.lon), label);
-          });
-        }).catch(function(){ result.innerHTML='<span style="color:var(--red)">Erro ao consultar CEP.</span>'; });
-    } else {
-      /* Endereço livre - tentar com e sem cidade */
-      var queries = [
-        encodeURIComponent(q+', Ananindeua, Pará'),
-        encodeURIComponent(q+', Belém, Pará'),
-        encodeURIComponent(q+', Pará, Brasil'),
-        encodeURIComponent(q+', Brasil'),
-      ];
-      tryNominatim(queries, function(place){
-        if(!place){ result.innerHTML='<span style="color:var(--red)">Endereço não encontrado. Tente usar o CEP.</span>'; return; }
-        showResult(parseFloat(place.lat), parseFloat(place.lon), place.display_name.split(',').slice(0,4).join(','));
+        hint.textContent = '';
+        btn.style.display = 'block';
+      })
+      .catch(function(){
+        hint.textContent = 'Não foi possível calcular a rota. Tente outro ponto.';
       });
-    }
+  }
+
+  window.openDistMap = function(){
+    injectModal();
+    var modal = document.getElementById('dist-map-modal');
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    /* Reset search box */
+    var si = document.getElementById('dist-search-input');
+    var sr = document.getElementById('dist-search-results');
+    if(si) si.value = '';
+    if(sr) sr.style.display = 'none';
+    /* Reset footer */
+    var hint = document.getElementById('dist-map-hint');
+    var info = document.getElementById('dist-map-info');
+    var btn  = document.getElementById('dist-map-confirm');
+    if(hint){ hint.textContent = 'Toque em qualquer ponto do mapa para marcar sua localização'; hint.style.display=''; }
+    if(info){ info.style.display='none'; info.innerHTML=''; }
+    if(btn)  btn.style.display = 'none';
+    setTimeout(function(){
+      buildMap();
+      if(_map) setTimeout(function(){ _map.invalidateSize(); }, 80);
+    }, 50);
   };
+
+  window.closeDistMap = function(){
+    var modal = document.getElementById('dist-map-modal');
+    if(modal) modal.style.display = 'none';
+    document.body.style.overflow = '';
+  };
+
+  window.confirmDistMap = function(){
+    if(!_pendingResult) return;
+    var r = _pendingResult;
+    var t = r.taxa;
+    window._distTaxaVal   = (t.taxa !== null && t.taxa > 0) ? t.taxa : 0;
+    window._distTaxaLabel = t.label;
+    if(typeof orcUpdatePanel === 'function') orcUpdatePanel();
+
+    /* ── Update chips ── */
+    var distEl = document.getElementById('dist-card-dist');
+    var taxaEl = document.getElementById('dist-card-taxa');
+    var taxaWrap = document.getElementById('dist-card-taxa-wrap');
+    if(distEl) distEl.textContent = fmtDist(r.dist);
+    if(taxaEl){
+      if(t.taxa === 0){
+        taxaEl.textContent = 'Grátis';
+        taxaEl.style.color = 'var(--green)';
+        if(taxaWrap){ taxaWrap.style.background='rgba(74,158,107,.1)'; taxaWrap.style.borderColor='rgba(74,158,107,.25)'; }
+      } else if(t.taxa === null){
+        taxaEl.textContent = 'Consultar';
+        taxaEl.style.color = 'var(--red)';
+      } else {
+        taxaEl.textContent = 'R$ '+t.taxa;
+        taxaEl.style.color = t.cor;
+      }
+    }
+
+    /* ── Show card ── */
+    var btn  = document.getElementById('dist-map-btn');
+    var wrap = document.getElementById('dist-card-map-wrap');
+    if(btn)  btn.style.display = 'none';
+
+    if(_miniMap){ _miniMap.remove(); _miniMap = null; }
+
+    /* Show wrapper FIRST so the browser computes dimensions,
+       then init map via double-RAF (guarantees a paint has happened) */
+    if(wrap){
+      wrap.style.opacity = '0';
+      wrap.style.display = 'block';
+    }
+
+    function doInitMiniMap(){
+      var miniEl = document.getElementById('dist-mini-map');
+      if(!miniEl || !_userLat || !_routeCoords) return;
+
+      var theme = (typeof getKtTheme === 'function') ? getKtTheme() : 'escuro';
+      var isDark = theme !== 'branco';
+
+      /* Pre-paint background so there's no white flash while tiles load */
+      miniEl.style.background = isDark ? '#111115' : '#e8e4dc';
+
+      _miniMap = L.map(miniEl, {
+        zoomControl: false, attributionControl: false,
+        dragging: false, scrollWheelZoom: false,
+        touchZoom: false, doubleClickZoom: false,
+        keyboard: false, tap: false, fadeAnimation: false
+      });
+
+      var tileUrl = theme === 'branco'
+        ? 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png'
+        : 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+      L.tileLayer(tileUrl, { maxZoom: 20, updateWhenIdle: false }).addTo(_miniMap);
+      if(theme === 'noturno') miniEl.style.filter = 'hue-rotate(210deg) saturate(0.65) brightness(0.72)';
+
+      /* Tech pin */
+      L.marker([TECH_LAT, TECH_LNG], { icon: L.divIcon({
+        html: '<div style="width:12px;height:12px;background:#c8a96e;border:2px solid #fff;border-radius:50%;box-shadow:0 0 8px rgba(200,169,110,.8)"></div>',
+        iconSize:[12,12], iconAnchor:[6,6], className:''
+      }), zIndexOffset:500}).addTo(_miniMap);
+
+      /* User pin */
+      L.marker([_userLat, _userLng], { icon: L.divIcon({
+        html: '<div style="width:12px;height:12px;background:#3b82f6;border:2px solid #fff;border-radius:50%;box-shadow:0 0 8px rgba(59,130,246,.8)"></div>',
+        iconSize:[12,12], iconAnchor:[6,6], className:''
+      }), zIndexOffset:500}).addTo(_miniMap);
+
+      /* Route */
+      var line = L.polyline(_routeCoords, {color:'#c8a96e', weight:2.5, opacity:.85}).addTo(_miniMap);
+      _miniMap.fitBounds(line.getBounds(), {padding:[28,28], animate:false});
+
+      /* Force size recalculation at multiple intervals */
+      _miniMap.invalidateSize({animate:false});
+      [80, 200, 500].forEach(function(ms){
+        setTimeout(function(){
+          if(_miniMap){
+            _miniMap.invalidateSize({animate:false});
+            _miniMap.fitBounds(line.getBounds(), {padding:[28,28], animate:false});
+          }
+        }, ms);
+      });
+
+      /* Fade card in after map is ready */
+      if(wrap){
+        wrap.style.transition = 'opacity .35s ease';
+        wrap.style.opacity = '1';
+      }
+    }
+
+    /* Double requestAnimationFrame = container is definitely painted */
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){
+        doInitMiniMap();
+      });
+    });
+
+    closeDistMap();
+  };
+
+  /* ESC closes modal */
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeDistMap(); });
+
 })();
 </script>
 
