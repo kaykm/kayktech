@@ -8144,7 +8144,6 @@ document.querySelectorAll('.svc-card').forEach((card, i)=>{
 <script>
 function showBancadaUnavailable(){
   const overlay = document.getElementById('bancada-modal-overlay');
-
   const wrap = document.getElementById('bm-check-wrap');
   const btn = document.getElementById('bm-confirm-btn');
   wrap.classList.remove('checked');
@@ -8152,10 +8151,17 @@ function showBancadaUnavailable(){
   btn.disabled = true;
   overlay.classList.add('visible');
   document.body.style.overflow = 'hidden';
+  /* Push sidebar below overlay — backdrop-filter creates compositing layers
+     that ignore z-index in WebKit; lowering sidebar z-index is the reliable fix */
+  const sb = document.getElementById('dt-sidebar');
+  if(sb) sb.style.setProperty('z-index','1','important');
 }
 function closeBancadaModal(){
   document.getElementById('bancada-modal-overlay').classList.remove('visible');
   document.body.style.overflow = '';
+  /* Restore sidebar z-index */
+  const sb = document.getElementById('dt-sidebar');
+  if(sb) sb.style.removeProperty('z-index');
 }
 function handleBancadaOverlayClick(e){
   if(e.target === document.getElementById('bancada-modal-overlay')) closeBancadaModal();
