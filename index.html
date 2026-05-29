@@ -11154,5 +11154,111 @@ html.kt-perf-ultra-leve .sgs-track{backdrop-filter:none!important;-webkit-backdr
 }
 </style>
 
+
+<script id="kt-card-height-equalizer">
+/* ── Equaliza altura dos cards dentro de cada svc-plan-row ──────────────────
+   Problema: grid com repeat(auto-fit,minmax(155px,1fr)) quebra em múltiplas
+   linhas em viewports pequenos. align-items:stretch só funciona na mesma
+   linha do grid — cards em linhas diferentes ficam com alturas diferentes.
+   Solução: mede a maior altura natural dos cards e aplica min-height em todos.
+─────────────────────────────────────────────────────────────────────────── */
+(function(){
+  var _timer = null;
+
+  function equalizeRows(){
+    document.querySelectorAll('.svc-plan-row').forEach(function(row){
+      var cards = Array.from(row.querySelectorAll(':scope > .svc-plan-card'));
+      if(cards.length < 2) return;
+
+      /* 1. Reset para medir alturas naturais */
+      cards.forEach(function(c){ c.style.minHeight = ''; });
+
+      /* 2. Força reflow e mede */
+      var maxH = 0;
+      cards.forEach(function(c){
+        var h = c.getBoundingClientRect().height;
+        if(h > maxH) maxH = h;
+      });
+
+      /* 3. Aplica apenas se houver diferença real (> 2px) */
+      var hasVariance = cards.some(function(c){
+        return Math.abs(c.getBoundingClientRect().height - maxH) > 2;
+      });
+
+      if(hasVariance && maxH > 0){
+        cards.forEach(function(c){
+          c.style.minHeight = Math.ceil(maxH) + 'px';
+        });
+      }
+    });
+  }
+
+  function schedule(ms){
+    clearTimeout(_timer);
+    _timer = setTimeout(equalizeRows, ms || 60);
+  }
+
+  /* ── Gatilhos ── */
+
+  /* 1. Carregamento inicial (após animações de entrada) */
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', function(){ schedule(450); });
+  } else {
+    schedule(450);
+  }
+
+  /* 2. Resize (debounced 80ms) */
+  window.addEventListener('resize', function(){ schedule(80); });
+
+  /* 3. Mudança de página — patcha window.navigateTo */
+  var _origNav = window.navigateTo;
+  window.navigateTo = function(pageId){
+    if(typeof _origNav === 'function') _origNav.apply(this, arguments);
+    schedule(220); /* aguarda a animação pageIn (.35s) */
+  };
+
+  /* 4. Mudança de tema/perf (pode afetar padding/fonte e alterar alturas) */
+  document.addEventListener('ktPerfChanged', function(){ schedule(120); });
+
+  /* 5. Observe mudanças de classe nos cards (seleção, desconto bancada, etc.) */
+  var _obs = new MutationObserver(function(muts){
+    var hit = muts.some(function(m){
+      return m.type === 'attributes' &&
+             m.target.classList &&
+             (m.target.classList.contains('svc-plan-card') ||
+              m.target.classList.contains('svc-plan-row'));
+    });
+    if(hit) schedule(100);
+  });
+
+  function attachObservers(){
+    document.querySelectorAll('.svc-plan-row').forEach(function(row){
+      _obs.observe(row, {
+        subtree: false,
+        childList: false,
+        attributes: true,
+        attributeFilter: ['class','style']
+      });
+      row.querySelectorAll('.svc-plan-card').forEach(function(card){
+        _obs.observe(card, {
+          subtree: false,
+          childList: false,
+          attributes: true,
+          attributeFilter: ['class','style']
+        });
+      });
+    });
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', attachObservers);
+  } else {
+    attachObservers();
+  }
+
+  /* Expõe para chamadas externas */
+  window.ktEqualizeCards = equalizeRows;
+})();
+</script>
 </body>
 </html>
