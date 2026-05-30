@@ -104,9 +104,9 @@ Economias aplicadas: comentários removidos, CSS unido e compactado legível, SV
     var mobileScreen = window.matchMedia && window.matchMedia('(max-width: 599px)').matches;
     var isMobileDefault = savedView === 'mobile' || (!savedView && (mobileScreen || mobileUA));
     var theme = localStorage.getItem('kt_theme_mode') || 'escuro';
-    var perf  = localStorage.getItem('kt_perf_mode') || (isMobileDefault ? 'leve' : 'medio');
+    var perf  = localStorage.getItem('kt_perf_mode') || (isMobileDefault ? 'ultra-leve' : 'medio');
     if(!validTheme[theme]) theme = 'escuro';
-    if(!validPerf[perf]) perf = (isMobileDefault ? 'leve' : 'medio');
+    if(!validPerf[perf]) perf = (isMobileDefault ? 'ultra-leve' : 'medio');
     document.documentElement.classList.add('kt-theme-' + theme, 'kt-perf-' + perf);
     document.documentElement.setAttribute('data-kt-theme', theme);
     document.documentElement.setAttribute('data-kt-perf', perf);
@@ -138,8 +138,7 @@ body{padding-left:var(--sidebar);font-size:16.8px}
 #content-wrap{max-width:1060px;margin:0 auto;position:relative;z-index:1}
 #content-wrap:has(#page-main.page-active){max-width:1696px}
 #content-wrap:has(#page-main.page-active) #page-main{padding-left:calc((100% - 1060px) / 2);padding-right:calc((100% - 1060px) / 2)}
-@media(min-width:1400px){body{position:relative;overflow-x:hidden}
-}
+body{position:relative;overflow-x:hidden}
 .hero{padding:32px 28px 28px}
 .hero-tag{font-size:11px;margin-bottom:8px;letter-spacing:3.5px}
 .hero-desc{font-size:14px;margin-top:6px}
@@ -932,6 +931,10 @@ body{padding-left:0!important;font-size:inherit!important}
 .kt-step-card p{font-size:13px!important;line-height:1.5!important}
 .kt-step-num{font-size:13px!important;padding:2px 8px!important}
 .kt-step-badge{font-size:10px!important}
+.dmap-header{flex-wrap:wrap!important}
+.dmap-titleblock{flex:1 1 auto!important;min-width:0!important}
+.dmap-subtitle{white-space:normal!important}
+.dmap-search{order:3!important;flex:1 1 100%!important;max-width:none!important;margin-left:0!important;margin-top:10px!important}
 }
 body.kt-perf-pesado #bg-orbs-canvas,body.kt-perf-pesado #bg-spline-wrap,body.kt-perf-pesado #sidebar-orbs-canvas{will-change:contents;transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibility:hidden}
 body.kt-perf-pesado .svc-plan-card:hover{will-change:transform,box-shadow}
@@ -1176,8 +1179,6 @@ body.view-mobile .kt-setup-card.kt-perf-mobile-only{display:flex!important}
 @media(max-width:599px){.kt-setup-card.kt-perf-mobile-only{display:flex!important}
 }
 body.view-mobile #kt-setup-overlay.manual .kt-setup-perf-section .kt-setup-matrix{grid-template-columns:repeat(2,minmax(0,1fr))}
-@media(max-width:720px){#kt-setup-overlay.manual .kt-setup-perf-section .kt-setup-matrix{grid-template-columns:repeat(2,minmax(0,1fr))}
-}
 .kt-setup-footer{display:flex;align-items:center;gap:10px;margin-top:16px}
 .kt-setup-status{flex:1;min-width:0;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .kt-setup-btn{border:1px solid rgba(200,169,110,.48);border-radius:12px;background:rgba(200,169,110,.10);color:var(--gold);padding:12px 15px;cursor:pointer;font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:1.6px;text-transform:uppercase;transition:transform .18s,background .2s,border-color .2s}
@@ -1198,7 +1199,7 @@ html.kt-theme-branco .kt-setup-card[data-kt-pref-value="leve"].active small{colo
 html.kt-theme-branco .kt-setup-card[data-kt-pref-value="ultra-leve"].active{color:#3a9e6b!important;border-color:rgba(74,200,130,.55)!important;background:rgba(100,210,150,.16)!important}
 @media(min-width:600px){#kt-setup-modal{margin-left:calc(var(--sidebar) / 2)!important}
 }
-@media(max-width:520px){#kt-setup-overlay{padding:12px}
+@media(max-width:599px){#kt-setup-overlay{padding:12px}
 .kt-setup-inner{padding:20px 14px 16px}
 .kt-setup-title{font-size:23px}
 .kt-setup-card{min-height:94px;padding:10px 5px;border-radius:13px}
@@ -1256,7 +1257,7 @@ body.view-mobile .view-toggle{display:none!important}
 55%{filter:blur(0px)}
 100%{opacity:1;transform:translateY(0) scale(1);filter:blur(0px)}
 }
-.atd-loc-btn{padding:11px 8px;background:#161616;border:1px solid rgba(200,169,110,0.22);border-radius:14px;color:rgba(200,169,110,.65);font-family:'Space Mono',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-height:76px;position:relative;cursor:pointer;transition:background .25s,border-color .25s,color .25s,box-shadow .25s,transform .18s;-webkit-tap-highlight-color:transparent;width:100%;box-sizing:border-box;box-shadow:-5px -5px 12px rgba(255,255,255,0.05),6px 6px 14px rgba(0,0,0,0.75),inset 0 1px 0 rgba(255,255,255,0.07),inset 0 -1px 0 rgba(0,0,0,0.4)}
+.atd-loc-btn{padding:11px 8px;background:#161616;border:1px solid rgba(200,169,110,0.22);border-radius:14px;color:rgba(200,169,110,.65);font-family:'Space Mono',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-height:76px;min-width:0;position:relative;cursor:pointer;transition:background .25s,border-color .25s,color .25s,box-shadow .25s,transform .18s;-webkit-tap-highlight-color:transparent;width:100%;box-sizing:border-box;box-shadow:-5px -5px 12px rgba(255,255,255,0.05),6px 6px 14px rgba(0,0,0,0.75),inset 0 1px 0 rgba(255,255,255,0.07),inset 0 -1px 0 rgba(0,0,0,0.4)}
 .atd-loc-btn:hover{background:#1c1c1c;border-color:rgba(200,169,110,0.38);color:rgba(200,185,140,.9);box-shadow:-6px -6px 14px rgba(255,255,255,0.06),7px 7px 16px rgba(0,0,0,0.8),inset 0 1px 0 rgba(255,255,255,0.09),inset 0 -1px 0 rgba(0,0,0,0.45),0 0 18px rgba(200,169,110,0.07);transform:translateY(-1px)}
 .atd-loc-btn.atd-active-dom{background:#1a1a1a!important;border-color:rgba(200,169,110,0.55)!important;color:var(--gold)!important;box-shadow:inset -4px -4px 9px rgba(255,255,255,0.04),inset 4px 4px 10px rgba(0,0,0,0.7),0 0 20px rgba(200,169,110,0.10),inset 0 1px 0 rgba(200,169,110,0.15)!important}
 .atd-loc-btn.atd-active-ban{background:#141414!important;border-color:rgba(200,169,110,0.22)!important;color:var(--gold-dim)!important;box-shadow:inset -3px -3px 8px rgba(255,255,255,0.03),inset 3px 3px 9px rgba(0,0,0,0.65),0 0 12px rgba(200,169,110,0.06)!important}
@@ -1448,7 +1449,7 @@ to{opacity:1;transform:translateY(0)}
 .footer-info-panel{overflow:hidden;max-height:0;transition:max-height .44s cubic-bezier(.4,0,.2,1),opacity .36s ease;opacity:0}
 .footer-info-panel.fip-open{max-height:960px;opacity:1}
 .fip-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border-top:1px solid var(--border)}
-@media(max-width:480px){.fip-grid{grid-template-columns:1fr}
+@media(max-width:599px){.fip-grid{grid-template-columns:1fr}
 }
 .fip-item{display:flex;gap:11px;align-items:flex-start;padding:13px 13px;background:var(--surface);transition:background .15s}
 .fip-item:hover{background:var(--surface2)}
@@ -1460,7 +1461,7 @@ to{opacity:1;transform:translateY(0)}
 .fip-text strong{color:var(--text);font-weight:500}
 #bancada-modal-overlay{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.78);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .48s ease;-webkit-tap-highlight-color:transparent}
 #bancada-modal-overlay.visible{opacity:1;pointer-events:all}
-#bancada-modal{width:100%;max-width:480px;background:var(--surface);border:1px solid var(--border2);border-top:2px solid var(--gold-dim);border-radius:10px 10px 0 0;padding:22px 20px 36px;transform:translateY(100%);transition:transform .75s cubic-bezier(.22,1,.36,1);-webkit-tap-highlight-color:transparent;max-height:88dvh;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+#bancada-modal{width:100%;max-width:480px;background:var(--surface);border:1px solid var(--border2);border-top:2px solid var(--gold-dim);border-radius:10px 10px 0 0;padding:22px 20px calc(36px + env(safe-area-inset-bottom,0px));transform:translateY(100%);transition:transform .75s cubic-bezier(.22,1,.36,1);-webkit-tap-highlight-color:transparent;max-height:88dvh;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 #bancada-modal-overlay.visible #bancada-modal{transform:translateY(0)}
 .bm-handle{width:36px;height:3px;background:var(--border2);border-radius:2px;margin:0 auto 22px}
 .bm-icon-wrap{width:42px;height:42px;border-radius:50%;background:rgba(200,169,110,.1);border:1px solid rgba(200,169,110,.22);display:flex;align-items:center;justify-content:center;margin-bottom:13px;flex-shrink:0}
@@ -1747,7 +1748,7 @@ to{opacity:1;transform:translateY(0)}
 88%{transform:scale(1.06)}
 100%{transform:scale(1)}
 }
-.kt-check-circle{transition:background 0.44s cubic-bezier(.22,1,.36,1),box-shadow 0.44s cubic-bezier(.22,1,.36,1) !important;will-change:background,transform}
+.kt-check-circle{transition:background 0.44s cubic-bezier(.22,1,.36,1),box-shadow 0.44s cubic-bezier(.22,1,.36,1) !important}
 .spc-feat:nth-child(1) .kt-check-circle{transition-delay:0ms !important}
 .spc-feat:nth-child(2) .kt-check-circle{transition-delay:30ms !important}
 .spc-feat:nth-child(3) .kt-check-circle{transition-delay:60ms !important}
@@ -2733,9 +2734,9 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
       var mobileUA = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || '');
       var mobileScreen = window.matchMedia && window.matchMedia('(max-width: 599px)').matches;
       var mobile = savedView === 'mobile' || (!savedView && (mobileScreen || mobileUA));
-      return mobile ? 'leve' : 'medio';
+      return mobile ? 'ultra-leve' : 'medio';
     }catch(e){
-      return (window.innerWidth < 600) ? 'leve' : 'medio';
+      return (window.innerWidth < 600) ? 'ultra-leve' : 'medio';
     }
   }
 
@@ -3145,7 +3146,7 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
 (function(){
 
   function isMobileDevice(){
-    return window.innerWidth < 768 || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+    return window.innerWidth < 600 || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
   }
   window.isMobileDevice = isMobileDevice;
 
@@ -3325,7 +3326,7 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
 </div>
 </div>
 
-<div class="hero-meta-item hero-meta-span2" style="opacity:0;animation:fu .7s ease forwards .82s">
+<div class="hero-meta-item" style="opacity:0;animation:fu .7s ease forwards .82s">
 <span class="hero-meta-icon" style="border-color:rgba(200,169,110,.35);color:var(--gold)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M4.93 4.93a10 10 0 0 0 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M8.46 8.46a5 5 0 0 0 0 7.07"/></svg></span>
 <div>
 <div class="hero-meta-label">Serviços</div>
@@ -3526,7 +3527,7 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;pointer-events:none"><use href="#kt-icon-8"></use></svg>
 <span>Como funciona</span>
 </div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:14px;position:relative">
+<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:7px;margin-bottom:14px;position:relative">
 <div id="tut-btn-domicilio" class="atd-loc-btn">
 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none"><use href="#kt-icon-9"></use></svg>
 <span>Na sua casa</span>
@@ -3553,11 +3554,11 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
 <svg width="15px" height="15px" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;user-select:none;-webkit-user-select:none;pointer-events:none"><use href="#kt-icon-8"></use></svg>
 <span>Local de atendimento</span>
 </div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;width:100%" id="atendimento-btns">
+<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:7px;width:100%" id="atendimento-btns">
 <button id="btn-domicilio" onclick="setAtendimento('domicilio')" class="atd-loc-btn atd-active-dom">
 <svg width="18px" height="18px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:block;user-select:none;-webkit-user-select:none;pointer-events:none"><use href="#kt-icon-9"></use></svg>
 <span>Na sua casa</span>
-<span style="font-size:11px;color:var(--green);letter-spacing:.5px;white-space:nowrap;line-height:1.2;display:block;text-align:center">grátis até 1,5 km</span>
+<span style="font-size:11px;color:var(--green);letter-spacing:.5px;line-height:1.2;display:block;text-align:center">grátis até 1,5&nbsp;km</span>
 <span onclick="event.stopPropagation();showKmPopup()" style="-webkit-tap-highlight-color:transparent;position:absolute;top:5px;right:6px;width:16px;height:16px;border-radius:50%;border:1px solid rgba(200,169,110,.4);display:flex;align-items:center;justify-content:center;background:rgba(200,169,110,.1);cursor:pointer;transition:background .2s ease" title="Ver tabela de deslocamento">
 <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="user-select:none;-webkit-user-select:none;pointer-events:none"><use href="#kt-icon-4"></use></svg>
 </span>
@@ -3565,7 +3566,7 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
 <button id="btn-tecnica" onclick="showBancadaUnavailable()" class="atd-loc-btn">
 <svg width="18px" height="18px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:block;user-select:none;-webkit-user-select:none;pointer-events:none"><use href="#kt-icon-3"></use></svg>
 <span>Deixar na bancada</span>
-<span style="font-size:11px;color:var(--gold-dim);letter-spacing:.5px;white-space:nowrap;line-height:1.2;display:block;text-align:center">disponível · ver detalhes</span>
+<span style="font-size:11px;color:var(--gold-dim);letter-spacing:.5px;line-height:1.2;display:block;text-align:center">disponível · ver detalhes</span>
 </button>
 </div>
 <div id="atendimento-info" style="margin-top:8px;font-family:'Space Mono',monospace;font-size:13px;color:var(--muted);line-height:1.6">Selecione onde quer ser atendido para calcular o orçamento correto.</div>
@@ -9103,14 +9104,14 @@ function buildQuickNav(pageId){
       '<div style="position:relative;width:100%;max-width:880px;height:88vh;background:#0d0d10;border:1px solid rgba(200,169,110,.22);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 40px 100px rgba(0,0,0,.8)">',
 
         /* Header */
-        '<div style="display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid rgba(255,255,255,.07);flex-shrink:0">',
-          '<div style="flex-shrink:0;min-width:0">',
+        '<div class="dmap-header" style="display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid rgba(255,255,255,.07);flex-shrink:0">',
+          '<div class="dmap-titleblock" style="flex-shrink:0;min-width:0">',
             '<div style="font-family:\'Space Mono\',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:2px">Marque sua localização</div>',
-            '<div style="font-size:11px;color:var(--muted);white-space:nowrap">Pesquise ou clique no mapa para definir o ponto de partida</div>',
+            '<div class="dmap-subtitle" style="font-size:11px;color:var(--muted);white-space:nowrap">Pesquise ou clique no mapa para definir o ponto de partida</div>',
           '</div>',
 
           /* Search */
-          '<div style="flex:1;position:relative;max-width:420px;margin-left:auto">',
+          '<div class="dmap-search" style="flex:1;position:relative;max-width:420px;margin-left:auto">',
             '<div style="display:flex;gap:6px">',
               '<div style="position:relative;flex:1">',
                 '<svg style="position:absolute;left:9px;top:50%;transform:translateY(-50%);pointer-events:none;flex-shrink:0" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
@@ -10615,7 +10616,7 @@ function closeWIP(){
     var savedPerf = storageGet(PERF_KEY);
     /* ultra-leve agora permitido em todos os modos — não forçar reset para medio */
     if(hasManualPerf()) return;
-    var perf = mode === 'mobile' ? 'leve' : 'medio';
+    var perf = mode === 'mobile' ? 'ultra-leve' : 'medio';
     if(!validPerf(perf)) return;
     if(typeof window.applyKtVisualPrefs === 'function'){
       window.applyKtVisualPrefs(getTheme(), perf, true);
@@ -10880,6 +10881,35 @@ html.kt-perf-ultra-leve .svc-card-nav .svc-nav-btn{backdrop-filter:none!importan
     return false;
   }
 
+  /* Quando os cards entram em modo carrossel (swipe via botão), força ultra-leve.
+     Runtime-only (não grava em localStorage) — o default salvo por view fica a
+     cargo de forcePerfForView, que é ciente de mobile/desktop e se autocorrige. */
+  function ensureUltraLeve(){
+    try{
+      var de = document.documentElement;
+      if(de.classList.contains('kt-perf-ultra-leve')) return;
+      ['leve','medio','pesado'].forEach(function(p){
+        de.classList.remove('kt-perf-'+p);
+        if(document.body) document.body.classList.remove('kt-perf-'+p);
+      });
+      de.classList.add('kt-perf-ultra-leve');
+      de.setAttribute('data-kt-perf','ultra-leve');
+      if(document.body){ document.body.classList.add('kt-perf-ultra-leve'); document.body.setAttribute('data-kt-perf','ultra-leve'); }
+      if(typeof window.ktFixUltraLeveInlineOpacity === 'function'){ setTimeout(window.ktFixUltraLeveInlineOpacity, 40); }
+    }catch(e){}
+  }
+
+  /* Repaint suave (opacity nudge) — força o compositor a re-rasterizar o card
+     visível, evitando que checkmarks/botão "sumam" em scroll containers no mobile. */
+  function repaintCard(card){
+    if(!card) return;
+    try{
+      card.style.opacity = '0.999';
+      void card.offsetWidth;
+      requestAnimationFrame(function(){ card.style.opacity = ''; });
+    }catch(e){}
+  }
+
   function getCards(row){
     return Array.prototype.slice.call(row.children).filter(function(el){
       return el.classList && el.classList.contains('svc-plan-card');
@@ -10994,6 +11024,7 @@ html.kt-perf-ultra-leve .svc-card-nav .svc-nav-btn{backdrop-filter:none!importan
         animateTo(card.offsetLeft);
       }
       syncNavs();
+      repaintCard(card);
     }
 
     function refresh(){
@@ -11001,8 +11032,10 @@ html.kt-perf-ultra-leve .svc-card-nav .svc-nav-btn{backdrop-filter:none!importan
       var wasActive = wrap.classList.contains('kt-nav-active');
       wrap.classList.toggle('kt-nav-active', active);
       if(active){
+        ensureUltraLeve();
         if(!wasActive) idx = 0;
         goTo(idx, true);
+        repaintCard(getCards(row)[idx]);
       } else {
         if(animId){ cancelAnimationFrame(animId); animId = 0; }
         row.scrollLeft = 0;
