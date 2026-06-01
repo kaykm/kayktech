@@ -1,9 +1,5 @@
 <!DOCTYPE html>
-<!--
-Kayk Tech - MAX_REDUZIDO_IA
-Reduzido para IA continuar editando: sem ofuscar JS, sem renomear funções, sem apagar funcionalidades conhecidas.
-Economias aplicadas: comentários removidos, CSS unido e compactado legível, SVG repetido convertido para sprite, linhas/indentação excedentes removidas.
--->
+
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -12,8 +8,7 @@ Economias aplicadas: comentários removidos, CSS unido e compactado legível, SV
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script>
-/* Suprime o erro benigno de ResizeObserver que browsers disparam
-   quando notificações não são entregues no mesmo frame de layout */
+
 (function(){
   var _onerror = window.onerror;
   window.onerror = function(msg, src, line, col, err){
@@ -34,29 +29,26 @@ Economias aplicadas: comentários removidos, CSS unido e compactado legível, SV
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#0a0a0a">
 <meta name="format-detection" content="telephone=yes">
-<!-- TODO: troque a URL abaixo pelo seu domínio real quando publicar -->
+
 <link rel="canonical" href="https://kaykm.github.io/kayktech/">
 
-<!-- Open Graph (preview de link no WhatsApp, Facebook, etc) -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Kayk Tech">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:title" content="Kayk Tech · Assistência Técnica Premium · Ananindeua - PA">
 <meta property="og:description" content="Reparo e manutenção de computadores em Ananindeua e região. Atendimento na sua casa ou na bancada — hardware, software, formatação, limpeza e diagnóstico.">
 <meta property="og:url" content="https://kaykm.github.io/kayktech/">
-<!-- TODO: substitua por uma imagem 1200x630px (logo + nome) para o preview ficar bonito -->
+
 <meta property="og:image" content="https://kaykm.github.io/kayktech/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Kayk Tech - Assistência Técnica Premium">
 
-<!-- Twitter / X cards -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Kayk Tech · Assistência Técnica Premium · Ananindeua - PA">
 <meta name="twitter:description" content="Reparo e manutenção de computadores em Ananindeua e região. Atendimento na sua casa ou na bancada.">
 <meta name="twitter:image" content="https://kaykm.github.io/kayktech/og-image.png">
 
-<!-- Dados estruturados: negócio local (ajuda a aparecer no Google Maps / busca local) -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -106,8 +98,7 @@ Economias aplicadas: comentários removidos, CSS unido e compactado legível, SV
     var mobileScreen = window.matchMedia && window.matchMedia('(max-width: 599px)').matches;
     var isMobileDefault = savedView === 'mobile' || (!savedView && (mobileScreen || mobileUA));
     var theme = localStorage.getItem('kt_theme_mode') || 'escuro';
-    /* Detecta hardware "humilde" para escolher um padrão leve no 1º acesso:
-       pouca RAM, poucos núcleos, modo economia de dados ou movimento reduzido. */
+
     var lowMem   = (navigator.deviceMemory || 8) <= 4;
     var lowCores = (navigator.hardwareConcurrency || 8) <= 4;
     var saveData = !!(navigator.connection && navigator.connection.saveData);
@@ -2133,8 +2124,6 @@ body.view-mobile .kt-setup-card[data-kt-pref-value="ultra-leve"]{display:flex!im
 }
 html.kt-perf-ultra-leve .hero-tag,html.kt-perf-ultra-leve .hero-title,html.kt-perf-ultra-leve .hero-desc,html.kt-perf-ultra-leve .hero-loc,html.kt-perf-ultra-leve .hero-chips,html.kt-perf-ultra-leve .view-toggle,html.kt-perf-ultra-leve .legend-wrap,html.kt-perf-ultra-leve .bk-card,html.kt-perf-ultra-leve .tip-item,html.kt-perf-ultra-leve .rdm-tag,html.kt-perf-ultra-leve .rdm-title,html.kt-perf-ultra-leve .rdm-sub,html.kt-perf-ultra-leve .rdm-stats,html.kt-perf-ultra-leve .rdm-phase,html.kt-perf-ultra-leve .rdm-tip,html.kt-perf-ultra-leve .rdm-chart-wrap,html.kt-perf-ultra-leve .svc-plan-row,html.kt-perf-ultra-leve .svc-switcher-wrap,html.kt-perf-ultra-leve .page.page-active,html.kt-perf-ultra-leve #atd-card,html.kt-perf-ultra-leve .hero-meta-item{opacity:1!important;transform:none!important}
 
-/* ── Collapsed sidebar config button ── */
-/* ── Gear btn wrap (visible when sidebar collapsed) ── */
 #ds-cfg-wrap{
   display:none;
   justify-content:center;align-items:center;
@@ -2170,11 +2159,6 @@ html.kt-perf-ultra-leve .hero-tag,html.kt-perf-ultra-leve .hero-title,html.kt-pe
   box-shadow:0 0 18px rgba(200,169,110,.22),inset 0 1px 0 rgba(255,255,255,.10);
 }
 
-/* ══════════════════════════════════════════════
-   SETTINGS MODAL — centered glassmorphism SaaS
-   ══════════════════════════════════════════════ */
-
-/* Overlay backdrop */
 #ds-cfg-overlay{
   position:fixed;inset:0;z-index:3100;
   display:none;align-items:center;justify-content:center;
@@ -2189,7 +2173,6 @@ html.kt-perf-ultra-leve .hero-tag,html.kt-perf-ultra-leve .hero-title,html.kt-pe
 }
 html.kt-theme-branco #ds-cfg-overlay{background:rgba(230,220,200,.55)}
 
-/* Modal card */
 #ds-cfg-popup{
   position:relative;
   width:min(92vw, 400px);
@@ -2211,7 +2194,7 @@ html.kt-theme-branco #ds-cfg-overlay{background:rgba(230,220,200,.55)}
   transition:transform .34s cubic-bezier(.22,1,.36,1),opacity .24s ease;
   overflow:hidden;
 }
-/* Noise texture layer */
+
 #ds-cfg-popup::before{
   content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.80' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.14'/%3E%3C/svg%3E");
@@ -2227,7 +2210,6 @@ html.kt-theme-branco #ds-cfg-popup{
   box-shadow:0 32px 80px rgba(88,60,18,.22),inset 0 1px 0 rgba(255,255,255,.90);
 }
 
-/* ── Modal Header ── */
 .dcp-header{
   display:flex;align-items:center;justify-content:space-between;
   padding:18px 20px 14px;
@@ -2263,10 +2245,8 @@ html.kt-theme-branco .dcp-header-sub{color:#8b6a30}
 .dcp-close-btn:hover{background:rgba(200,169,110,.12);border-color:rgba(200,169,110,.35);color:var(--gold)}
 html.kt-theme-branco .dcp-close-btn{border-color:rgba(155,109,38,.18);color:#8b6a30}
 
-/* ── Modal Body ── */
 .dcp-body{display:flex;flex-direction:column;gap:0}
 
-/* ── Section ── */
 .dcp-section{padding:16px 20px}
 .dcp-section+.dcp-section{border-top:1px solid rgba(255,255,255,.05)}
 html.kt-theme-branco .dcp-section+.dcp-section{border-top-color:rgba(155,109,38,.12)}
@@ -2278,7 +2258,6 @@ html.kt-theme-branco .dcp-section+.dcp-section{border-top-color:rgba(155,109,38,
 .dcp-sec-label svg{flex-shrink:0;opacity:.7}
 html.kt-theme-branco .dcp-sec-label{color:#8b6a30}
 
-/* ── View Pills ── */
 .dcp-pills{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .dcp-pill{
   display:flex;flex-direction:column;align-items:center;gap:7px;
@@ -2309,7 +2288,6 @@ html.kt-theme-branco .dcp-sec-label{color:#8b6a30}
 html.kt-theme-branco .dcp-pill{background:rgba(0,0,0,.04);border-color:rgba(155,109,38,.15);color:#8b7040}
 html.kt-theme-branco .dcp-pill.active-vm{background:rgba(200,169,110,.16);border-color:rgba(155,109,38,.50);color:#7a4e0e}
 
-/* ── Status badge ── */
 .dcp-status-row{
   display:flex;align-items:center;gap:8px;
   padding:10px 20px;
@@ -2331,7 +2309,6 @@ html.kt-theme-branco .dcp-status-row{border-color:rgba(155,109,38,.12);backgroun
 }
 html.kt-theme-branco .dcp-status{color:#8b6a30}
 
-/* ── Config button ── */
 .dcp-cfg-btn{
   display:flex;align-items:center;gap:10px;
   padding:13px 16px;border-radius:12px;cursor:pointer;
@@ -2390,7 +2367,6 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
 
 <canvas id="bg-orbs-canvas" aria-hidden="true"></canvas>
 
-<!-- Grid SVG background — pattern-tiled, full-viewport, radial-faded -->
 <div id="bg-spline-wrap" style="position:fixed;inset:0;z-index:0;pointer-events:none;width:100%;height:100%;overflow:hidden;background:#000;">
   <svg viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice"
        style="position:absolute;inset:0;width:100%;height:100%" aria-hidden="true"
@@ -2414,7 +2390,7 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
     </defs>
     <ellipse cx="960" cy="540" rx="240" ry="240" fill="white" fill-opacity="0.04" filter="url(#kt_orb_blur)"/>
     <rect x="0" y="0" width="1920" height="1080" fill="url(#kt_grid)" mask="url(#kt_mask)"/>
-    <!-- CSS-animated highlight cells — no JS, works on any host -->
+
     <g mask="url(#kt_mask)">
       <rect style="animation:kt-pulse 7.3s ease-in-out -1.4s infinite;--pk:.11" x="644"  y="105.5" width="79" height="79" fill="white"/>
       <rect style="animation:kt-pulse 5.8s ease-in-out -3.7s infinite;--pk:.13" x="960"  y="263.5" width="79" height="79" fill="white"/>
@@ -2435,7 +2411,7 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
   </svg>
 </div>
 <script>
-/* Respeita os modos de performance: leve/ultra-leve escondem o bg */
+
 (function(){
   function applyPerf(){
     var perf;
@@ -2600,12 +2576,9 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
 
 </aside>
 
-
-<!-- Settings Modal Overlay -->
 <div id="ds-cfg-overlay" aria-hidden="true">
   <div id="ds-cfg-popup" role="dialog" aria-modal="true" aria-labelledby="dsCfgTitle">
 
-    <!-- Header -->
     <div class="dcp-header">
       <div class="dcp-header-left">
         <div class="dcp-header-icon">
@@ -2621,16 +2594,13 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
       </button>
     </div>
 
-    <!-- Status Row -->
     <div class="dcp-status-row">
       <div class="dcp-status-dot"></div>
       <div class="dcp-status" id="dsCfgStatus">Tema: Escuro · Desempenho: Médio</div>
     </div>
 
-    <!-- Body -->
     <div class="dcp-body">
 
-      <!-- View Mode Section -->
       <div class="dcp-section">
         <div class="dcp-sec-label">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
@@ -2648,7 +2618,6 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
         </div>
       </div>
 
-      <!-- Theme & Performance Section -->
       <div class="dcp-section">
         <div class="dcp-sec-label">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#kt-icon-17"></use></svg>
@@ -2831,7 +2800,6 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
     var currentMobile = document.getElementById('ktVisualCurrentMobile');
     if(currentMobile) currentMobile.textContent = 'Tema: ' + labelsTheme[selectedTheme];
 
-    /* estado ativo dos botões de view (desktop/mobile) */
     var vmMode = document.body.classList.contains('view-mobile') ? 'mobile' : 'desktop';
     document.querySelectorAll('.vm-btn[data-vm]').forEach(function(btn){
       btn.classList.toggle('active-vm', btn.getAttribute('data-vm') === vmMode);
@@ -3090,7 +3058,6 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
 })();
 </script>
 
-
 <a id="wa-fab" href="https://wa.me/5591999687602" target="_blank" aria-label="WhatsApp" rel="noopener">
 <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#kt-icon-18"></use></svg>
 </a>
@@ -3149,7 +3116,7 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
     if(save !== false){
       try{
         localStorage.setItem('kt_view_mode', mode);
-        /* Record that this choice was made explicitly on this device type */
+
         localStorage.setItem('kt_view_manual', isMobileDevice() ? 'mobile' : 'desktop');
       }catch(e){}
     }
@@ -3177,7 +3144,6 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
 
   window.setViewMode = setViewMode;
 
-  // ── Aviso de tela larga no modo mobile ──
   function updateWideWarn(){
     var warn = document.getElementById('mobile-wide-warn');
     if(!warn) return;
@@ -3186,7 +3152,7 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
     warn.style.display = (isMobileMode && isWide) ? 'flex' : 'none';
   }
   window.addEventListener('resize', updateWideWarn);
-  // patch setViewMode para chamar updateWideWarn depois
+
   var _origSetViewMode = window.setViewMode;
   window.setViewMode = function(mode, save){
     _origSetViewMode(mode, save);
@@ -3198,8 +3164,7 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
     var saved = null, manual = null;
     try{ saved = localStorage.getItem('kt_view_mode'); manual = localStorage.getItem('kt_view_manual'); }catch(e){}
     var deviceMode = isMobileDevice() ? 'mobile' : 'desktop';
-    /* Respect saved preference only if user chose it manually on this same device type,
-       otherwise always follow the current device */
+
     var mode = (saved && manual === deviceMode) ? saved : deviceMode;
     setViewMode(mode, false);
 
@@ -3211,7 +3176,6 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
     }
   }
 
-  /* Auto-switch on resize if no manual override for current device */
   var _resizeTimer;
   window.addEventListener('resize', function(){
     clearTimeout(_resizeTimer);
@@ -3219,7 +3183,7 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
       var manual = null;
       try{ manual = localStorage.getItem('kt_view_manual'); }catch(e){}
       var deviceMode = isMobileDevice() ? 'mobile' : 'desktop';
-      /* Only auto-switch if the user hasn't manually chosen a different view on this device */
+
       if(manual !== deviceMode){
         var current = document.body.classList.contains('view-mobile') ? 'mobile' : 'desktop';
         if(current !== deviceMode) setViewMode(deviceMode, false);
@@ -3449,9 +3413,9 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
 
 <script>
 (function(){
-  var DELAY   = 800;   /* espera animação de entrada */
-  var TOTAL   = 6000;  /* 6 segundos */
-  var FADE    = 400;   /* fade out */
+  var DELAY   = 800;   
+  var TOTAL   = 6000;  
+  var FADE    = 400;   
   var started = false;
 
   function startTimer(){
@@ -3466,12 +3430,12 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
       if(!start) start = ts;
       var elapsed = ts - start;
       var pct = Math.min(elapsed / TOTAL, 1);
-      /* encolhe da direita para a esquerda */
+
       progress.style.transform = 'scaleX(' + (1 - pct) + ')';
       if(pct < 1){
         requestAnimationFrame(step);
       } else {
-        /* fade out */
+
         banner.style.transition = 'opacity ' + FADE + 'ms ease, max-height ' + FADE + 'ms ease, margin ' + FADE + 'ms ease, padding ' + FADE + 'ms ease';
         banner.style.opacity    = '0';
         banner.style.maxHeight  = banner.offsetHeight + 'px';
@@ -3566,30 +3530,24 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
 <button id="dist-map-btn" onclick="openDistMap()" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:#161616;border:1px solid rgba(200,169,110,.28);border-radius:14px;color:var(--gold);font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1.2px;cursor:pointer;width:100%;transition:all .25s;box-shadow:-5px -5px 12px rgba(255,255,255,0.05),6px 6px 14px rgba(0,0,0,0.75),inset 0 1px 0 rgba(255,255,255,0.07),inset 0 -1px 0 rgba(0,0,0,0.4)" onmouseenter="this.style.background='#1c1c1c';this.style.boxShadow='-6px -6px 14px rgba(255,255,255,0.06),7px 7px 16px rgba(0,0,0,0.8),inset 0 1px 0 rgba(255,255,255,0.09),inset 0 -1px 0 rgba(0,0,0,0.45),0 0 16px rgba(200,169,110,0.08)'" onmouseleave="this.style.background='#161616';this.style.boxShadow='-5px -5px 12px rgba(255,255,255,0.05),6px 6px 14px rgba(0,0,0,0.75),inset 0 1px 0 rgba(255,255,255,0.07),inset 0 -1px 0 rgba(0,0,0,0.4)'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>MARCAR MINHA LOCALIZAÇÃO NO MAPA</button>
 <div id="dist-result" style="display:none"></div>
 
-  <!-- ── Mini-map card (glassmorphism) ── -->
   <div id="dist-card-map-wrap" style="display:none;margin-top:12px;border-radius:14px;overflow:hidden;position:relative;
     background:rgba(255,255,255,.035);
     border:1px solid rgba(255,255,255,.09);
     box-shadow:0 12px 40px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.07);
     backdrop-filter:blur(18px)">
 
-    <!-- map -->
     <div id="dist-mini-map" style="height:168px;width:100%;display:block;position:relative;background:#111115"></div>
 
-    <!-- glass divider -->
     <div style="height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.1),transparent)"></div>
 
-    <!-- stats + action row -->
     <div style="padding:11px 13px;display:flex;align-items:center;justify-content:space-between;gap:8px;background:rgba(0,0,0,.18)">
       <div style="display:flex;gap:7px;flex-shrink:0">
 
-        <!-- distance chip -->
         <div style="background:rgba(200,169,110,.1);border:1px solid rgba(200,169,110,.22);border-radius:8px;padding:5px 11px;min-width:72px">
           <div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin-bottom:3px">Distância</div>
           <div id="dist-card-dist" style="font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:var(--gold);white-space:nowrap;line-height:1"></div>
         </div>
 
-        <!-- taxa chip -->
         <div id="dist-card-taxa-wrap" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:8px;padding:5px 11px;min-width:72px">
           <div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin-bottom:3px">Taxa</div>
           <div id="dist-card-taxa" style="font-family:'Space Mono',monospace;font-size:14px;font-weight:700;white-space:nowrap;line-height:1"></div>
@@ -3597,7 +3555,6 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
 
       </div>
 
-      <!-- alter button -->
       <button onclick="openDistMap()" style="display:flex;align-items:center;gap:6px;padding:7px 13px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:var(--muted);font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.8px;cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0" onmouseenter="this.style.background='rgba(200,169,110,.12)';this.style.borderColor='rgba(200,169,110,.3)';this.style.color='var(--gold)'" onmouseleave="this.style.background='rgba(255,255,255,.06)';this.style.borderColor='rgba(255,255,255,.1)';this.style.color='var(--muted)'">
         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
         Alterar
@@ -3622,14 +3579,11 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
   var banSub   = document.getElementById('tut-ban-sub');
   var killed   = false;
 
-  /* ── Transição morph: dissolve + blur saindo, cresce entrando ── */
   function morphTransition(fromFace, toFace, cb){
     var fromH = fromFace.offsetHeight;
 
-    /* trava altura ANTES de toFace entrar no fluxo, evitando flash de expansão */
     card.style.height = fromH + 'px';
 
-    /* mede altura da face destino: remove height:0 temporariamente para scrollHeight ser real */
     toFace.classList.remove('atd-hidden');
     toFace.style.height     = 'auto';
     toFace.style.overflow   = '';
@@ -3638,7 +3592,6 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
     toFace.style.top = '0'; toFace.style.left = '0'; toFace.style.right = '0';
     var toH = toFace.scrollHeight;
 
-    /* posiciona destino absolutamente sobre a face atual */
     toFace.style.visibility = '';
     toFace.style.opacity = '0';
     requestAnimationFrame(function(){
@@ -3647,16 +3600,13 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
       });
     });
 
-    /* saída */
     fromFace.classList.add('atd-leaving');
 
-    /* entrada com delay - deixa saída começar primeiro */
     setTimeout(function(){
       toFace.style.opacity = '';
       toFace.classList.add('atd-entering');
     }, 120);
 
-    /* cleanup - timing alinhado com a animação mais longa (entering 720ms + 120ms delay) */
     setTimeout(function(){
       fromFace.classList.remove('atd-leaving');
       fromFace.classList.add('atd-hidden');
@@ -3675,10 +3625,8 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
     }, 900);
   }
 
-  /* ── helpers do tutorial ── */
   function wait(ms){ return new Promise(function(r){ setTimeout(r,ms); }); }
 
-  /* ── terminal de duas colunas ── */
   function getMsgBox(side){
     return document.getElementById(side === 'right' ? 'tut-msg-right' : 'tut-msg-left');
   }
@@ -3716,21 +3664,17 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
     box.appendChild(line);
   }
 
-  /* ── cursor grid container (referência de posição absoluta) ── */
-  var cursorGrid = cursor.parentElement; /* o div position:relative que contém os dois cards e o cursor */
+  var cursorGrid = cursor.parentElement; 
 
   function getCursorTarget(el){
-    /* Mira o centro do primeiro SVG dentro do card (o ícone).
-       Usa getBoundingClientRect do SVG e do cursorGrid para calcular
-       a posição relativa ao container pai do cursor - sem depender de fTut. */
+
     var svg = el.querySelector('svg');
     var target = svg ? svg.getBoundingClientRect() : el.getBoundingClientRect();
     var ref    = cursorGrid.getBoundingClientRect();
-    /* Centro do ícone relativo ao container */
+
     var cx = target.left + target.width  * 0.5 - ref.left;
     var cy = target.top  + target.height * 0.5 - ref.top;
-    /* O SVG do cursor é 20x20; a ponta do ponteiro está no canto sup-esq.
-       Deslocamos -2px para que a ponta toque o centro do ícone. */
+
     return { x: cx - 2, y: cy - 2 };
   }
 
@@ -3746,8 +3690,7 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
   }
 
   function placeCursorIdle(){
-    /* Posição inicial neutra: entre os dois cards, invisível.
-       Usa o centro horizontal do grid e o topo dos cards. */
+
     var ref = cursorGrid.getBoundingClientRect();
     var gd  = document.getElementById('tut-btn-domicilio').getBoundingClientRect();
     var gb  = document.getElementById('tut-btn-bancada').getBoundingClientRect();
@@ -3757,7 +3700,7 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
     cursor.style.left    = cx + 'px';
     cursor.style.top     = cy + 'px';
     cursor.style.opacity = '0';
-    /* Reativa transição depois do reflow */
+
     requestAnimationFrame(function(){
       requestAnimationFrame(function(){
         cursor.style.transition = 'opacity .35s ease, left .55s cubic-bezier(.4,0,.2,1), top .55s cubic-bezier(.4,0,.2,1)';
@@ -3781,7 +3724,6 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
     }
   }
 
-  /* ── API pública ── */
   window.atdSkipToReal = function(){
     killed = true;
     var current = !fPrompt.classList.contains('atd-hidden') ? fPrompt : fTut;
@@ -3800,7 +3742,6 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
     await wait(200);
     if(killed) return;
 
-    /* coluna esquerda - domicílio */
     await appendLine('Escolha como quer ser atendido:', 36, 'left');
     await wait(400);
     if(killed) return;
@@ -3815,7 +3756,6 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
     await wait(300);
     if(killed) return;
 
-    /* digita endereço na coluna esquerda */
     var addrLine = document.createElement('div');
     addrLine.style.cssText = 'display:flex;align-items:flex-baseline;gap:0;min-height:1.5em';
     var addrSpan = document.createElement('span');
@@ -3832,7 +3772,6 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
     await wait(300);
     if(killed) return;
 
-    /* resultado com valor em amarelo */
     var resLine = document.createElement('div');
     resLine.style.cssText = 'min-height:1.5em';
     resLine.innerHTML = '📍 ~2,8 km - Taxa: <span style="color:#e8c96a;font-weight:600">R$ 15</span>';
@@ -3842,7 +3781,6 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
 
     hl(btnDom, false);
 
-    /* coluna direita - bancada */
     await moveCursorTo(btnBan);
     await clickEl(btnBan);
     hl(btnBan, true);
@@ -3864,7 +3802,7 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
     await appendLine('Agora é a sua vez 👇', 40, 'left');
     await wait(700);
     if(killed) return;
-    /* atualiza altura do card para o conteúdo real - sem espaço vazio */
+
     card.style.height = fTut.scrollHeight + 'px';
     await wait(2500);
     if(killed) return;
@@ -4381,7 +4319,7 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
     function fmtPrice(v){ return 'R$\u00a0' + v; }
 
     function syncBancadaDiscount(thEl, price){
-      /* visual de preço cortado removido - desconto mostrado no painel total */
+
     }
 
     function updateUI(){
@@ -4639,7 +4577,7 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
 </button>
 </div>
 </div>
-<!-- compatibilidade: elementos ocultos referenciados por JS existente -->
+
 <div style="display:none">
 <button class="svc-cycle-btn" id="svc-cycle-btn"><span id="svc-cycle-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="pointer-events:none"><use href="#kt-icon-5"></use></svg></span><span class="svc-cycle-label-clip"><span id="svc-cycle-label">Formatação</span></span><span class="svc-cycle-dots"><span class="scd scd-active" id="scd-0"></span><span class="scd" id="scd-1"></span><span class="scd" id="scd-2"></span></span></button>
 <button class="svc-badge-btn active" id="badge-format"><span class="svc-badge-dot"></span>Formatação</button>
@@ -4663,7 +4601,6 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
         idx = (idx + 1) % 3;
         var svc = order[idx];
 
-        // animate label and icon
         var lbl = document.getElementById('svc-cycle-label');
         var ico = document.getElementById('svc-cycle-icon');
         lbl.classList.remove('svc-lbl-cycling');
@@ -4672,7 +4609,6 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
         lbl.classList.add('svc-lbl-cycling');
         ico.classList.add('svc-icon-cycling');
 
-        // update content mid-animation
         setTimeout(function(){
           lbl.textContent = labels[svc];
           ico.innerHTML = icons[svc];
@@ -4683,17 +4619,14 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
           ico.classList.remove('svc-icon-cycling');
         }, 400);
 
-        // update dots
         for(var i=0;i<3;i++){
           var d = document.getElementById('scd-'+i);
           if(d) d.classList.toggle('scd-active', i===idx);
         }
 
-        // trigger switchSvc for panels
         if(window.switchSvc) window.switchSvc(svc, null);
         window._activeSvcPanel = svc;
 
-        // sync sidebar
         var sidebarLabels = {format:'Formatação', so:'Inst. SO', backup:'Backup'};
         var sidebarColors = {format:'#c96d6d', so:'#7b9ee8', backup:'#4db87a'};
         var sidebarSvgs = {
@@ -4913,7 +4846,7 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
       document.getElementById('badge-format').classList.toggle('active', svc === 'format');
       document.getElementById('badge-so').classList.toggle('active', svc === 'so');
       document.getElementById('badge-backup').classList.toggle('active', svc === 'backup');
-      /* sync glass tabs */
+
       document.querySelectorAll('.sgs-tab').forEach(function(t){ t.classList.toggle('active', t.getAttribute('data-svc') === svc); });
 
       var prevPanel = document.getElementById('panel-' + prev);
@@ -5240,7 +5173,7 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
     btn.classList.toggle('fib-open', open);
     btn.title = open ? 'Fechar informações' : 'Ver informações';
     if(open){
-      // Relock after panel animates open (transition is 440ms)
+
       setTimeout(function(){
         if(window._lockPageScroll) window._lockPageScroll();
         panel.scrollIntoView({behavior:'smooth',block:'nearest'});
@@ -5988,7 +5921,6 @@ function toggleMode(){
   var HOLD_MS = 10000;
   var holdTimer = null, rafId = null, startTs = null;
 
-  /* anel de progresso */
   var ring = document.createElement('div');
   ring.id = 'logo-hold-ring';
   var STYLE = [
@@ -6024,7 +5956,7 @@ function toggleMode(){
 
     function tick(ts){
       var elapsed = ts - startTs;
-      /* anel só aparece após 3s */
+
       if(elapsed >= 3000 && ring.style.opacity !== '1'){
         ring.style.opacity = '1';
       }
@@ -6105,7 +6037,7 @@ function navigateTo(pageId){
   if(menu.classList.contains('open')) toggleMenu();
   if(pageId === 'page-roadmap') setTimeout(animateChartBars, 400);
   if(typeof window.initGreenDots === 'function') setTimeout(window.initGreenDots, 150);
-  // Re-lock scroll for new page
+
   setTimeout(function(){ if(window._lockPageScroll) window._lockPageScroll(); }, 120);
 }
 
@@ -6267,7 +6199,6 @@ function showToast(msg, color){
   msgEl.textContent = msg;
   dot.style.background = color || 'var(--gold)';
 
-  /* posiciona 10px acima da barra flutuante visível */
   (function(){
     var mini = document.getElementById('kayq-mini-cta');
     var bar  = document.getElementById('kayq-quote-bar');
@@ -6323,7 +6254,7 @@ function orcTogglePlan(el){
   const hasOtherServices = Object.keys(orcState).some(k => !k.startsWith('diag_'));
 
   if(svc === 'diag' && hasOtherServices){
-    /* Já incluído grátis - não faz nada, orcSyncDiag controla */
+
     showToast('Diagnóstico já incluído grátis com o serviço', '#4a9e6b');
     return;
   }
@@ -6344,17 +6275,16 @@ function orcTogglePlan(el){
     }
   });
 
-  /* Tier-based color: basic → slate, advanced → amber, premium → crimson-gold */
   function tierColor(cardEl){
     if(!cardEl) return '#7a8fa8';
-    if(cardEl.classList.contains('spc-tier-premium'))  return '#d4a820'; /* premium → strong gold */
-    if(cardEl.classList.contains('spc-tier-advanced')) return '#b87230'; /* advanced → amber-orange */
-    return '#7a8fa8'; /* basic → slate */
+    if(cardEl.classList.contains('spc-tier-premium'))  return '#d4a820'; 
+    if(cardEl.classList.contains('spc-tier-advanced')) return '#b87230'; 
+    return '#7a8fa8'; 
   }
   const barColor = svc === 'diag' ? '#4a9e6b' : tierColor(el);
 
   if(svc === 'diag'){
-    /* Diagnóstico selecionado sozinho: R$35, free:false */
+
     orcState[key] = {
       el, key,
       name: 'Diagnóstico Simples',
@@ -6385,7 +6315,7 @@ function orcTogglePlan(el){
 }
 
 function _syncPastaBancadaVisual(th, effectivePrice){
-  /* visual de preço cortado removido - desconto bancada mostrado no painel total */
+
   if(!th) return;
 }
 
@@ -6471,12 +6401,12 @@ function orcSyncPastaGratis(){
         free: true
       };
     } else {
-      /* pasta já selecionada - recalcular com desconto premium */
+
       if(typeof pastaCommit === 'function') pastaCommit();
     }
   } else {
     if(orcState['pasta_gratis']) delete orcState['pasta_gratis'];
-    /* pasta já selecionada - recalcular sem desconto premium */
+
     if(orcState['pasta_sel']){
       if(typeof pastaCommit === 'function') pastaCommit();
     }
@@ -6490,7 +6420,7 @@ function orcSyncPastaGratis(){
     var profundaAgora = typeof orcState !== 'undefined' && !!orcState['limpeza_2'];
     if(_orig) _orig.apply(this, arguments);
     _syncPastaCards();
-    /* Re-aplicar desconto bancada APENAS quando limpeza premium muda */
+
     if(profundaAgora !== _prevProfunda){
       _prevProfunda = profundaAgora;
       setTimeout(function(){
@@ -6547,9 +6477,7 @@ function orcSyncPastaGratis(){
         card1.style.opacity       = '0.32';
         card1.style.pointerEvents = 'none';
         card1.style.filter        = 'grayscale(1)';
-        /* Re-habilita os botões ‹›  do carrossel dentro do card bloqueado.
-           pointer-events:none no pai bloqueia os filhos — as setas do
-           carrossel ficam mudas sem isso. */
+
         var nav1 = card1.querySelector('.svc-card-nav');
         if(nav1) nav1.style.pointerEvents = 'auto';
         if(curr1) curr1.style.display = 'none';
@@ -6562,7 +6490,7 @@ function orcSyncPastaGratis(){
         card1.style.filter        = '';
         var nav1r = card1.querySelector('.svc-card-nav');
         if(nav1r) nav1r.style.pointerEvents = '';
-        /* limpar elementos legados */
+
         card1.querySelectorAll('.spc-disc-badge, .spc-price-old').forEach(function(e){ e.remove(); });
         price1.removeAttribute('data-base');
         if(curr1){ curr1.style.display = ''; curr1.style.cssText = ''; }
@@ -6577,7 +6505,7 @@ function orcSyncPastaGratis(){
     var price2 = document.getElementById('spc-pasta-2-price');
     if(card2 && price2){
       card2.querySelectorAll('.spc-pasta-combo-desc').forEach(function(e){ e.remove(); });
-      /* limpar badge e riscado antes */
+
       card2.querySelectorAll('.spc-disc-badge, .spc-price-old').forEach(function(e){ e.remove(); });
       if(profunda){
         price2.textContent = '135';
@@ -6622,7 +6550,7 @@ function orcSyncDiag(){
     diagEl.classList.remove('orc-selected');
     delete orcState[diagKey];
   }
-  /* Sync visual do card (botão verde + texto "Selecionado") */
+
   var diagBtn = diagEl.querySelector('.spc-btn');
   var diagIsSelected = diagEl.classList.contains('orc-selected');
   diagEl.classList.toggle('spc-selected', diagIsSelected);
@@ -6635,7 +6563,7 @@ function orcSyncDiag(){
     }
   }
   if(typeof window.syncSvcCards === 'function') window.syncSvcCards('diag');
-  /* Atualiza preço no card para R$0 / Grátis quando incluído */
+
   var diagPrice = diagEl.querySelector('.spc-amount');
   var diagCurr  = diagEl.querySelector('.spc-currency');
   var diagFree  = diagEl.querySelector('.diag-free-badge');
@@ -6681,7 +6609,6 @@ function orcUpdatePanel(){
   emptyMsg.style.display = 'none';
   panel.style.display = 'block';
 
-  /* sync hint bancada */
   const _bHint_ = document.getElementById('bancada-disc-hint');
   if(_bHint_) _bHint_.style.display = (atendimentoMode === 'tecnica') ? 'block' : 'none';
 
@@ -6692,7 +6619,7 @@ function orcUpdatePanel(){
 
   const numPaidSvcs = paidItems.filter(i => !i.noDiscount).length;
   const discount = getAtendimentoDiscount(numPaidSvcs);
-  /* taxa de deslocamento — só domiciliar com taxa definida */
+
   const isDomicilio = atendimentoMode !== 'tecnica';
   const taxaDesloc  = (isDomicilio && window._distTaxaVal > 0) ? window._distTaxaVal : 0;
   const finalPrice = Math.max(0, totalPrice - discount) + taxaDesloc;
@@ -6749,13 +6676,12 @@ function orcUpdatePanel(){
   const pieSvg = document.getElementById('orc-dist-pie');
   const distLegend = document.getElementById('orc-dist-legend');
   if(itemsForChart.length){
-    /* ── Gráfico pizza 3D isométrico ── */
-    const cx=40, cy=34;        // centro (topo do disco)
-    const rx=32, ry=18;        // raios elipse (perspectiva isométrica)
-    const depth=11;            // espessura 3D
-    const ri=0;                // pizza cheia (não donut)
 
-    // escurece uma cor hex para as laterais 3D
+    const cx=40, cy=34;        
+    const rx=32, ry=18;        
+    const depth=11;            
+    const ri=0;                
+
     function shade(hex, f){
       hex = hex.replace('#','');
       if(hex.length===3) hex = hex.split('').map(c=>c+c).join('');
@@ -6775,10 +6701,10 @@ function orcUpdatePanel(){
     });
 
     let walls = '';
-    // paredes laterais — uma única faixa contínua por fatia (sem emendas)
+
     segs.forEach(s=>{
       const {item,a0,a1} = s;
-      // amostra só o trecho frontal do arco (sin>0)
+
       const steps = Math.max(8, Math.ceil((a1-a0)/0.05));
       const front = [];
       for(let i=0;i<=steps;i++){
@@ -6786,7 +6712,7 @@ function orcUpdatePanel(){
         if(Math.sin(t) > 0.001) front.push(t);
       }
       if(front.length < 2) return;
-      // borda superior (esq→dir) + borda inferior (dir→esq) num só path
+
       let topEdge = '', botEdge = '';
       front.forEach((t,i)=>{
         const p = pt(t);
@@ -6810,7 +6736,7 @@ function orcUpdatePanel(){
       const large = (a1-a0) > Math.PI ? 1 : 0;
       const d = `M${cx},${cy} L${p0.x},${p0.y} A${rx},${ry} 0 ${large},1 ${p1.x},${p1.y} Z`;
       tops += `<path d="${d}" fill="${item.color}" stroke="rgba(0,0,0,.22)" stroke-width=".8"/>`;
-      // brilho no topo
+
       tops += `<path d="${d}" fill="url(#pieGloss)" opacity=".5"/>`;
     });
 
@@ -6956,7 +6882,7 @@ function clearOrcamento(){
   Object.values(orcState).forEach(i=>i.el.classList.remove('orc-selected'));
   Object.keys(orcState).forEach(k=>delete orcState[k]);
   colorCursor = 0;
-  // Remove spc-selected de todos os cards e reseta texto dos botões
+
   document.querySelectorAll('.svc-plan-card').forEach(function(card){
     card.classList.remove('spc-selected','orc-selected');
     var btn = card.querySelector('.spc-btn');
@@ -6965,7 +6891,7 @@ function clearOrcamento(){
       btn.textContent = svc === 'diag' ? 'Selecionar Diagnóstico' : 'Selecionar';
     }
   });
-  // Remove has-selection de todas as rows
+
   document.querySelectorAll('.svc-plan-row').forEach(function(row){
     row.classList.remove('has-selection');
   });
@@ -7011,7 +6937,6 @@ function copyOrcamento(){
   }
 }
 
-
 function setCopiadoState(){
   var btn = document.getElementById('btn-copiar-wa');
   var txt = document.getElementById('btn-copiar-wa-txt');
@@ -7050,10 +6975,6 @@ const PASTA_LVL  = { 0: 2,  1: 5,  2: 6  };
 const PASTA_LOCAL_NAME = { 0: 'CPU', 1: 'GPU', 2: 'CPU+GPU' };
 const PASTA_EXTRA_KEY = { 0: 'cpu', 1: 'gpu', 2: 'combo' };
 
-/* Cor da barra/gráfico da pasta = cor do TIER do plano dela (igual aos
-   demais serviços). Lê o tier do card real (spc-pasta-card-N); se não
-   achar, usa o mapa por plano: CPU=basic, GPU=advanced, CPU+GPU=premium.
-   Antes a pasta usava verde fixo, o que destoava do plano selecionado. */
 const PASTA_TIER_COLOR = { 0: '#7a8fa8', 1: '#b87230', 2: '#d4a820' };
 function pastaPlanColor(plan){
   const card = document.getElementById('spc-pasta-card-' + plan);
@@ -7186,8 +7107,6 @@ function pastaCommit(){
   var isBancadaActive = document.body.classList.contains('bancada-mode');
   var isGpu = pastaLocal === 1;
 
-  /* Para GPU e Combo na bancada: embutir desconto no preço e marcar noDiscount
-     para não descontar de novo no total do orçamento */
   var hasLimpezaDiscount = (profundaSelected && (isCpu || isCombo))
                         || ((isCombo || isGpu) && isBancadaActive);
 
@@ -7245,8 +7164,6 @@ clearOrcamento = function(){
 
 let atendimentoMode = 'domicilio';
 
-/* injectDiscountPrices removido - desconto bancada mostrado apenas no painel total */
-
 function setAtendimento(mode){
   atendimentoMode = mode;
   const btnD = document.getElementById('btn-domicilio');
@@ -7255,7 +7172,6 @@ function setAtendimento(mode){
 
   document.body.classList.toggle('bancada-mode', mode === 'tecnica');
 
-  /* hint de desconto bancada no painel total */
   const _hint_ = document.getElementById('bancada-disc-hint');
   if(_hint_) _hint_.style.display = (mode === 'tecnica') ? 'block' : 'none';
 
@@ -7289,7 +7205,7 @@ function setAtendimento(mode){
     if(dcw) dcw.style.display = 'none';
   }
   orcSyncPastaGratis();
-  /* Re-commit silencioso dos serviços com preço dinâmico */
+
   if(typeof pastaCommit === 'function' && typeof pastaLocal !== 'undefined' && pastaLocal !== null && typeof pastaTipo !== 'undefined' && pastaTipo !== null){
     pastaCommit();
   }
@@ -8242,15 +8158,14 @@ function showBancadaUnavailable(){
   btn.disabled = true;
   overlay.classList.add('visible');
   document.body.style.overflow = 'hidden';
-  /* Push sidebar below overlay — backdrop-filter creates compositing layers
-     that ignore z-index in WebKit; lowering sidebar z-index is the reliable fix */
+
   const sb = document.getElementById('dt-sidebar');
   if(sb) sb.style.setProperty('z-index','1','important');
 }
 function closeBancadaModal(){
   document.getElementById('bancada-modal-overlay').classList.remove('visible');
   document.body.style.overflow = '';
-  /* Restore sidebar z-index */
+
   const sb = document.getElementById('dt-sidebar');
   if(sb) sb.style.removeProperty('z-index');
 }
@@ -8409,7 +8324,7 @@ function closeKmPopup(){
 <script>
 function openSvcInfo(){
   var ov = document.getElementById('svc-info-overlay');
-  /* reset animations so they retrigger on reopen */
+
   ov.querySelectorAll('#svc-info-scroll>.sic-header,#svc-info-scroll>.sic-item,#svc-info-scroll>.sic-rule,#svc-info-scroll>.sic-close-btn').forEach(function(el){
     el.style.animation='none';
     void el.offsetWidth;
@@ -8614,13 +8529,11 @@ function buildQuickNav(pageId){
 (function(){
   'use strict';
 
-  /* Resolve o card real a partir de qualquer elemento-alvo.
-     NUNCA usa sectionEl como alvo de highlight - só planEl (card). */
   function findCard(el){
     if(!el) return null;
-    /* th-plan = coluna da tabela de pasta térmica - é um card válido */
+
     if(el.classList && el.classList.contains('th-plan')) return el;
-    /* sobe até o card */
+
     return el.closest('.svc-plan-card, .svc-card, .rdm-item, .bk-card, .th-plan') || null;
   }
 
@@ -8691,12 +8604,12 @@ function buildQuickNav(pageId){
 
   function highlight(card){
     if(!card) return;
-    /* remove classe de qualquer outro card anterior */
+
     document.querySelectorAll('.kt-card-found').forEach(function(el){
       el.classList.remove('kt-card-found');
     });
     clearTimeout(timer);
-    /* força reflow para reiniciar animação se já estava no mesmo card */
+
     void card.offsetWidth;
     card.classList.add('kt-card-found');
     timer = setTimeout(function(){
@@ -8716,16 +8629,16 @@ function buildQuickNav(pageId){
     function run(){
       if(svcPanel && window.switchSvc) window.switchSvc(svcPanel, null);
       setTimeout(function(){
-        /* planId aponta direto para o card - preferência absoluta */
+
         var planEl    = planId      ? document.getElementById(planId)    : null;
         var sectionEl = sectionHash ? document.querySelector(sectionHash) : null;
-        /* scroll: usa planEl se existir, senão sectionEl */
+
         var scrollTarget = planEl || sectionEl;
         if(!scrollTarget) return;
         var offset = window.innerWidth >= 600 ? 84 : 72;
         var top = scrollTarget.getBoundingClientRect().top + window.scrollY - offset;
         window.scrollTo({top: Math.max(0, top), behavior: 'smooth'});
-        /* salto sequencial: card 1 -> 2 -> 3, com retorno suave e sem borda dourada */
+
         setTimeout(function(){
           if(useHighlight && planEl) highlight(findCard(planEl));
           playCardJumpSequence(planEl, sectionEl, svcPanel);
@@ -8817,7 +8730,6 @@ function buildQuickNav(pageId){
     }
     syncSvcCards(svc);
 
-    /* Sempre que limpeza muda, resync da pasta grátis */
     if(svc === 'limpeza'){
       if(typeof window.orcSyncPastaGratis === 'function') window.orcSyncPastaGratis();
     }
@@ -8959,15 +8871,12 @@ function buildQuickNav(pageId){
 </script>
 
 <script>
-/* ═══════════════════════════════════════════════════
-   BANCADA DISCOUNT - animação suave nos svc-plan-cards
-   ═══════════════════════════════════════════════════ */
+
 (function(){
 
-  /* CSS do estado bancada nos cards */
   var st = document.createElement('style');
   st.textContent = [
-    /* preço antigo riscado */
+
     '.spc-price-old{',
     '  display:none;font-family:"Space Mono",monospace;font-size:11px;',
     '  color:var(--muted);text-decoration:line-through;',
@@ -8975,7 +8884,7 @@ function buildQuickNav(pageId){
     '  transition:opacity .3s;',
     '}',
     'body.bancada-mode .spc-price-old{ display:none; }',
-    /* badge de desconto */
+
     '.spc-disc-badge{',
     '  display:none;font-family:"Space Mono",monospace;font-size:9px;',
     '  color:#000;background:#4a9e6b;border-radius:20px;',
@@ -8984,37 +8893,35 @@ function buildQuickNav(pageId){
     '  box-shadow:0 0 6px rgba(74,158,107,.4);',
     '}',
     'body.bancada-mode .spc-disc-badge{ display:none; }',
-    /* animação de contagem */
+
     '.spc-amount{ transition:color .4s; }',
     'body.bancada-mode .spc-amount.discounted{ color:#4a9e6b!important; }',
   ].join('');
   document.head.appendChild(st);
 
-  /* Desconto fixo por serviço (R$) e mínimos */
-  var DISC = 20; /* desconto padrão */
+  var DISC = 20; 
   var MINS = {
     limpeza:        { 0:45,  1:80,  2:100 },
     pasta:          { 0:30,  1:100, 2:130 },
     format:         { 0:60,  1:100, 2:135 },
     so:             { 0:40,  1:65,  2:90  },
-    instalacao:     { 0:20,  1:20         }, /* variável - mínimo mantido */
+    instalacao:     { 0:20,  1:20         }, 
     montagem:       { 0:130, 1:180, 2:230 },
     build:          { 0:0,   1:10         },
-    diag:           null, /* skip - já grátis ou fixo */
+    diag:           null, 
     backup:         { 0:25,  1:40         },
-    consultoria:    null, /* skip - não muda */
+    consultoria:    null, 
     virus:          { 0:60,  1:110, 2:170 },
     'pac-essencial':{ 0:99               },
   };
 
-  /* anima número de `from` até `to` em ~500ms */
   function animateNum(el, from, to, onDone){
     var start = null;
     var dur   = 520;
     function step(ts){
       if(!start) start = ts;
       var p = Math.min((ts - start) / dur, 1);
-      /* easeOutCubic */
+
       var e = 1 - Math.pow(1 - p, 3);
       var val = Math.round(from + (to - from) * e);
       el.textContent = String(val);
@@ -9033,13 +8940,12 @@ function buildQuickNav(pageId){
   }
 
   function applyBancada(card, isBancada){
-    /* visual de preço cortado removido - desconto bancada mostrado no painel total */
-    /* limpar elementos legados caso existam */
+
     card.querySelectorAll('.spc-price-old, .spc-disc-badge').forEach(function(e){ e.remove(); });
     var amt = card.querySelector('.spc-amount');
     if(amt){
       amt.classList.remove('discounted');
-      /* restaurar preço base se estava animado */
+
       var base = amt.getAttribute('data-base');
       if(base){ amt.textContent = base; amt.removeAttribute('data-base'); }
     }
@@ -9052,22 +8958,20 @@ function buildQuickNav(pageId){
   }
   window._bancadaSyncAll = syncAll;
 
-  /* Hook no setAtendimento */
   var _origSet = window.setAtendimento;
   window.setAtendimento = function(mode){
     if(_origSet) _origSet.apply(this, arguments);
     setTimeout(function(){
-      /* Atualizar GPU e Combo via _syncPastaCards */
+
       if(typeof window.orcSyncPastaGratis === 'function') window.orcSyncPastaGratis();
       syncAll(document.body.classList.contains('bancada-mode'));
     }, 60);
-    /* Abrir termos se domiciliar e ainda não aceito */
+
     if(mode === 'domicilio' && !sessionStorage.getItem('terms_ok_session')){
       setTimeout(function(){ if(typeof window.openTerms === 'function') window.openTerms(); }, 120);
     }
   };
 
-  /* init no load */
   document.addEventListener('DOMContentLoaded', function(){
     if(document.body.classList.contains('bancada-mode')) syncAll(true);
   });
@@ -9076,10 +8980,9 @@ function buildQuickNav(pageId){
 </script>
 
 <script>
-/* ── Calculadora de distância domiciliar — mapa interativo ── */
+
 (function(){
 
-  /* ── Destino fixo: WE 31, 1061, Cidade Nova 5, Ananindeua-PA ── */
   var TECH_LAT = -1.361428;
   var TECH_LNG = -48.394952;
   var TECH_LABEL = 'Tv. WE 31, 1061 — Cidade Nova V, Ananindeua';
@@ -9096,7 +8999,6 @@ function buildQuickNav(pageId){
   function getTaxa(km){ for(var i=0;i<TAXA.length;i++) if(km<=TAXA[i].max) return TAXA[i]; return TAXA[TAXA.length-1]; }
   function fmtDist(m){ if(m<1000) return Math.round(m)+' m'; return (m/1000).toFixed(1).replace('.',',')+' km'; }
 
-  /* ── Inject modal ── */
   function injectModal(){
     if(document.getElementById('dist-map-modal')) return;
 
@@ -9126,14 +9028,12 @@ function buildQuickNav(pageId){
     modal.innerHTML = [
       '<div style="position:relative;width:100%;max-width:880px;height:88vh;background:#0d0d10;border:1px solid rgba(200,169,110,.22);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 40px 100px rgba(0,0,0,.8)">',
 
-        /* Header */
         '<div class="dmap-header" style="display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid rgba(255,255,255,.07);flex-shrink:0">',
           '<div class="dmap-titleblock" style="flex-shrink:0;min-width:0">',
             '<div style="font-family:\'Space Mono\',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:2px">Marque sua localização</div>',
             '<div class="dmap-subtitle" style="font-size:11px;color:var(--muted);white-space:nowrap">Pesquise ou clique no mapa para definir o ponto de partida</div>',
           '</div>',
 
-          /* Search */
           '<div class="dmap-search" style="flex:1;position:relative;max-width:420px;margin-left:auto">',
             '<div style="display:flex;gap:6px">',
               '<div style="position:relative;flex:1">',
@@ -9154,10 +9054,8 @@ function buildQuickNav(pageId){
           '<button onclick="closeDistMap()" style="flex-shrink:0;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:7px;color:var(--text);width:32px;height:32px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:background .15s" onmouseenter="this.style.background=\'rgba(255,255,255,.14)\'" onmouseleave="this.style.background=\'rgba(255,255,255,.06)\'">×</button>',
         '</div>',
 
-        /* Map */
         '<div id="dist-leaflet-map" style="flex:1;min-height:0"></div>',
 
-        /* Footer */
         '<div style="padding:12px 16px;border-top:1px solid rgba(255,255,255,.07);background:#0a0a0c;flex-shrink:0">',
           '<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">',
             '<div id="dist-map-hint" style="flex:1;font-family:\'Space Mono\',monospace;font-size:11px;color:var(--muted)">Toque em qualquer ponto do mapa para marcar sua localização</div>',
@@ -9189,7 +9087,6 @@ function buildQuickNav(pageId){
       zoomControl: true, attributionControl: true, scrollWheelZoom: true
     }).setView([TECH_LAT, TECH_LNG], 16);
 
-    /* Theme-aware tiles */
     function getKtTheme(){
       try{
         var t = localStorage.getItem('kt_theme_mode') || 'escuro';
@@ -9223,7 +9120,6 @@ function buildQuickNav(pageId){
     applyMapTheme(getKtTheme());
     L.control.scale({ imperial: false, metric: true, position: 'bottomright' }).addTo(_map);
 
-    /* Watch for theme class change on <html> */
     (new MutationObserver(function(muts){
       muts.forEach(function(m){
         if(m.attributeName === 'class' || m.attributeName === 'data-kt-theme'){
@@ -9233,7 +9129,6 @@ function buildQuickNav(pageId){
       });
     })).observe(document.documentElement, {attributes:true, attributeFilter:['class','data-kt-theme']});
 
-    /* Tech pin — animated gold */
     var techIcon = L.divIcon({
       html: '<div style="position:relative;width:24px;height:24px">'
           + '<div style="position:absolute;inset:0;background:rgba(200,169,110,.3);border-radius:50%;animation:dist-pulse 2.4s ease-in-out infinite"></div>'
@@ -9250,7 +9145,6 @@ function buildQuickNav(pageId){
     _map.on('click', function(e){ placeUserPin(e.latlng.lat, e.latlng.lng); });
   }
 
-  /* ── Search ── */
   window.distMapSearchLive = function(val){
     clearTimeout(_searchTimer);
     var res = document.getElementById('dist-search-results');
@@ -9329,7 +9223,6 @@ function buildQuickNav(pageId){
     btn.style.display  = 'none';
     _pendingResult = null;
 
-    /* OSRM route */
     var url = 'https://router.project-osrm.org/route/v1/driving/'
       + lng+','+lat+';'+TECH_LNG+','+TECH_LAT
       + '?overview=full&geometries=geojson';
@@ -9338,12 +9231,11 @@ function buildQuickNav(pageId){
       .then(function(r){ return r.json(); })
       .then(function(d){
         if(!d.routes || !d.routes.length) throw new Error('sem rota');
-        var dist = d.routes[0].distance; /* metros */
+        var dist = d.routes[0].distance; 
         var km   = dist / 1000;
         var t    = getTaxa(km);
         _pendingResult = { km: km, dist: dist, taxa: t };
 
-        /* Draw route */
         var coords = d.routes[0].geometry.coordinates.map(function(c){ return [c[1],c[0]]; });
         _routeCoords = coords;
         _routeLine = L.polyline(coords, {
@@ -9378,12 +9270,12 @@ function buildQuickNav(pageId){
     var modal = document.getElementById('dist-map-modal');
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
-    /* Reset search box */
+
     var si = document.getElementById('dist-search-input');
     var sr = document.getElementById('dist-search-results');
     if(si) si.value = '';
     if(sr) sr.style.display = 'none';
-    /* Reset footer */
+
     var hint = document.getElementById('dist-map-hint');
     var info = document.getElementById('dist-map-info');
     var btn  = document.getElementById('dist-map-confirm');
@@ -9410,7 +9302,6 @@ function buildQuickNav(pageId){
     window._distTaxaLabel = t.label;
     if(typeof orcUpdatePanel === 'function') orcUpdatePanel();
 
-    /* ── Update chips ── */
     var distEl = document.getElementById('dist-card-dist');
     var taxaEl = document.getElementById('dist-card-taxa');
     var taxaWrap = document.getElementById('dist-card-taxa-wrap');
@@ -9429,15 +9320,12 @@ function buildQuickNav(pageId){
       }
     }
 
-    /* ── Show card ── */
     var btn  = document.getElementById('dist-map-btn');
     var wrap = document.getElementById('dist-card-map-wrap');
     if(btn)  btn.style.display = 'none';
 
     if(_miniMap){ _miniMap.remove(); _miniMap = null; }
 
-    /* Show wrapper FIRST so the browser computes dimensions,
-       then init map via double-RAF (guarantees a paint has happened) */
     if(wrap){
       wrap.style.opacity = '0';
       wrap.style.display = 'block';
@@ -9450,7 +9338,6 @@ function buildQuickNav(pageId){
       var theme = (typeof getKtTheme === 'function') ? getKtTheme() : 'escuro';
       var isDark = theme !== 'branco';
 
-      /* Pre-paint background so there's no white flash while tiles load */
       miniEl.style.background = isDark ? '#111115' : '#e8e4dc';
 
       _miniMap = L.map(miniEl, {
@@ -9466,23 +9353,19 @@ function buildQuickNav(pageId){
       L.tileLayer(tileUrl, { maxZoom: 20, updateWhenIdle: false }).addTo(_miniMap);
       if(theme === 'noturno') miniEl.style.filter = 'hue-rotate(210deg) saturate(0.65) brightness(0.72)';
 
-      /* Tech pin */
       L.marker([TECH_LAT, TECH_LNG], { icon: L.divIcon({
         html: '<div style="width:12px;height:12px;background:#c8a96e;border:2px solid #fff;border-radius:50%;box-shadow:0 0 8px rgba(200,169,110,.8)"></div>',
         iconSize:[12,12], iconAnchor:[6,6], className:''
       }), zIndexOffset:500}).addTo(_miniMap);
 
-      /* User pin */
       L.marker([_userLat, _userLng], { icon: L.divIcon({
         html: '<div style="width:12px;height:12px;background:#3b82f6;border:2px solid #fff;border-radius:50%;box-shadow:0 0 8px rgba(59,130,246,.8)"></div>',
         iconSize:[12,12], iconAnchor:[6,6], className:''
       }), zIndexOffset:500}).addTo(_miniMap);
 
-      /* Route */
       var line = L.polyline(_routeCoords, {color:'#c8a96e', weight:2.5, opacity:.85}).addTo(_miniMap);
       _miniMap.fitBounds(line.getBounds(), {padding:[28,28], animate:false});
 
-      /* Force size recalculation at multiple intervals */
       _miniMap.invalidateSize({animate:false});
       [80, 200, 500].forEach(function(ms){
         setTimeout(function(){
@@ -9493,14 +9376,12 @@ function buildQuickNav(pageId){
         }, ms);
       });
 
-      /* Fade card in after map is ready */
       if(wrap){
         wrap.style.transition = 'opacity .35s ease';
         wrap.style.opacity = '1';
       }
     }
 
-    /* Double requestAnimationFrame = container is definitely painted */
     requestAnimationFrame(function(){
       requestAnimationFrame(function(){
         doInitMiniMap();
@@ -9510,17 +9391,15 @@ function buildQuickNav(pageId){
     closeDistMap();
   };
 
-  /* ESC closes modal */
   document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeDistMap(); });
 
 })();
 </script>
 
 <script>
-/* ── Green dot: indica features novas em planos superiores ── */
+
 (function(){
 
-  /* Retorna texto limpo de um li.spc-feat, ignorando dots já inseridos */
   function featText(li){
     var clone = li.cloneNode(true);
     clone.querySelectorAll('.spc-new-dot').forEach(function(d){ d.remove(); });
@@ -9529,9 +9408,8 @@ function buildQuickNav(pageId){
     return clone.textContent.trim().toLowerCase();
   }
 
-  /* Verifica se o li tem checkmark - kt-check-circle ou SVG antigo */
   function isChecked(li){
-    /* novo padrão: span.kt-check-circle */
+
     if(li.querySelector('.kt-check-circle')) return true;
     var svgs = li.querySelectorAll('svg');
     for(var i=0;i<svgs.length;i++){
@@ -9542,7 +9420,6 @@ function buildQuickNav(pageId){
     return false;
   }
 
-  /* Coleta textos de todos os itens INCLUSOS de um card */
   function getCheckedTexts(card){
     var texts = [];
     card.querySelectorAll('.spc-feat').forEach(function(li){
@@ -9552,7 +9429,7 @@ function buildQuickNav(pageId){
   }
 
   function injectDots(row){
-    /* reseta para re-processar */
+
     row.querySelectorAll('.spc-new-dot').forEach(function(d){ d.remove(); });
     delete row.dataset.dotsGreenInit;
 
@@ -9562,7 +9439,6 @@ function buildQuickNav(pageId){
     var cards = Array.from(row.querySelectorAll('.svc-plan-card'));
     if(cards.length < 2) return;
 
-    /* Acumula textos de todos os planos anteriores (comparação cumulativa) */
     var prevTexts = getCheckedTexts(cards[0]);
 
     for(var i = 1; i < cards.length; i++){
@@ -9575,13 +9451,12 @@ function buildQuickNav(pageId){
           var dot = document.createElement('span');
           dot.className = 'spc-new-dot';
           dot.title = 'Novo neste plano';
-          /* Posiciona o dot relativo ao li - canto superior direito do círculo */
+
           li.style.position = 'relative';
           li.appendChild(dot);
         }
       });
 
-      /* Acumula textos deste card para o próximo */
       getCheckedTexts(cards[i]).forEach(function(t){
         if(prevTexts.indexOf(t) === -1) prevTexts.push(t);
       });
@@ -9781,11 +9656,10 @@ function closeVirusInfo(){
     if(!ul) return;
     var items = Array.from(ul.querySelectorAll('li.spc-feat'));
 
-    // Check if any sep already exists - if so, just classify existing seps
     var hasSep = items.some(function(li){ return isSep(li); });
 
     if(hasSep){
-      // Just classify existing seps
+
       items.forEach(function(li){
         if(!isSep(li)) return;
         var txt = (li.textContent || '').trim().toLowerCase();
@@ -9794,12 +9668,11 @@ function closeVirusInfo(){
         } else if(txt === 'não incluso' || txt === 'nao incluso'){
           li.classList.add('sep-nao-incluso');
         }
-        // others (tudo da instalação +, exclusivo premium, etc.) keep neutral style
+
       });
       return;
     }
 
-    // No seps - inject automatically
     var visibleItems = items.filter(function(li){ return !isHidden(li); });
     var firstCheck = -1, firstCross = -1;
     visibleItems.forEach(function(li, i){
@@ -9812,7 +9685,7 @@ function closeVirusInfo(){
       ul.insertBefore(makeSep('incluso', 'sep-incluso'), refNode);
     }
     if(firstCross !== -1){
-      // Re-query after insert
+
       var allNow = Array.from(ul.querySelectorAll('li.spc-feat'));
       var crossItems = allNow.filter(function(li){ return !isHidden(li) && !isSep(li) && isCross(li); });
       if(crossItems.length > 0){
@@ -9825,7 +9698,6 @@ function closeVirusInfo(){
     document.querySelectorAll('.svc-plan-card').forEach(processCard);
   }
 
-  /* Auto-switch on resize if no manual override for current device */
   var _resizeTimer;
   window.addEventListener('resize', function(){
     clearTimeout(_resizeTimer);
@@ -9833,7 +9705,7 @@ function closeVirusInfo(){
       var manual = null;
       try{ manual = localStorage.getItem('kt_view_manual'); }catch(e){}
       var deviceMode = isMobileDevice() ? 'mobile' : 'desktop';
-      /* Only auto-switch if the user hasn't manually chosen a different view on this device */
+
       if(manual !== deviceMode){
         var current = document.body.classList.contains('view-mobile') ? 'mobile' : 'desktop';
         if(current !== deviceMode) setViewMode(deviceMode, false);
@@ -9979,20 +9851,7 @@ function closeWIP(){
 </script>
 
 <script id="kt-anim-controller">
-/* ════════════════════════════════════════════════════════════════
-   KTAnim · Controlador único de animações em canvas (orbs)
-   Resolve o maior gargalo de performance: os loops requestAnimationFrame
-   rodavam 60x/s SEMPRE — mesmo com o canvas escondido (leve/ultra-leve),
-   com a aba em segundo plano, ou com a seção fora da tela.
-   Agora cada loop:
-     • só roda nos modos médio/pesado (orbs ficam ocultos em leve/ultra);
-     • pausa quando a aba está em segundo plano (document.hidden);
-     • pausa quando o canvas sai da viewport (IntersectionObserver);
-     • limita o FPS (30 no médio, 60 no pesado) — os orbs se movem tão
-       devagar que isso é imperceptível, mas corta o custo de desenho
-       pela metade nos aparelhos fracos. O movimento é compensado por
-       passo (steps) para manter a MESMA velocidade visual.
-   ════════════════════════════════════════════════════════════════ */
+
 window.KTAnim = (function(){
   var docHidden = (typeof document.hidden === 'boolean') ? document.hidden : false;
   var runners = [];
@@ -10009,7 +9868,6 @@ window.KTAnim = (function(){
   function orbsAllowed(){ var p = perfMode(); return p === 'medio' || p === 'pesado'; }
   function fpsCap(){ return perfMode() === 'pesado' ? 60 : 30; }
 
-  /* register(canvas, tick): tick(steps) deve rodar `steps` updates + 1 draw */
   function register(canvas, tick){
     var rafId = null, lastT = 0, inView = true;
 
@@ -10058,14 +9916,12 @@ window.KTAnim = (function(){
 </script>
 
 <script id="kt-sidebar-orbs">
-/* ── Sidebar: large blurry slow golden orbs ── */
+
 (function(){
   var canvas = document.getElementById('sidebar-orbs-canvas');
   if(!canvas) return;
   var ctx = canvas.getContext('2d');
 
-  /* Blur grande + screen blend. SEM contrast (contrast cria banding).
-     Saturação moderada para a cor não "estourar" em faixas. */
   canvas.style.filter = 'blur(56px) saturate(1.45)';
   canvas.style.mixBlendMode = 'screen';
   canvas.style.willChange = 'transform';
@@ -10082,11 +9938,6 @@ window.KTAnim = (function(){
 
   var W=0, H=0;
 
-  /* Lê as dimensões CSS renderizadas do próprio canvas (não da sidebar).
-     O canvas tem width:100%;height:100% em CSS, então offsetWidth/Height
-     sempre refletem o tamanho visual real — evita o bug de escala onde
-     o drawing buffer maior que o display CSS comprime os orbs e o
-     blur(56px) vira um borrão dourado uniforme cobrindo tudo. */
   function resize(){
     var w = canvas.offsetWidth;
     var h = canvas.offsetHeight;
@@ -10099,22 +9950,21 @@ window.KTAnim = (function(){
     }
   }
 
-  /* ── Orb ── */
   function Orb(){
     var c = pick(COLORS);
     this.x    = rng(0, W);
     this.y    = rng(0, H);
     this.r    = rng(90, 180);
-    this.vx   = rng(-0.018, 0.018);   /* muito lento */
+    this.vx   = rng(-0.018, 0.018);   
     this.vy   = rng(-0.012, 0.012);
     this.hue  = c.h + rng(-6,6);
     this.sat  = c.s;
     this.lit  = c.l;
     this.alpha    = 0;
-    this.alphaMax = rng(0.22, 0.38);   /* mais brilho no screen blend */
+    this.alphaMax = rng(0.22, 0.38);   
     this.state    = 'in';
-    this.holdLeft = rng(800, 2000);    /* fica visível por muito tempo */
-    this.speed    = rng(0.0005, 0.0012); /* fade extremamente lento */
+    this.holdLeft = rng(800, 2000);    
+    this.speed    = rng(0.0005, 0.0012); 
     this.wander = rng(0, Math.PI*2);
     this.wanderSpeed = rng(0.0008, 0.002);
   }
@@ -10161,7 +10011,7 @@ window.KTAnim = (function(){
     if(this.alpha <= 0) return;
     var grd = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.r);
     var h = this.hue, s = this.sat, l = this.lit, a = this.alpha;
-    /* Many stops with a smooth ease-out curve eliminate visible banding */
+
     grd.addColorStop(0.00, 'hsla('+h+','+s+'%,'+l+'%,'+(a).toFixed(4)+')');
     grd.addColorStop(0.12, 'hsla('+h+','+s+'%,'+(l-3)+'%,'+(a*0.88).toFixed(4)+')');
     grd.addColorStop(0.25, 'hsla('+h+','+s+'%,'+(l-6)+'%,'+(a*0.72).toFixed(4)+')');
@@ -10177,11 +10027,10 @@ window.KTAnim = (function(){
     ctx.fill();
   };
 
-  /* stagger initial states so not all orbs fade in at once */
   var orbs = [];
   function init(){
     resize();
-    var count = Math.floor(rng(1, 4)); /* 1 to 3 */
+    var count = Math.floor(rng(1, 4)); 
     for(var i = 0; i < count; i++){
       var o = new Orb();
       if(Math.random() > 0.4){
@@ -10201,8 +10050,6 @@ window.KTAnim = (function(){
     requestAnimationFrame(loop);
   }
 
-  /* tick(steps): roda `steps` updates (mantém a velocidade ao limitar FPS)
-     e desenha 1 vez. Usado pelo KTAnim (pausa/throttle automático). */
   function tick(steps){
     for(var s = 0; s < steps; s++){
       for(var i = 0; i < orbs.length; i++) orbs[i].update();
@@ -10211,7 +10058,6 @@ window.KTAnim = (function(){
     for(var j = 0; j < orbs.length; j++) orbs[j].draw();
   }
 
-  /* ── Dithering overlay: subtle static noise quebra o banding ── */
   function buildNoise(){
     var sidebar = document.getElementById('dt-sidebar');
     if(!sidebar) return;
@@ -10226,14 +10072,14 @@ window.KTAnim = (function(){
     for(var p = 0; p < img.data.length; p += 4){
       var v = (Math.random() * 255) | 0;
       img.data[p] = img.data[p+1] = img.data[p+2] = v;
-      img.data[p+3] = 6; /* opacidade bem baixa - dithering fino */
+      img.data[p+3] = 6; 
     }
     nctx.putImageData(img, 0, 0);
     n.style.cssText =
       'position:absolute;inset:0;z-index:0;pointer-events:none;'+
       'background-image:url('+c.toDataURL()+');background-repeat:repeat;'+
       'mix-blend-mode:soft-light;opacity:.22;';
-    /* inserir logo após o canvas dos orbs */
+
     if(canvas.nextSibling) sidebar.insertBefore(n, canvas.nextSibling);
     else sidebar.appendChild(n);
   }
@@ -10245,15 +10091,12 @@ window.KTAnim = (function(){
     else { loop(); }
   }
 
-  /* ResizeObserver no proprio canvas e mais confiavel que window.resize:
-     detecta mudancas no sidebar sem polling */
   if(window.ResizeObserver){
     new ResizeObserver(function(){ requestAnimationFrame(resize); }).observe(canvas);
   } else {
     window.addEventListener('resize', resize);
   }
 
-  /* double rAF: garante layout concluido antes de ler offsetWidth */
   if(document.readyState === 'loading'){
     document.addEventListener('DOMContentLoaded', function(){
       requestAnimationFrame(function(){ requestAnimationFrame(start); });
@@ -10265,14 +10108,12 @@ window.KTAnim = (function(){
 </script>
 
 <script id="kt-bg-orbs">
-/* ── Orbs de fundo (atrás do conteúdo, vistos borrados pelo card) ── */
+
 (function(){
   var canvas = document.getElementById('bg-orbs-canvas');
   if(!canvas) return;
   var ctx = canvas.getContext('2d');
 
-  /* ── posicionamento dinâmico: o canvas vai DENTRO da svc-group-card
-     da limpeza, não no viewport global ── */
   canvas.style.position='absolute';
   canvas.style.left='-80px';
   canvas.style.top='-80px';
@@ -10290,7 +10131,6 @@ window.KTAnim = (function(){
 
   var W=0,H=0;
 
-  /* redimensiona relativo ao container pai, não ao viewport */
   function resize(){
     var cont=canvas.parentNode;
     var cW=(cont&&cont!==document.body)?cont.offsetWidth:window.innerWidth;
@@ -10299,16 +10139,15 @@ window.KTAnim = (function(){
     canvas.style.width=W+'px';
     canvas.style.height=H+'px';
     canvas.width=W; canvas.height=H;
-    /* atualiza clip-path com raio correto por breakpoint */
+
     var r = window.innerWidth >= 600 ? '26px' : '20px';
     canvas.style.clipPath = 'inset(80px round ' + r + ')';
   }
 
-  /* move o canvas para dentro da svc-group-card da limpeza */
   function attachToSection(){
     var row=document.querySelector('.svc-plan-row[data-svc-row="limpeza"]');
     var grp=row?row.closest('.svc-group-card'):null;
-    /* fallback: usar #sec-limpeza se svc-group-card ainda não existe */
+
     if(!grp){
       var secEl=document.getElementById('sec-limpeza');
       grp=secEl?secEl.parentNode:null;
@@ -10316,7 +10155,7 @@ window.KTAnim = (function(){
     if(grp){
       grp.style.position='relative';
       grp.classList.add('kt-cv-skip');
-      /* overflow:visible preserva sombras dos cards selecionados */
+
       canvas.style.clipPath='inset(80px round 20px)';
       grp.insertBefore(canvas,grp.firstChild);
       canvas.style.display='block';
@@ -10372,14 +10211,14 @@ window.KTAnim = (function(){
     for(var i=0;i<orbs.length;i++){orbs[i].update();orbs[i].draw();}
     requestAnimationFrame(loop);
   }
-  /* tick(steps): mantém velocidade mesmo com FPS limitado; 1 desenho por frame */
+
   function tick(steps){
     for(var s=0;s<steps;s++){ for(var i=0;i<orbs.length;i++) orbs[i].update(); }
     ctx.clearRect(0,0,W,H);
     for(var j=0;j<orbs.length;j++) orbs[j].draw();
   }
   function setup(){
-    /* setTimeout(0) garante que kt-svc-group-wrapper já rodou e criou .svc-group-card */
+
     setTimeout(function(){
       attachToSection();
       init();
@@ -10393,7 +10232,7 @@ window.KTAnim = (function(){
 </script>
 
 <script id="kt-svc-group-wrapper">
-/* ── Envolve cada (título + row de planos) num card-container ── */
+
 (function(){
   function wrapGroups(){
     var rows=document.querySelectorAll('.svc-plan-row');
@@ -10415,14 +10254,14 @@ window.KTAnim = (function(){
 </script>
 
 <script>
-/* ── kt-check-pop · dispara animação de escala ao selecionar card ── */
+
 (function(){
   function triggerCheckPop(card){
     var circles = card.querySelectorAll('.spc-feat .kt-check-circle');
     circles.forEach(function(el, i){
       var cls = 'kt-pop-' + Math.min(i, 13);
       el.classList.remove(cls);
-      /* force reflow para reiniciar a animação */
+
       void el.offsetWidth;
       el.classList.add(cls);
       var delay = Math.min(i, 13) * 30 + 500;
@@ -10454,7 +10293,7 @@ window.KTAnim = (function(){
 </script>
 
 <script id="kt-branco-patches">
-/* ── Aplica patches visuais do tema Branco diretamente nos inline styles ── */
+
 (function(){
   var BADGE_BASIC    = { bg:'#4e4e4e', color:'#e8e8e8', border:'none' };
   var BADGE_ADVANCED = { bg:'#FFA700', color:'#1a1208', border:'none' };
@@ -10468,7 +10307,6 @@ window.KTAnim = (function(){
   function applyBranco(){
     if(!isBranco()) return;
 
-    /* ── Badges: cor sólida, sem borda ── */
     document.querySelectorAll('.svc-plan-card.spc-tier-basic .spc-badge').forEach(function(el){
       el.style.setProperty('background', BADGE_BASIC.bg,    'important');
       el.style.setProperty('color',      BADGE_BASIC.color, 'important');
@@ -10485,20 +10323,18 @@ window.KTAnim = (function(){
       el.style.setProperty('border',     BADGE_PREMIUM.border,'important');
     });
 
-    /* ── Feat items "não incluso" (todos os tiers): cor no modo branco ── */
     document.querySelectorAll(
       '.svc-plan-card .spc-feat span[style*="--muted"]'
     ).forEach(function(el){
       el.style.setProperty('color', '#333333', 'important');
     });
 
-    /* ── Feat items inclusos (avançado + premium): shadow no texto direto do li ── */
     document.querySelectorAll(
       '.svc-plan-card.spc-tier-advanced .spc-feat,' +
       '.svc-plan-card.spc-tier-premium  .spc-feat'
     ).forEach(function(el){
       el.style.setProperty('text-shadow', FEAT_SHADOW, 'important');
-      /* Se tem checkmark (incluso), aplica cinza escuro no texto */
+
       if(el.querySelector('.kt-check-circle')){
         el.style.setProperty('color', '#2a2a2a', 'important');
       }
@@ -10517,20 +10353,17 @@ window.KTAnim = (function(){
     });
   }
 
-  /* Observa mudanças de tema no <html> */
   var observer = new MutationObserver(function(){
     if(isBranco()) applyBranco(); else clearBranco();
   });
   observer.observe(document.documentElement, { attributes:true, attributeFilter:['class'] });
 
-  /* Observa seleção/desseleção dos cards para reaplicar badges */
   document.querySelectorAll('.svc-plan-card').forEach(function(card){
     new MutationObserver(function(){
       if(isBranco()) applyBranco();
     }).observe(card, { attributes:true, attributeFilter:['class'] });
   });
 
-  /* Roda no carregamento */
   if(document.readyState === 'loading'){
     document.addEventListener('DOMContentLoaded', applyBranco);
   } else {
@@ -10541,7 +10374,7 @@ window.KTAnim = (function(){
 
 <script id="kt-ultra-leve-mobile-only-script">
 (function(){
-  /* Ultra-leve liberado para todos os modos (desktop + mobile) */
+
   var PERF_KEY = 'kt_perf_mode';
   var PERF_MANUAL_KEY = 'kt_perf_manual';
   function storageSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
@@ -10570,7 +10403,7 @@ window.KTAnim = (function(){
 </script>
 
 <script>
-/* ── SELECTION ANIMATION: has-selection class on row ── */
+
 (function(){
   function syncRowState(){
     document.querySelectorAll('.svc-plan-row').forEach(function(row){
@@ -10578,7 +10411,7 @@ window.KTAnim = (function(){
       row.classList.toggle('has-selection', !!hasSel);
     });
   }
-  /* Observe class changes on svc-plan-cards */
+
   var observer = new MutationObserver(function(muts){
     muts.forEach(function(m){
       if(m.attributeName === 'class') syncRowState();
@@ -10590,7 +10423,7 @@ window.KTAnim = (function(){
     });
     syncRowState();
   }
-  /* Auto-switch on resize if no manual override for current device */
+
   var _resizeTimer;
   window.addEventListener('resize', function(){
     clearTimeout(_resizeTimer);
@@ -10598,7 +10431,7 @@ window.KTAnim = (function(){
       var manual = null;
       try{ manual = localStorage.getItem('kt_view_manual'); }catch(e){}
       var deviceMode = isMobileDevice() ? 'mobile' : 'desktop';
-      /* Only auto-switch if the user hasn't manually chosen a different view on this device */
+
       if(manual !== deviceMode){
         var current = document.body.classList.contains('view-mobile') ? 'mobile' : 'desktop';
         if(current !== deviceMode) setViewMode(deviceMode, false);
@@ -10636,8 +10469,7 @@ window.KTAnim = (function(){
 })();
 </script>
 <script>
-/* neutraliza os inline !important que applyPremiumStyle injeta,
-   permitindo que kt-plan-editor-result-models renderize o glassmorphism */
+
 (function(){
   function clearPremiumInline(){
     document.querySelectorAll('.svc-plan-card.spc-tier-premium').forEach(function(c){
@@ -10655,7 +10487,7 @@ window.KTAnim = (function(){
 })();
 </script>
 <script>
-/* ── Discount tag tooltip ── */
+
 (function(){
   var tip = document.createElement('div');
   tip.className = 'disc-tooltip';
@@ -10684,7 +10516,7 @@ window.KTAnim = (function(){
     clearTimeout(hideTimer);
     var r = el.getBoundingClientRect();
     var tw = 220;
-    /* position:fixed → NÃO soma scrollY */
+
     var left = r.left + r.width/2 - tw/2;
     left = Math.max(8, Math.min(left, window.innerWidth - tw - 8));
     tip.style.left = left + 'px';
@@ -10705,7 +10537,7 @@ window.KTAnim = (function(){
   document.addEventListener('mouseout', function(e){
     if(e.target.closest('.cmp-disc-tag')) hide();
   });
-  /* touch: toque abre, toque fora fecha */
+
   document.addEventListener('touchstart', function(e){
     var el = e.target.closest('.cmp-disc-tag');
     if(el){ e.preventDefault(); if(active === el){ hide(); } else { show(el); } }
@@ -10739,7 +10571,7 @@ window.KTAnim = (function(){
   }
   function forcePerfForView(mode){
     var savedPerf = storageGet(PERF_KEY);
-    /* ultra-leve agora permitido em todos os modos — não forçar reset para medio */
+
     if(hasManualPerf()) return;
     var perf = mode === 'mobile' ? 'ultra-leve' : 'medio';
     if(!validPerf(perf)) return;
@@ -10758,13 +10590,11 @@ window.KTAnim = (function(){
     }
   }
 
-  /* Marca desempenho como escolha manual quando o usuário mexer nos cards de performance. */
   document.addEventListener('click', function(e){
     var perfCard = e.target && e.target.closest ? e.target.closest('[data-kt-pref-kind="perf"]') : null;
     if(perfCard) storageSet(PERF_MANUAL_KEY, '1');
   }, true);
 
-  /* Garante LEVE por padrão no modo mobile e MÉDIO no desktop, enquanto não houver escolha manual. */
   function applyDefaultPerfNow(){ forcePerfForView(getViewMode()); }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(applyDefaultPerfNow, 40); });
   else setTimeout(applyDefaultPerfNow, 40);
@@ -10798,7 +10628,7 @@ window.KTAnim = (function(){
   function setPerf(p){clean();document.documentElement.classList.add('kt-perf-'+p);document.documentElement.setAttribute('data-kt-perf',p);if(document.body){document.body.classList.add('kt-perf-'+p);document.body.setAttribute('data-kt-perf',p)}}
   function enforce(){
     var p=g('kt_perf_mode') || document.documentElement.getAttribute('data-kt-perf');
-    /* ultra-leve liberado para todos os modos */
+
     if(p==='ultra-leve'){ setPerf('ultra-leve'); }
   }
   document.addEventListener('click',function(e){
@@ -10810,17 +10640,12 @@ window.KTAnim = (function(){
   addEventListener('resize',function(){setTimeout(enforce,80)},{passive:true});
   document.addEventListener('DOMContentLoaded',enforce);
 
-  /* ══ ULTRA-LEVE: Corrige inline styles com opacity:0 + animation ══
-     A regra CSS do override cobre as classes, mas elementos com
-     style="opacity:0;animation:fu..." inline precisam de JS para
-     terem o opacity forçado a 1, pois animation:none!important impede
-     a animação de completar e o estado "forwards" nunca é aplicado.    */
   function fixUltraLeveInlineOpacity(){
     if(!document.documentElement.classList.contains('kt-perf-ultra-leve')) return;
     var all = document.querySelectorAll('[style*="opacity:0"]');
     for(var i=0;i<all.length;i++){
       var el=all[i];
-      /* só toca elementos que usam animação para revelar (padrão "fu") */
+
       var st=el.getAttribute('style')||'';
       if(st.indexOf('animation')!==-1 || st.indexOf('animation:fu')!==-1){
         el.style.opacity='1';
@@ -10828,7 +10653,7 @@ window.KTAnim = (function(){
         el.style.animation='none';
       }
     }
-    /* hero-meta-item inline extras */
+
     var metaItems=document.querySelectorAll('.hero-meta-item');
     for(var j=0;j<metaItems.length;j++){metaItems[j].style.opacity='1';metaItems[j].style.transform='none';}
   }
@@ -10842,9 +10667,9 @@ window.KTAnim = (function(){
   } else {
     fixUltraLeveDelayed();
   }
-  /* Re-aplica ao trocar de modo em runtime */
+
   window.ktFixUltraLeveInlineOpacity=fixUltraLeveInlineOpacity;
-  /* Re-aplica ao clicar (troca de página via nav) */
+
   document.addEventListener('click',function(){
     if(document.documentElement.classList.contains('kt-perf-ultra-leve')){
       setTimeout(fixUltraLeveInlineOpacity,60);
@@ -10853,7 +10678,6 @@ window.KTAnim = (function(){
   },{passive:true,capture:true});
 })();
 </script>
-
 
 <script>
 (function(){
@@ -10891,22 +10715,22 @@ window.KTAnim = (function(){
     if(btn)   btn.classList.toggle('active', isOpen);
     if(isOpen) dsCfgSyncPills();
   };
-  /* close on overlay backdrop click */
+
   document.addEventListener('click', function(e){
     var overlay = document.getElementById('ds-cfg-overlay');
     var popup   = document.getElementById('ds-cfg-popup');
     var btn     = document.getElementById('ds-cfg-btn');
     if(!overlay || !overlay.classList.contains('open')) return;
-    /* click outside popup (on the backdrop) */
+
     if(popup && !popup.contains(e.target) && (!btn || !btn.contains(e.target))) dsCfgClose();
   });
-  /* close on ESC */
+
   document.addEventListener('keydown', function(e){
     if((e.key === 'Escape' || e.key === 'Esc') && document.getElementById('ds-cfg-overlay') && document.getElementById('ds-cfg-overlay').classList.contains('open')){
       dsCfgClose();
     }
   });
-  /* sync pills when view mode changes */
+
   var _origSVM = window.setViewMode;
   if(_origSVM){
     window.setViewMode = function(mode, save){
@@ -10919,9 +10743,9 @@ window.KTAnim = (function(){
 </script>
 
 <style id="kt-plan-nav-style">
-/* ── Navegação de plano: botões dentro do card ─────────────── */
+
 .svc-nav-wrap{display:block}
-/* Faixa de navegação injeta-se antes do .spc-btn */
+
 .svc-card-nav{
   display:none;
   align-items:center;
@@ -10936,11 +10760,11 @@ window.KTAnim = (function(){
   padding-top:20px;
   padding-bottom:18px
 }
-/* spc-btn tem margin-top:auto nativo — zerar quando nav ativo p/ centrar corretamente */
+
 .svc-nav-wrap.kt-nav-active>.svc-plan-row>.svc-plan-card>.spc-btn{margin-top:0!important}
 html.kt-theme-noturno .svc-card-nav{border-top-color:rgba(200,169,110,.08)}
 html.kt-theme-branco .svc-card-nav{border-top-color:rgba(155,109,38,.14)}
-/* Botões de seta */
+
 .svc-card-nav .svc-nav-btn{
   width:34px;height:34px;border-radius:50%;flex-shrink:0;
   background:rgba(6,6,8,.80);
@@ -10963,17 +10787,17 @@ html.kt-theme-branco .svc-card-nav{border-top-color:rgba(155,109,38,.14)}
   transform:scale(1.10)
 }
 .svc-card-nav .svc-nav-btn:not(.kt-nav-hidden):active{transform:scale(.90);background:rgba(200,169,110,.24)}
-/* Indicador central */
+
 .svc-nav-counter{
   font-family:'Space Mono',monospace;font-size:11px;letter-spacing:1.5px;
   color:var(--muted);flex:1;text-align:center;user-select:none;-webkit-user-select:none
 }
-/* Temas */
+
 html.kt-theme-noturno .svc-card-nav .svc-nav-btn{background:rgba(3,5,12,.84);border-color:rgba(200,169,110,.22)}
 html.kt-theme-branco .svc-card-nav .svc-nav-btn{background:rgba(250,244,228,.90);border-color:rgba(155,109,38,.34);color:rgba(118,78,14,1);box-shadow:0 2px 10px rgba(91,65,23,.18)}
 html.kt-theme-branco .svc-nav-counter{color:rgba(120,80,20,.50)}
 html.kt-perf-ultra-leve .svc-card-nav .svc-nav-btn{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
-/* Row em modo ativo */
+
 .svc-nav-wrap.kt-nav-active>.svc-plan-row{
   display:flex!important;flex-direction:row!important;
   overflow-x:hidden!important;gap:6px!important;
@@ -11006,9 +10830,6 @@ html.kt-perf-ultra-leve .svc-card-nav .svc-nav-btn{backdrop-filter:none!importan
     return false;
   }
 
-  /* Quando os cards entram em modo carrossel (swipe via botão), força ultra-leve.
-     Runtime-only (não grava em localStorage) — o default salvo por view fica a
-     cargo de forcePerfForView, que é ciente de mobile/desktop e se autocorrige. */
   function ensureUltraLeve(){
     try{
       var de = document.documentElement;
@@ -11024,8 +10845,6 @@ html.kt-perf-ultra-leve .svc-card-nav .svc-nav-btn{backdrop-filter:none!importan
     }catch(e){}
   }
 
-  /* Repaint suave (opacity nudge) — força o compositor a re-rasterizar o card
-     visível, evitando que checkmarks/botão "sumam" em scroll containers no mobile. */
   function repaintCard(card){
     if(!card) return;
     try{
@@ -11087,13 +10906,11 @@ html.kt-perf-ultra-leve .svc-card-nav .svc-nav-btn{backdrop-filter:none!importan
     var cards = getCards(row);
     if(cards.length < 2) return;
 
-    /* Wrapper posicionador */
     var wrap = document.createElement('div');
     wrap.className = 'svc-nav-wrap';
     row.parentNode.insertBefore(wrap, row);
     wrap.appendChild(row);
 
-    /* Injeta controles em cada card */
     cards.forEach(injectCardNav);
 
     var idx = 0, animId = 0;
@@ -11128,7 +10945,6 @@ html.kt-perf-ultra-leve .svc-card-nav .svc-nav-btn{backdrop-filter:none!importan
       });
     }
 
-    /* Delegação: captura cliques em qualquer .svc-card-nav btn */
     wrap.addEventListener('click', function(e){
       var btn = e.target && e.target.closest ? e.target.closest('.svc-card-nav .svc-nav-btn') : null;
       if(!btn || btn.classList.contains('kt-nav-hidden')) return;
@@ -11206,17 +11022,12 @@ html.kt-perf-ultra-leve .svc-card-nav .svc-nav-btn{backdrop-filter:none!importan
 </script>
 
 <style id="kt-glass-switcher-style">
-/* ══════════════════════════════════════════════════════
-   GLASS + NEUMORPHIC SERVICE SWITCHER
-   ══════════════════════════════════════════════════════ */
 
-/* ── Wrapper geral ────────────────────────────────────── */
 .svc-glass-switcher{
   display:flex;
   margin-bottom:14px
 }
 
-/* ── Track: glassmorphic pill ─────────────────────────── */
 .sgs-track{
   display:flex;gap:5px;padding:5px;
   border-radius:20px;width:100%;
@@ -11229,7 +11040,6 @@ html.kt-perf-ultra-leve .svc-card-nav .svc-nav-btn{backdrop-filter:none!importan
     inset 0 -1px 0 rgba(0,0,0,.2)
 }
 
-/* ── Cada aba ──────────────────────────────────────────── */
 .sgs-tab{
   flex:1;display:flex;flex-direction:column;
   align-items:center;justify-content:center;
@@ -11243,12 +11053,12 @@ html.kt-perf-ultra-leve .svc-card-nav .svc-nav-btn{backdrop-filter:none!importan
   transition:color .22s,background .22s,border-color .22s,
     box-shadow .22s,transform .18s cubic-bezier(.34,1.2,.64,1);
   position:relative;overflow:hidden;
-  /* neumorphic raised (inativo) */
+
   box-shadow:
     -3px -3px 8px rgba(255,255,255,.04),
      3px  3px 9px rgba(0,0,0,.48)
 }
-/* shimmer glass no hover */
+
 .sgs-tab::before{
   content:'';position:absolute;inset:0;
   background:linear-gradient(135deg,rgba(255,255,255,.07) 0%,transparent 55%);
@@ -11258,7 +11068,6 @@ html.kt-perf-ultra-leve .svc-card-nav .svc-nav-btn{backdrop-filter:none!importan
 .sgs-tab:hover::before{opacity:1}
 .sgs-tab:active{transform:scale(.96)}
 
-/* ── Aba ATIVA: inset pressed + cor do serviço ─────────── */
 .sgs-tab.active{
   color:var(--text);
   box-shadow:
@@ -11266,7 +11075,6 @@ html.kt-perf-ultra-leve .svc-card-nav .svc-nav-btn{backdrop-filter:none!importan
     inset  3px  3px 9px rgba(0,0,0,.52)
 }
 
-/* Formatação (terracota) */
 .sgs-tab[data-svc="format"].active{
   background:rgba(201,112,88,.14);
   border-color:rgba(201,112,88,.22);
@@ -11276,7 +11084,7 @@ html.kt-perf-ultra-leve .svc-card-nav .svc-nav-btn{backdrop-filter:none!importan
     inset  3px  3px 9px rgba(0,0,0,.52),
     0 0 20px rgba(201,112,88,.10)
 }
-/* Inst. SO (azul) */
+
 .sgs-tab[data-svc="so"].active{
   background:rgba(100,140,222,.14);
   border-color:rgba(100,140,222,.22);
@@ -11286,7 +11094,7 @@ html.kt-perf-ultra-leve .svc-card-nav .svc-nav-btn{backdrop-filter:none!importan
     inset  3px  3px 9px rgba(0,0,0,.52),
     0 0 20px rgba(100,140,222,.10)
 }
-/* Backup (verde) */
+
 .sgs-tab[data-svc="backup"].active{
   background:rgba(60,168,100,.14);
   border-color:rgba(60,168,100,.22);
@@ -11297,14 +11105,13 @@ html.kt-perf-ultra-leve .svc-card-nav .svc-nav-btn{backdrop-filter:none!importan
     0 0 20px rgba(60,168,100,.10)
 }
 
-/* ── Ícone dentro da aba ───────────────────────────────── */
 .sgs-icon-wrap{
   display:flex;align-items:center;justify-content:center;
   width:30px;height:30px;border-radius:9px;flex-shrink:0;
   transition:transform .22s cubic-bezier(.34,1.2,.64,1)
 }
 .sgs-tab.active .sgs-icon-wrap{transform:scale(1.10)}
-/* cores de fundo do ícone */
+
 .sgs-icon-format{
   background:rgba(201,112,88,.15);color:#c87058;
   border:1px solid rgba(201,112,88,.2)
@@ -11317,20 +11124,18 @@ html.kt-perf-ultra-leve .svc-card-nav .svc-nav-btn{backdrop-filter:none!importan
   background:rgba(60,168,100,.15);color:#4db87a;
   border:1px solid rgba(60,168,100,.2)
 }
-/* ícone inativo: dessatura */
+
 .sgs-tab:not(.active) .sgs-icon-wrap{
   filter:saturate(.35) brightness(.7)
 }
 .sgs-tab.active .sgs-icon-wrap{filter:none}
 
-/* ── Label ─────────────────────────────────────────────── */
 .sgs-label{
   font-family:'Space Mono',monospace;font-size:8.5px;
   letter-spacing:.9px;text-transform:uppercase;white-space:nowrap;
   transition:color .22s
 }
 
-/* ── Variante Desktop (min 600px): tabs um pouco maiores ─ */
 @media(min-width:600px){
   .sgs-track{padding:6px;gap:6px;border-radius:22px}
   .sgs-tab{padding:14px 8px 12px;border-radius:16px;gap:7px;font-size:9px}
@@ -11338,7 +11143,6 @@ html.kt-perf-ultra-leve .svc-card-nav .svc-nav-btn{backdrop-filter:none!importan
   .sgs-label{font-size:9px}
 }
 
-/* ── Temas ─────────────────────────────────────────────── */
 html.kt-theme-noturno .sgs-track{
   background:rgba(255,255,255,.03);
   border-color:rgba(200,169,110,.08);
@@ -11360,7 +11164,6 @@ html.kt-theme-branco .sgs-tab.active{
 html.kt-theme-branco .sgs-tab:hover{color:rgba(100,70,20,.6)}
 html.kt-perf-ultra-leve .sgs-track{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
 
-/* ── Cabeçalho do panel dentro do svc-group-card ────────── */
 .svc-panel-head{
   display:flex!important;flex-direction:column;
   padding:14px 16px 8px!important
@@ -11373,20 +11176,13 @@ html.kt-perf-ultra-leve .sgs-track{backdrop-filter:none!important;-webkit-backdr
 .sph-icon-so{background:rgba(100,140,222,.16);color:#7b9ee8;border:1px solid rgba(100,140,222,.25)}
 .sph-icon-backup{background:rgba(60,168,100,.16);color:#4db87a;border:1px solid rgba(60,168,100,.25)}
 
-/* ── Reduced motion ────────────────────────────────────── */
 @media(prefers-reduced-motion:reduce){
   .sgs-tab,.sgs-icon-wrap,.sgs-tab::before{transition:none!important}
 }
 </style>
 
-
 <script id="kt-card-height-equalizer">
-/* ── Equaliza altura dos cards dentro de cada svc-plan-row ──────────────────
-   Problema: grid com repeat(auto-fit,minmax(155px,1fr)) quebra em múltiplas
-   linhas em viewports pequenos. align-items:stretch só funciona na mesma
-   linha do grid — cards em linhas diferentes ficam com alturas diferentes.
-   Solução: mede a maior altura natural dos cards e aplica min-height em todos.
-─────────────────────────────────────────────────────────────────────────── */
+
 (function(){
   var _timer = null;
 
@@ -11395,17 +11191,14 @@ html.kt-perf-ultra-leve .sgs-track{backdrop-filter:none!important;-webkit-backdr
       var cards = Array.from(row.querySelectorAll(':scope > .svc-plan-card'));
       if(cards.length < 2) return;
 
-      /* 1. Reset para medir alturas naturais */
       cards.forEach(function(c){ c.style.minHeight = ''; });
 
-      /* 2. Força reflow e mede */
       var maxH = 0;
       cards.forEach(function(c){
         var h = c.getBoundingClientRect().height;
         if(h > maxH) maxH = h;
       });
 
-      /* 3. Aplica apenas se houver diferença real (> 2px) */
       var hasVariance = cards.some(function(c){
         return Math.abs(c.getBoundingClientRect().height - maxH) > 2;
       });
@@ -11423,29 +11216,22 @@ html.kt-perf-ultra-leve .sgs-track{backdrop-filter:none!important;-webkit-backdr
     _timer = setTimeout(equalizeRows, ms || 60);
   }
 
-  /* ── Gatilhos ── */
-
-  /* 1. Carregamento inicial (após animações de entrada) */
   if(document.readyState === 'loading'){
     document.addEventListener('DOMContentLoaded', function(){ schedule(450); });
   } else {
     schedule(450);
   }
 
-  /* 2. Resize (debounced 80ms) */
   window.addEventListener('resize', function(){ schedule(80); });
 
-  /* 3. Mudança de página — patcha window.navigateTo */
   var _origNav = window.navigateTo;
   window.navigateTo = function(pageId){
     if(typeof _origNav === 'function') _origNav.apply(this, arguments);
-    schedule(220); /* aguarda a animação pageIn (.35s) */
+    schedule(220); 
   };
 
-  /* 4. Mudança de tema/perf (pode afetar padding/fonte e alterar alturas) */
   document.addEventListener('ktPerfChanged', function(){ schedule(120); });
 
-  /* 5. Observe mudanças de classe nos cards (seleção, desconto bancada, etc.) */
   var _obs = new MutationObserver(function(muts){
     var hit = muts.some(function(m){
       return m.type === 'attributes' &&
@@ -11481,25 +11267,20 @@ html.kt-perf-ultra-leve .sgs-track{backdrop-filter:none!important;-webkit-backdr
     attachObservers();
   }
 
-  /* Expõe para chamadas externas */
   window.ktEqualizeCards = equalizeRows;
 })();
 </script>
-<!-- ============================================================
-     KAYK · Mini-menu de orçamento sempre disponível
-     - Desktop: barra fixa centralizada sobre o conteúdo
-     - Tela estreita (view-mobile): assume o botão flutuante inferior
-     ============================================================ -->
+
 <style id="kayq-quote-style">
-  /* ---------- Barra fixa (desktop) ---------- */
+
   #kayq-quote-bar{
     position:fixed; left:0; right:0; bottom:18px; z-index:995;
     display:none; justify-content:center;
     padding:0 16px; pointer-events:none;
     transition:opacity .3s ease, transform .3s ease;
   }
-  body.view-desktop #kayq-quote-bar{ display:flex; left:var(--sidebar-mini); } /* sidebar colapsada (padrão) */
-  body.view-desktop.ds-sidebar-expanded #kayq-quote-bar{ left:var(--sidebar); } /* sidebar expandida */
+  body.view-desktop #kayq-quote-bar{ display:flex; left:var(--sidebar-mini); } 
+  body.view-desktop.ds-sidebar-expanded #kayq-quote-bar{ left:var(--sidebar); } 
   body.kayq-near-orc #kayq-quote-bar{ opacity:0; transform:translateY(14px); pointer-events:none !important; }
 
   .kayq-qb{
@@ -11523,7 +11304,7 @@ html.kt-perf-ultra-leve .sgs-track{backdrop-filter:none!important;-webkit-backdr
     transition:background .18s, border-color .22s, box-shadow .22s, transform .15s;
     border:1px solid transparent;
   }
-  /* Estado preenchido: neumorphic 2.0 dark — raised com borda dourada sutil */
+
   #kayq-quote-bar:not(.is-empty) .kayq-qb-info{
     border-color:rgba(200,169,110,.18);
     background:rgba(255,255,255,.025);
@@ -11551,7 +11332,6 @@ html.kt-perf-ultra-leve .sgs-track{backdrop-filter:none!important;-webkit-backdr
   .kayq-qb-info:hover{ background:rgba(200,169,110,.04); }
   .kayq-qb-info:active{ background:rgba(200,169,110,.09); }
 
-  /* Chevron hint — só visível no estado preenchido */
   .kayq-qb-info-hint{
     display:none; align-items:center; gap:3px; flex-shrink:0; margin-left:auto;
     font-family:'Space Mono',monospace; font-size:9px; letter-spacing:1.2px;
@@ -11629,7 +11409,6 @@ html.kt-perf-ultra-leve .sgs-track{backdrop-filter:none!important;-webkit-backdr
   .kayq-qb-empty-btn:hover{ background:rgba(200,169,110,.18); border-color:var(--gold); box-shadow:0 4px 16px rgba(200,169,110,.22); }
   .kayq-qb-empty-btn:active{ transform:scale(.97); }
 
-  /* alternância vazio / preenchido (preenchido = padrão) */
   .kayq-qb-empty-text, .kayq-qb-empty-btn{ display:none; }
   #kayq-quote-bar.is-empty .kayq-qb-label,
   #kayq-quote-bar.is-empty .kayq-qb-filled-row,
@@ -11640,7 +11419,6 @@ html.kt-perf-ultra-leve .sgs-track{backdrop-filter:none!important;-webkit-backdr
   #kayq-quote-bar.is-empty .kayq-qb-ico-filled{ display:none; }
   #kayq-quote-bar:not(.is-empty) .kayq-qb-ico-empty{ display:none; }
 
-  /* ---------- Pílula compacta (tela estreita / view-mobile) ---------- */
   #kayq-mini-cta{
     position:fixed; left:0; right:0; bottom:18px; z-index:999;
     display:none; justify-content:center;
@@ -11666,7 +11444,6 @@ html.kt-perf-ultra-leve .sgs-track{backdrop-filter:none!important;-webkit-backdr
   .kayq-mini:hover{ background:#8eeaae; box-shadow:0 10px 30px rgba(0,231,91,.5), 0 2px 0 rgba(255,255,255,.3) inset; }
   .kayq-mini:active{ transform:scale(.97); }
 
-  /* Botão secundário "Ver orçamento" na pílula mobile */
   .kayq-mini-orc{
     pointer-events:auto; cursor:pointer; flex-shrink:0;
     display:inline-flex; align-items:center; justify-content:center;
@@ -11684,8 +11461,6 @@ html.kt-perf-ultra-leve .sgs-track{backdrop-filter:none!important;-webkit-backdr
 
   #kayq-mini-cta{ gap:8px; }
 
-  /* tela estreita preenchida: some o botão de WhatsApp redundante (a pílula já envia)
-     e sobe o atalho "ver desktop" para não colidir com a pílula de envio */
   body.view-mobile.kayq-filled:not(.kayq-near-orc) #wa-fab{
     opacity:0; pointer-events:none; transform:scale(.85);
     transition:opacity .25s ease, transform .25s ease;
@@ -11694,17 +11469,12 @@ html.kt-perf-ultra-leve .sgs-track{backdrop-filter:none!important;-webkit-backdr
     transform:translateY(-50px);
   }
 
-  /* ── Compactação progressiva — desktop, janelas estreitas ──
-     Para view-desktop com janela estreita (600–880px): ajustes progressivos. */
-
-  /* ① ≤ 880px — esconde label, reduz espaçamentos */
   @media (max-width: 880px) {
     body.view-desktop .kayq-qb-label{ display:none; }
     body.view-desktop .kayq-qb{ gap:10px; }
     body.view-desktop .kayq-qb-actions{ gap:6px; }
   }
 
-  /* ② ≤ 720px — remove o botão de copiar e aperta fonte/padding */
   @media (max-width: 720px) {
     body.view-desktop .kayq-qb{ gap:8px; }
     body.view-desktop .kayq-qb-copy{ display:none !important; }
@@ -11716,7 +11486,6 @@ html.kt-perf-ultra-leve .sgs-track{backdrop-filter:none!important;-webkit-backdr
     body.view-desktop .kayq-qb-empty-btn svg{ width:15px; height:15px; }
   }
 
-  /* ③ ≤ 650px — badge some, preço encolhe, botão fica só ícone + "Enviar" */
   @media (max-width: 650px) {
     body.view-desktop .kayq-qb{ gap:6px; padding:8px 10px 8px 12px; }
     body.view-desktop .kayq-qb-badge{ display:none; }
@@ -11733,7 +11502,6 @@ html.kt-perf-ultra-leve .sgs-track{backdrop-filter:none!important;-webkit-backdr
   }
 </style>
 
-<!-- Barra fixa (desktop) -->
 <div id="kayq-quote-bar" class="is-empty" aria-live="polite">
   <div class="kayq-qb">
     <div class="kayq-qb-info" onclick="if(typeof scrollToOrc==='function')scrollToOrc()" role="button" tabindex="0" aria-label="Ver orçamento completo" title="Ver orçamento completo">
@@ -11771,7 +11539,6 @@ html.kt-perf-ultra-leve .sgs-track{backdrop-filter:none!important;-webkit-backdr
   </div>
 </div>
 
-<!-- Pilula compacta (telas estreitas) -->
 <div id="kayq-mini-cta">
   <button type="button" class="kayq-mini-orc" onclick="if(typeof scrollToOrc==='function')scrollToOrc()" aria-label="Ver orcamento completo" title="Ver orcamento completo">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
@@ -11783,7 +11550,7 @@ html.kt-perf-ultra-leve .sgs-track{backdrop-filter:none!important;-webkit-backdr
 </div>
 
 <script>
-/* KAYK · lógica do mini-menu de orçamento sempre disponível */
+
 (function(){
   'use strict';
 
@@ -11794,12 +11561,12 @@ html.kt-perf-ultra-leve .sgs-track{backdrop-filter:none!important;-webkit-backdr
     try{ return (typeof orcState !== 'undefined' && orcState) ? Object.keys(orcState) : []; }
     catch(e){ return []; }
   }
-  /* serviços escolhidos pelo usuário (ignora o diagnóstico grátis incluído automaticamente) */
+
   function orcServiceCount(){
     try{
       if(typeof orcState === 'undefined' || !orcState) return 0;
       var paid = Object.values(orcState).filter(function(i){ return i && !i.free; }).length;
-      /* se há itens mas todos marcados como grátis, ainda conta como 1 seleção */
+
       return (paid === 0 && Object.keys(orcState).length > 0) ? 1 : paid;
     }catch(e){ return 0; }
   }
@@ -11813,13 +11580,11 @@ html.kt-perf-ultra-leve .sgs-track{backdrop-filter:none!important;-webkit-backdr
     else{ window.scrollTo({top:0, behavior:'smooth'}); }
   }
 
-  /* Ação quando nada está selecionado: avisa e leva aos planos */
   window.kayqEmptyAction = function(){
     if(typeof showToast === 'function'){ showToast('Selecione um serviço primeiro', '#9e4a4a'); }
     scrollToPlans();
   };
 
-  /* Mantém barra + pílula sincronizados com a seleção */
   window.kayqUpdateQuoteBar = function(){
     var filled = orcItemKeys().length > 0;
     var n = orcServiceCount();
@@ -11838,7 +11603,6 @@ html.kt-perf-ultra-leve .sgs-track{backdrop-filter:none!important;-webkit-backdr
     }
   };
 
-  /* Esconde os CTAs flutuantes quando o orçamento já está na tela (evita duplicar botões) */
   function setupNearObserver(){
     var orc = document.getElementById('orc-resumo');
     if(!orc || !('IntersectionObserver' in window)) return;
@@ -11851,7 +11615,6 @@ html.kt-perf-ultra-leve .sgs-track{backdrop-filter:none!important;-webkit-backdr
     io.observe(orc);
   }
 
-  /* Envolve orcUpdatePanel para atualizar a barra em toda mudança de estado */
   function hookUpdatePanel(){
     if(typeof orcUpdatePanel === 'function' && !orcUpdatePanel.__kayq){
       var _orig = orcUpdatePanel;
@@ -11861,7 +11624,7 @@ html.kt-perf-ultra-leve .sgs-track{backdrop-filter:none!important;-webkit-backdr
         return r;
       };
       _wrap.__kayq = true;
-      orcUpdatePanel = _wrap; /* reatribuição global (mesmo padrão usado em clearOrcamento) */
+      orcUpdatePanel = _wrap; 
     }
   }
 
@@ -11888,15 +11651,7 @@ html.kt-perf-ultra-leve .sgs-track{backdrop-filter:none!important;-webkit-backdr
 </script>
 
 <style id="kt-perf-boost">
-/* ════════════════════════════════════════════════════════════════
-   KT PERF BOOST · otimizações de performance que preservam o visual
-   Carregado por último de propósito: vence o cascade dos modos.
-   ════════════════════════════════════════════════════════════════ */
 
-/* ── LEVE: o maior custo no celular é backdrop-filter (recalcula o
-   blur a cada frame de scroll). Removemos só ele — sombras, bordas e
-   gradientes continuam, então os painéis ainda parecem "vidro fosco
-   escuro", mas o scroll fica liso. ───────────────────────────────── */
 html.kt-perf-leve *,
 html.kt-perf-leve *::before,
 html.kt-perf-leve *::after{
@@ -11904,14 +11659,9 @@ html.kt-perf-leve *::after{
   -webkit-backdrop-filter:none!important;
 }
 
-/* ── O overlay de ruído da sidebar usa mix-blend-mode (custa no scroll).
-   Some nos modos leves — os orbs já estão ocultos lá. ─────────────── */
 html.kt-perf-leve #sidebar-orbs-noise,
 html.kt-perf-ultra-leve #sidebar-orbs-noise{display:none!important}
 
-/* ── ULTRA-LEVE: antes ficava "chapado" (sem nenhuma sombra). Devolvemos
-   sombras SUTIS e estáticas (são rasterizadas 1x e ficam em cache — custo
-   quase zero no scroll) para manter a profundidade premium. ───────── */
 html.kt-perf-ultra-leve .svc-plan-card,
 html.kt-perf-ultra-leve .svc-plan-card:hover,
 html.kt-perf-ultra-leve .uniq-svc-card,
@@ -11924,7 +11674,7 @@ html.kt-perf-ultra-leve .info-banner{
 html.kt-perf-ultra-leve .svc-plan-card.spc-featured{
   box-shadow:0 3px 16px rgba(200,169,110,.12),0 2px 10px rgba(0,0,0,.34)!important;
 }
-/* Temas claro/noturno: sombra coerente com o fundo */
+
 html.kt-perf-ultra-leve.kt-theme-branco .svc-plan-card,
 html.kt-theme-branco.kt-perf-ultra-leve .svc-plan-card,
 html.kt-theme-branco.kt-perf-ultra-leve .uniq-svc-card,
@@ -11933,10 +11683,6 @@ html.kt-theme-branco.kt-perf-ultra-leve .tip-item{
   box-shadow:0 2px 10px rgba(91,65,23,.12)!important;
 }
 
-/* ── ULTRA-LEVE: transições instantâneas (.001ms) deixavam tudo "seco".
-   Devolvemos micro-transições rápidas só nos elementos interativos —
-   custo desprezível e devolve o tato de clique/hover. As animações de
-   entrada continuam desligadas (não mexemos em animation-duration). ── */
 html.kt-perf-ultra-leve .svc-plan-card,
 html.kt-perf-ultra-leve .spc-btn,
 html.kt-perf-ultra-leve .svc-nav-btn,
@@ -11948,11 +11694,6 @@ html.kt-perf-ultra-leve button{
              border-color .14s ease,box-shadow .14s ease,color .14s ease!important;
 }
 
-/* ── content-visibility: o navegador pula a renderização de cards que
-   estão fora da tela → 1ª pintura mais rápida e scroll mais leve em
-   aparelhos humildes. Só no celular e só nos modos leves (onde as sombras
-   já são sutis, sem risco de "cortar" brilhos). O grupo com canvas é
-   excluído via .kt-cv-skip (precisa do tamanho real). ──────────────── */
 @media (max-width:599px){
   html.kt-perf-leve .svc-group-card:not(.kt-cv-skip),
   html.kt-perf-ultra-leve .svc-group-card:not(.kt-cv-skip){
@@ -11961,9 +11702,6 @@ html.kt-perf-ultra-leve button{
   }
 }
 
-/* ── Celular no modo MÉDIO (escolha manual): reduz o raio do blur dos
-   orbs. O custo do blur cresce ~ao quadrado do raio, então 44px no lugar
-   de 64px é ~2x mais barato e continua bem suave. Pesado fica intacto. ─ */
 @media (max-width:599px){
   html.kt-perf-medio #bg-orbs-canvas{filter:blur(44px) saturate(1.4)!important}
   html.kt-perf-medio #sidebar-orbs-canvas{filter:blur(40px) saturate(1.35)!important}
