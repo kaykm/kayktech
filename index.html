@@ -93,6 +93,8 @@ Economias aplicadas: comentários removidos, CSS unido e compactado legível, SV
   ]
 }
 </script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <script>
 (function(){
@@ -104,9 +106,17 @@ Economias aplicadas: comentários removidos, CSS unido e compactado legível, SV
     var mobileScreen = window.matchMedia && window.matchMedia('(max-width: 599px)').matches;
     var isMobileDefault = savedView === 'mobile' || (!savedView && (mobileScreen || mobileUA));
     var theme = localStorage.getItem('kt_theme_mode') || 'escuro';
-    var perf  = localStorage.getItem('kt_perf_mode') || (isMobileDefault ? 'ultra-leve' : 'medio');
+    /* Detecta hardware "humilde" para escolher um padrão leve no 1º acesso:
+       pouca RAM, poucos núcleos, modo economia de dados ou movimento reduzido. */
+    var lowMem   = (navigator.deviceMemory || 8) <= 4;
+    var lowCores = (navigator.hardwareConcurrency || 8) <= 4;
+    var saveData = !!(navigator.connection && navigator.connection.saveData);
+    var reduceMo = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var humble   = lowMem || lowCores || saveData || reduceMo;
+    var autoPerf = (isMobileDefault || humble) ? 'ultra-leve' : 'medio';
+    var perf  = localStorage.getItem('kt_perf_mode') || autoPerf;
     if(!validTheme[theme]) theme = 'escuro';
-    if(!validPerf[perf]) perf = (isMobileDefault ? 'ultra-leve' : 'medio');
+    if(!validPerf[perf]) perf = autoPerf;
     document.documentElement.classList.add('kt-theme-' + theme, 'kt-perf-' + perf);
     document.documentElement.setAttribute('data-kt-theme', theme);
     document.documentElement.setAttribute('data-kt-perf', perf);
@@ -256,7 +266,6 @@ body{position:relative;overflow-x:hidden}
 .ds-sd-price{font-size:13px;color:var(--gold);font-weight:600;white-space:nowrap;flex-shrink:0}
 .ds-sd-section{display:block;font-size:14.4px;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;padding:5px 12px 3px;background:var(--black);border-bottom:1px solid var(--border)}
 #dt-sidebar .ds-wa{font-size:13.2px}
-#scrollTopBtn{right:22px;bottom:22px}
 .mode-switch-wrap{display:none!important}
 .side-overlay,.side-menu,.menu-btn,#sideMenu,#sideOverlay{display:none!important}
 .cmp-sec-title{font-size:21.6px!important}
@@ -712,12 +721,7 @@ to{opacity:1;transform:translateX(0)}
 .rdm-tip-tag{font-family:'Space Mono',monospace;font-size:13px;letter-spacing:2px;text-transform:uppercase;margin-bottom:3px;color:var(--gold)}
 .rdm-tip-body{font-size:13.2px;color:#999;font-weight:300;line-height:1.6}
 .rdm-tip-body strong{color:var(--text);font-weight:400}
-#scrollTopBtn{position:fixed;bottom:22px;right:22px;z-index:990;width:60px;height:60px;border-radius:50%;background:#1a1a1a;border:1.5px solid rgba(200,169,110,.4);color:var(--gold);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 0 0 0 rgba(200,169,110,0),0 4px 18px rgba(0,0,0,.6);transition:border-color .2s,box-shadow .2s,transform .2s,background .2s,backdrop-filter .2s,-webkit-backdrop-filter .2s;backdrop-filter:blur(0px);-webkit-backdrop-filter:blur(0px);-webkit-tap-highlight-color:transparent}
-#scrollTopBtn:hover{background:rgba(200,169,110,.12);border-color:rgba(200,169,110,.8);box-shadow:0 0 0 4px rgba(200,169,110,.08),0 4px 20px rgba(0,0,0,.7);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);transform:scale(1.06)}
-#scrollTopBtn:active{transform:scale(.94);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);background:rgba(200,169,110,.18)}
-@media(min-width:600px){#scrollTopBtn{right:22px}
-}
-#toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-8px);z-index:1100;background:var(--surface2);border:1px solid var(--border2);border-radius:3px;padding:9px 16px;font-family:'Space Mono',monospace;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .25s ease,transform .25s ease;box-shadow:0 4px 20px rgba(0,0,0,.6)}
+#toast{position:fixed;bottom:90px;top:auto;left:50%;transform:translateX(-50%) translateY(10px);z-index:1100;background:var(--surface2);border:1px solid var(--border2);border-radius:3px;padding:9px 16px;font-family:'Space Mono',monospace;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .25s ease,transform .25s ease;box-shadow:0 4px 20px rgba(0,0,0,.6)}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 #toast .toast-dot{display:inline-block;width:5px;height:5px;border-radius:50%;margin-right:7px;vertical-align:middle}
 .orc-table-wrap{position:relative}
@@ -754,7 +758,7 @@ to{opacity:1;transform:translateX(0)}
 .orc-list-row:last-child{border-bottom:none}
 .orc-list-name{font-size:13.2px;color:var(--text);font-weight:300;flex:1}
 .orc-list-price{font-family:'Space Mono',monospace;font-size:13px;color:var(--gold);font-weight:700;white-space:nowrap}
-.svc-plan-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:8px;margin:0 13px 6px;padding:4px 2px;opacity:0;animation:fu .55s ease forwards .14s;align-items:stretch;overflow:visible}
+.svc-plan-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:14px;margin:0 13px 6px;padding:4px 2px;opacity:0;animation:fu .55s ease forwards .14s;align-items:stretch;overflow:visible}
 .svc-plan-card.spc-selected{border-color:var(--gold)!important;background:rgba(200,169,110,.1)!important;box-shadow:0 0 0 1px rgba(200,169,110,.25),0 4px 20px rgba(200,169,110,.08)}
 .svc-plan-card.spc-selected .spc-btn{background:rgba(74,158,107,.15)!important;border-color:rgba(74,158,107,.55)!important;color:var(--green)!important}
 .svc-plan-card.spc-selected.spc-featured .spc-btn{background:rgba(74,158,107,.15)!important;border-color:rgba(74,158,107,.55)!important;color:var(--green)!important}
@@ -923,7 +927,6 @@ body{padding-left:0!important;font-size:inherit!important}
 .desc-tag{font-size:9px!important}
 .desc-txt{font-size:11px!important}
 #orc-resumo{margin:10px 13px 0}
-#scrollTopBtn{bottom:22px!important}
 .rdm-item-diff{display:none!important}
 .kt-step-list{gap:8px!important;max-height:55vh!important;overflow-y:auto!important}
 .kt-step-card{padding:10px 12px!important;border-radius:10px!important}
@@ -1240,7 +1243,7 @@ body.view-desktop #dt-switch-fab{display:none!important}
 #mobile-wide-warn .mww-action-btn{width:100%;padding:14px 18px;background:rgba(184,132,42,.1);border:1px solid rgba(184,132,42,.45);border-radius:6px;color:var(--amber);font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:background .22s,border-color .22s,box-shadow .22s;-webkit-tap-highlight-color:transparent;display:flex;align-items:center;justify-content:center;gap:10px}
 #mobile-wide-warn .mww-action-btn:hover,#mobile-wide-warn .mww-action-btn:active{background:rgba(184,132,42,.2);border-color:rgba(184,132,42,.8);box-shadow:0 0 20px rgba(184,132,42,.12)}
 #mww-hint{font-size:9px;letter-spacing:1.5px;color:#333;text-align:center;line-height:1.7;text-transform:uppercase}
-#wa-fab,#scrollTopBtn,#dt-switch-fab{z-index:1000!important}
+#wa-fab,#dt-switch-fab{z-index:1000!important}
 body.view-mobile .view-toggle{display:none!important}
 #atd-card{margin:14px 13px 2px;background:rgba(8,8,10,0.52);backdrop-filter:blur(22px) saturate(160%) brightness(0.9);-webkit-backdrop-filter:blur(22px) saturate(160%) brightness(0.9);border:1px solid rgba(255,255,255,0.07);border-top:1px solid rgba(255,255,255,0.11);border-radius:18px;position:relative;overflow:hidden;opacity:0;animation:fu .7s ease forwards .38s;transition:height .42s cubic-bezier(.4,0,.2,1);box-shadow:0 8px 40px rgba(0,0,0,0.6),0 1px 0 rgba(255,255,255,0.06) inset,0 0 0 1px rgba(200,169,110,0.06) inset;isolation:isolate}
 #atd-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1.5px;background:linear-gradient(90deg,transparent 0%,rgba(200,169,110,0.18) 20%,rgba(200,169,110,0.55) 50%,rgba(200,169,110,0.18) 80%,transparent 100%);z-index:2}
@@ -3087,18 +3090,6 @@ html.kt-theme-branco .dcp-cfg-btn{background:rgba(200,169,110,.10);border-color:
 })();
 </script>
 
-<button id="scrollTopBtn" onclick="scrollToOrc()" aria-label="Ir ao orçamento">
-<svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-
-<rect x="4" y="3" width="16" height="18" rx="2"/>
-
-<path d="M9 3 C9 1.9 10 1 12 1 C14 1 15 1.9 15 3"/>
-
-<circle cx="12" cy="13" r="4"/>
-
-<text x="12" y="16.5" text-anchor="middle" font-size="5.5" font-family="monospace" fill="currentColor" stroke="none">R$</text>
-</svg>
-</button>
 
 <a id="wa-fab" href="https://wa.me/5591999687602" target="_blank" aria-label="WhatsApp" rel="noopener">
 <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#kt-icon-18"></use></svg>
@@ -6163,8 +6154,6 @@ document.querySelectorAll('.vt-btn').forEach(btn=>{
   });
 });
 
-const scrollBtn = document.getElementById('scrollTopBtn');
-
 function scrollToTop(){
   window.scrollTo({top:0, behavior:'smooth'});
 }
@@ -6277,6 +6266,18 @@ function showToast(msg, color){
   const msgEl = document.getElementById('toastMsg');
   msgEl.textContent = msg;
   dot.style.background = color || 'var(--gold)';
+
+  /* posiciona 10px acima da barra flutuante visível */
+  (function(){
+    var mini = document.getElementById('kayq-mini-cta');
+    var bar  = document.getElementById('kayq-quote-bar');
+    var ref  = null;
+    if(mini && getComputedStyle(mini).display !== 'none' && mini.getBoundingClientRect().height > 0) ref = mini;
+    else if(bar && getComputedStyle(bar).display !== 'none' && bar.getBoundingClientRect().height > 0) ref = bar;
+    t.style.bottom = ref ? (window.innerHeight - ref.getBoundingClientRect().top + 10) + 'px' : '90px';
+    t.style.top = 'auto';
+  })();
+
   clearTimeout(toastTimer);
   t.classList.remove('show');
   void t.offsetWidth;
@@ -6466,7 +6467,7 @@ function orcSyncPastaGratis(){
         originalPrice: 50,
         time: 32,
         lvl: 2,
-        color: '#4a9e6b',
+        color: pastaPlanColor(0),
         free: true
       };
     } else {
@@ -6546,6 +6547,11 @@ function orcSyncPastaGratis(){
         card1.style.opacity       = '0.32';
         card1.style.pointerEvents = 'none';
         card1.style.filter        = 'grayscale(1)';
+        /* Re-habilita os botões ‹›  do carrossel dentro do card bloqueado.
+           pointer-events:none no pai bloqueia os filhos — as setas do
+           carrossel ficam mudas sem isso. */
+        var nav1 = card1.querySelector('.svc-card-nav');
+        if(nav1) nav1.style.pointerEvents = 'auto';
         if(curr1) curr1.style.display = 'none';
         price1.textContent  = 'Indisponível';
         price1.style.color  = 'var(--muted)';
@@ -6554,6 +6560,8 @@ function orcSyncPastaGratis(){
         card1.style.opacity       = '';
         card1.style.pointerEvents = '';
         card1.style.filter        = '';
+        var nav1r = card1.querySelector('.svc-card-nav');
+        if(nav1r) nav1r.style.pointerEvents = '';
         /* limpar elementos legados */
         card1.querySelectorAll('.spc-disc-badge, .spc-price-old').forEach(function(e){ e.remove(); });
         price1.removeAttribute('data-base');
@@ -7042,6 +7050,21 @@ const PASTA_LVL  = { 0: 2,  1: 5,  2: 6  };
 const PASTA_LOCAL_NAME = { 0: 'CPU', 1: 'GPU', 2: 'CPU+GPU' };
 const PASTA_EXTRA_KEY = { 0: 'cpu', 1: 'gpu', 2: 'combo' };
 
+/* Cor da barra/gráfico da pasta = cor do TIER do plano dela (igual aos
+   demais serviços). Lê o tier do card real (spc-pasta-card-N); se não
+   achar, usa o mapa por plano: CPU=basic, GPU=advanced, CPU+GPU=premium.
+   Antes a pasta usava verde fixo, o que destoava do plano selecionado. */
+const PASTA_TIER_COLOR = { 0: '#7a8fa8', 1: '#b87230', 2: '#d4a820' };
+function pastaPlanColor(plan){
+  const card = document.getElementById('spc-pasta-card-' + plan);
+  if(card){
+    if(card.classList.contains('spc-tier-premium'))  return '#d4a820';
+    if(card.classList.contains('spc-tier-advanced')) return '#b87230';
+    if(card.classList.contains('spc-tier-basic'))    return '#7a8fa8';
+  }
+  return PASTA_TIER_COLOR[plan] || '#7a8fa8';
+}
+
 let pastaLocal = null;
 let pastaTipo  = null;
 
@@ -7183,7 +7206,7 @@ function pastaCommit(){
     originalPrice: isFree ? PASTA_BASE[pastaLocal] : null,
     time: PASTA_TIME[pastaLocal],
     lvl: PASTA_LVL[pastaLocal],
-    color: ORC_COLORS[1],
+    color: pastaPlanColor(pastaLocal),
     free: isFree,
     noDiscount: hasLimpezaDiscount
   };
@@ -9955,6 +9978,85 @@ function closeWIP(){
 })();
 </script>
 
+<script id="kt-anim-controller">
+/* ════════════════════════════════════════════════════════════════
+   KTAnim · Controlador único de animações em canvas (orbs)
+   Resolve o maior gargalo de performance: os loops requestAnimationFrame
+   rodavam 60x/s SEMPRE — mesmo com o canvas escondido (leve/ultra-leve),
+   com a aba em segundo plano, ou com a seção fora da tela.
+   Agora cada loop:
+     • só roda nos modos médio/pesado (orbs ficam ocultos em leve/ultra);
+     • pausa quando a aba está em segundo plano (document.hidden);
+     • pausa quando o canvas sai da viewport (IntersectionObserver);
+     • limita o FPS (30 no médio, 60 no pesado) — os orbs se movem tão
+       devagar que isso é imperceptível, mas corta o custo de desenho
+       pela metade nos aparelhos fracos. O movimento é compensado por
+       passo (steps) para manter a MESMA velocidade visual.
+   ════════════════════════════════════════════════════════════════ */
+window.KTAnim = (function(){
+  var docHidden = (typeof document.hidden === 'boolean') ? document.hidden : false;
+  var runners = [];
+  function kickAll(){ for(var i=0;i<runners.length;i++) runners[i].kick(); }
+
+  document.addEventListener('visibilitychange', function(){
+    docHidden = document.hidden;
+    kickAll();
+  }, {passive:true});
+  document.addEventListener('ktPerfChanged', function(){ setTimeout(kickAll, 0); });
+  window.addEventListener('pageshow', kickAll, {passive:true});
+
+  function perfMode(){ return document.documentElement.getAttribute('data-kt-perf') || 'medio'; }
+  function orbsAllowed(){ var p = perfMode(); return p === 'medio' || p === 'pesado'; }
+  function fpsCap(){ return perfMode() === 'pesado' ? 60 : 30; }
+
+  /* register(canvas, tick): tick(steps) deve rodar `steps` updates + 1 draw */
+  function register(canvas, tick){
+    var rafId = null, lastT = 0, inView = true;
+
+    if('IntersectionObserver' in window){
+      try{
+        var io = new IntersectionObserver(function(entries){
+          inView = entries[entries.length - 1].isIntersecting;
+          kick();
+        }, {rootMargin:'140px'});
+        io.observe(canvas);
+      }catch(e){ inView = true; }
+    }
+
+    function shouldRun(){ return !docHidden && inView && orbsAllowed(); }
+
+    function frame(t){
+      if(!shouldRun()){ rafId = null; return; }
+      if(!lastT) lastT = t;
+      var dt = t - lastT;
+      var interval = 1000 / fpsCap();
+      if(dt >= interval){
+        var steps = Math.round(dt / 16.6667);
+        if(steps < 1) steps = 1; if(steps > 4) steps = 4;
+        lastT = t;
+        try{ tick(steps); }catch(e){}
+      }
+      rafId = requestAnimationFrame(frame);
+    }
+
+    function kick(){
+      if(shouldRun()){
+        if(rafId == null){ lastT = 0; rafId = requestAnimationFrame(frame); }
+      } else if(rafId != null){
+        cancelAnimationFrame(rafId); rafId = null;
+      }
+    }
+
+    var r = { kick: kick };
+    runners.push(r);
+    kick();
+    return r;
+  }
+
+  return { register: register, orbsAllowed: orbsAllowed };
+})();
+</script>
+
 <script id="kt-sidebar-orbs">
 /* ── Sidebar: large blurry slow golden orbs ── */
 (function(){
@@ -10099,6 +10201,16 @@ function closeWIP(){
     requestAnimationFrame(loop);
   }
 
+  /* tick(steps): roda `steps` updates (mantém a velocidade ao limitar FPS)
+     e desenha 1 vez. Usado pelo KTAnim (pausa/throttle automático). */
+  function tick(steps){
+    for(var s = 0; s < steps; s++){
+      for(var i = 0; i < orbs.length; i++) orbs[i].update();
+    }
+    ctx.clearRect(0, 0, W, H);
+    for(var j = 0; j < orbs.length; j++) orbs[j].draw();
+  }
+
   /* ── Dithering overlay: subtle static noise quebra o banding ── */
   function buildNoise(){
     var sidebar = document.getElementById('dt-sidebar');
@@ -10126,7 +10238,12 @@ function closeWIP(){
     else sidebar.appendChild(n);
   }
 
-  function start(){ init(); buildNoise(); loop(); }
+  function start(){
+    init();
+    buildNoise();
+    if(window.KTAnim){ window.KTAnim.register(canvas, tick); }
+    else { loop(); }
+  }
 
   /* ResizeObserver no proprio canvas e mais confiavel que window.resize:
      detecta mudancas no sidebar sem polling */
@@ -10198,6 +10315,7 @@ function closeWIP(){
     }
     if(grp){
       grp.style.position='relative';
+      grp.classList.add('kt-cv-skip');
       /* overflow:visible preserva sombras dos cards selecionados */
       canvas.style.clipPath='inset(80px round 20px)';
       grp.insertBefore(canvas,grp.firstChild);
@@ -10254,12 +10372,19 @@ function closeWIP(){
     for(var i=0;i<orbs.length;i++){orbs[i].update();orbs[i].draw();}
     requestAnimationFrame(loop);
   }
+  /* tick(steps): mantém velocidade mesmo com FPS limitado; 1 desenho por frame */
+  function tick(steps){
+    for(var s=0;s<steps;s++){ for(var i=0;i<orbs.length;i++) orbs[i].update(); }
+    ctx.clearRect(0,0,W,H);
+    for(var j=0;j<orbs.length;j++) orbs[j].draw();
+  }
   function setup(){
     /* setTimeout(0) garante que kt-svc-group-wrapper já rodou e criou .svc-group-card */
     setTimeout(function(){
       attachToSection();
       init();
-      loop();
+      if(window.KTAnim){ window.KTAnim.register(canvas, tick); }
+      else { loop(); }
     },0);
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',setup);
@@ -10851,7 +10976,7 @@ html.kt-perf-ultra-leve .svc-card-nav .svc-nav-btn{backdrop-filter:none!importan
 /* Row em modo ativo */
 .svc-nav-wrap.kt-nav-active>.svc-plan-row{
   display:flex!important;flex-direction:row!important;
-  overflow-x:hidden!important;gap:0!important;
+  overflow-x:hidden!important;gap:6px!important;
   align-items:stretch!important;
   padding-left:0!important;padding-right:0!important
 }
@@ -11360,5 +11485,489 @@ html.kt-perf-ultra-leve .sgs-track{backdrop-filter:none!important;-webkit-backdr
   window.ktEqualizeCards = equalizeRows;
 })();
 </script>
+<!-- ============================================================
+     KAYK · Mini-menu de orçamento sempre disponível
+     - Desktop: barra fixa centralizada sobre o conteúdo
+     - Tela estreita (view-mobile): assume o botão flutuante inferior
+     ============================================================ -->
+<style id="kayq-quote-style">
+  /* ---------- Barra fixa (desktop) ---------- */
+  #kayq-quote-bar{
+    position:fixed; left:0; right:0; bottom:18px; z-index:995;
+    display:none; justify-content:center;
+    padding:0 16px; pointer-events:none;
+    transition:opacity .3s ease, transform .3s ease;
+  }
+  body.view-desktop #kayq-quote-bar{ display:flex; left:var(--sidebar-mini); } /* sidebar colapsada (padrão) */
+  body.view-desktop.ds-sidebar-expanded #kayq-quote-bar{ left:var(--sidebar); } /* sidebar expandida */
+  body.kayq-near-orc #kayq-quote-bar{ opacity:0; transform:translateY(14px); pointer-events:none !important; }
+
+  .kayq-qb{
+    pointer-events:auto;
+    display:flex; align-items:center; gap:16px;
+    width:100%; max-width:min(560px,100%);
+    padding:10px 12px 10px 14px;
+    border-radius:18px;
+    background:linear-gradient(145deg, rgba(30,30,30,.94) 0%, rgba(14,14,14,.94) 100%);
+    border:1px solid rgba(200,169,110,.20);
+    backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    box-shadow:
+      0 14px 38px rgba(0,0,0,.6),
+      0 2px 0 rgba(255,255,255,.05) inset,
+      -7px -7px 18px rgba(255,255,255,.02),
+      7px 7px 20px rgba(0,0,0,.55);
+  }
+
+  .kayq-qb-info{ display:flex; align-items:center; gap:11px; min-width:0; flex:1;
+    cursor:pointer; border-radius:10px; padding:4px 6px; margin:-4px -6px;
+    transition:background .18s, border-color .22s, box-shadow .22s, transform .15s;
+    border:1px solid transparent;
+  }
+  /* Estado preenchido: neumorphic 2.0 dark — raised com borda dourada sutil */
+  #kayq-quote-bar:not(.is-empty) .kayq-qb-info{
+    border-color:rgba(200,169,110,.18);
+    background:rgba(255,255,255,.025);
+    box-shadow:
+      -3px -3px 8px rgba(255,255,255,.04),
+       3px  3px 10px rgba(0,0,0,.50);
+  }
+  #kayq-quote-bar:not(.is-empty) .kayq-qb-info:hover{
+    border-color:rgba(200,169,110,.40);
+    background:rgba(200,169,110,.055);
+    transform:translateY(-1px);
+    box-shadow:
+      -4px -4px 12px rgba(255,255,255,.055),
+       4px  4px 14px rgba(0,0,0,.60),
+       0 0 0 1px rgba(200,169,110,.10);
+  }
+  #kayq-quote-bar:not(.is-empty) .kayq-qb-info:active{
+    transform:translateY(0) scale(.99);
+    border-color:rgba(200,169,110,.45);
+    background:rgba(200,169,110,.08);
+    box-shadow:
+      inset -2px -2px 6px rgba(255,255,255,.03),
+      inset  2px  2px 8px rgba(0,0,0,.48);
+  }
+  .kayq-qb-info:hover{ background:rgba(200,169,110,.04); }
+  .kayq-qb-info:active{ background:rgba(200,169,110,.09); }
+
+  /* Chevron hint — só visível no estado preenchido */
+  .kayq-qb-info-hint{
+    display:none; align-items:center; gap:3px; flex-shrink:0; margin-left:auto;
+    font-family:'Space Mono',monospace; font-size:9px; letter-spacing:1.2px;
+    color:rgba(200,169,110,.45); text-transform:uppercase; white-space:nowrap;
+    transition:color .2s, transform .2s;
+  }
+  .kayq-qb-info-hint svg{ width:11px; height:11px; }
+  #kayq-quote-bar:not(.is-empty) .kayq-qb-info-hint{ display:flex; }
+  #kayq-quote-bar:not(.is-empty) .kayq-qb-info:hover .kayq-qb-info-hint{
+    color:rgba(200,169,110,.8); transform:translateY(-1px);
+  }
+  .kayq-qb-ico{
+    flex-shrink:0; width:38px; height:38px; border-radius:11px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .kayq-qb-ico svg{ width:19px; height:19px; }
+  .kayq-qb-ico-filled{ background:rgba(74,158,107,.12); border:1px solid rgba(74,158,107,.4); color:#5fc98a; }
+  .kayq-qb-ico-empty{ background:rgba(200,169,110,.1); border:1px solid var(--gold-dim); color:var(--gold); }
+
+  .kayq-qb-texts{ display:flex; flex-direction:column; gap:2px; min-width:0; }
+  .kayq-qb-label{
+    font-family:'Space Mono',monospace; font-size:9.5px; letter-spacing:2px;
+    text-transform:uppercase; color:var(--muted); white-space:nowrap; line-height:1;
+  }
+  .kayq-qb-filled-row{ display:flex; align-items:center; gap:9px; white-space:nowrap; }
+  .kayq-qb-price{ font-size:18px; color:var(--text); white-space:nowrap; line-height:1.15; }
+  .kayq-qb-price small{ font-size:11px; color:var(--gold); font-weight:700; }
+  .kayq-qb-price b{ font-weight:700; letter-spacing:.3px; }
+  .kayq-qb-badge{
+    font-family:'Space Mono',monospace; font-size:10px; letter-spacing:.6px;
+    color:var(--gold); background:rgba(200,169,110,.1);
+    border:1px solid var(--gold-dim); border-radius:999px;
+    padding:3px 9px; white-space:nowrap; flex-shrink:0;
+  }
+  .kayq-qb-empty-text{
+    font-family:'Space Mono',monospace; font-size:13px; letter-spacing:.5px;
+    color:#9a9a9a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+
+  .kayq-qb-actions{ display:flex; align-items:center; gap:8px; flex-shrink:0; }
+
+  .kayq-qb-copy{
+    flex-shrink:0; width:42px; height:42px; border-radius:11px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(200,169,110,.08); border:1px solid var(--gold-dim); color:var(--gold);
+    transition:background .18s, border-color .18s, transform .14s, box-shadow .2s;
+  }
+  .kayq-qb-copy svg{ width:17px; height:17px; }
+  .kayq-qb-copy:hover{ background:rgba(200,169,110,.16); border-color:var(--gold); box-shadow:0 4px 14px rgba(200,169,110,.2); }
+  .kayq-qb-copy:active{ transform:scale(.95); }
+
+  .kayq-qb-send{
+    flex-shrink:0; cursor:pointer; height:42px; padding:0 18px;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    border-radius:12px; border:1px solid #00e75b; background:#75dd9e; color:#04210f;
+    font-family:'Space Mono',monospace; font-size:12.5px; letter-spacing:1px; text-transform:uppercase; font-weight:700;
+    white-space:nowrap;
+    box-shadow:0 4px 16px rgba(0,231,91,.28), inset 0 1px 0 rgba(255,255,255,.35);
+    transition:background .18s, border-color .18s, transform .14s, box-shadow .2s;
+  }
+  .kayq-qb-send svg{ width:18px; height:18px; }
+  .kayq-qb-send:hover{ background:#8eeaae; border-color:#00ff60; box-shadow:0 6px 22px rgba(0,231,91,.42), inset 0 1px 0 rgba(255,255,255,.4); }
+  .kayq-qb-send:active{ transform:scale(.97); }
+
+  .kayq-qb-empty-btn{
+    flex-shrink:0; cursor:pointer; height:42px; padding:0 18px;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    border-radius:12px;
+    background:rgba(200,169,110,.1); border:1px solid var(--gold-dim); color:var(--gold);
+    font-family:'Space Mono',monospace; font-size:11.5px; letter-spacing:.8px; text-transform:uppercase; font-weight:700;
+    white-space:nowrap;
+    transition:background .18s, border-color .18s, transform .14s, box-shadow .2s;
+  }
+  .kayq-qb-empty-btn svg{ width:16px; height:16px; opacity:.85; }
+  .kayq-qb-empty-btn:hover{ background:rgba(200,169,110,.18); border-color:var(--gold); box-shadow:0 4px 16px rgba(200,169,110,.22); }
+  .kayq-qb-empty-btn:active{ transform:scale(.97); }
+
+  /* alternância vazio / preenchido (preenchido = padrão) */
+  .kayq-qb-empty-text, .kayq-qb-empty-btn{ display:none; }
+  #kayq-quote-bar.is-empty .kayq-qb-label,
+  #kayq-quote-bar.is-empty .kayq-qb-filled-row,
+  #kayq-quote-bar.is-empty .kayq-qb-copy,
+  #kayq-quote-bar.is-empty .kayq-qb-send{ display:none !important; }
+  #kayq-quote-bar.is-empty .kayq-qb-empty-text{ display:block; }
+  #kayq-quote-bar.is-empty .kayq-qb-empty-btn{ display:flex; }
+  #kayq-quote-bar.is-empty .kayq-qb-ico-filled{ display:none; }
+  #kayq-quote-bar:not(.is-empty) .kayq-qb-ico-empty{ display:none; }
+
+  /* ---------- Pílula compacta (tela estreita / view-mobile) ---------- */
+  #kayq-mini-cta{
+    position:fixed; left:0; right:0; bottom:18px; z-index:999;
+    display:none; justify-content:center;
+    padding:0 16px; pointer-events:none;
+    transition:opacity .3s ease, transform .3s ease;
+  }
+  body.view-mobile.kayq-filled #kayq-mini-cta{ display:flex; }
+  body.kayq-near-orc #kayq-mini-cta{ opacity:0; transform:translateY(14px); pointer-events:none !important; }
+
+  .kayq-mini{
+    pointer-events:auto; cursor:pointer;
+    display:inline-flex; align-items:center; justify-content:center; gap:9px;
+    max-width:100%; height:52px; padding:0 22px;
+    border-radius:15px; border:1px solid #00e75b; background:#75dd9e; color:#04210f;
+    font-family:'Space Mono',monospace; font-size:13px; letter-spacing:.5px; text-transform:uppercase; font-weight:700;
+    white-space:nowrap;
+    box-shadow:0 8px 26px rgba(0,231,91,.4), 0 2px 0 rgba(255,255,255,.25) inset;
+    transition:transform .14s, box-shadow .2s, background .18s;
+  }
+  .kayq-mini svg{ width:20px; height:20px; flex-shrink:0; }
+  .kayq-mini-txt{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .kayq-mini-txt small{ font-size:11px; }
+  .kayq-mini:hover{ background:#8eeaae; box-shadow:0 10px 30px rgba(0,231,91,.5), 0 2px 0 rgba(255,255,255,.3) inset; }
+  .kayq-mini:active{ transform:scale(.97); }
+
+  /* Botão secundário "Ver orçamento" na pílula mobile */
+  .kayq-mini-orc{
+    pointer-events:auto; cursor:pointer; flex-shrink:0;
+    display:inline-flex; align-items:center; justify-content:center;
+    width:52px; height:52px;
+    border-radius:15px; border:1px solid rgba(200,169,110,.38);
+    background:rgba(14,14,16,.88); color:var(--gold);
+    backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+    box-shadow:0 4px 18px rgba(0,0,0,.55);
+    transition:background .18s, border-color .2s, transform .14s, box-shadow .2s;
+    -webkit-tap-highlight-color:transparent; outline:none;
+  }
+  .kayq-mini-orc svg{ width:19px; height:19px; flex-shrink:0; }
+  .kayq-mini-orc:hover{ background:rgba(200,169,110,.12); border-color:rgba(200,169,110,.7); box-shadow:0 0 0 3px rgba(200,169,110,.1), 0 4px 18px rgba(0,0,0,.55); }
+  .kayq-mini-orc:active{ transform:scale(.95); background:rgba(200,169,110,.18); }
+
+  #kayq-mini-cta{ gap:8px; }
+
+  /* tela estreita preenchida: some o botão de WhatsApp redundante (a pílula já envia)
+     e sobe o atalho "ver desktop" para não colidir com a pílula de envio */
+  body.view-mobile.kayq-filled:not(.kayq-near-orc) #wa-fab{
+    opacity:0; pointer-events:none; transform:scale(.85);
+    transition:opacity .25s ease, transform .25s ease;
+  }
+  body.view-mobile.kayq-filled:not(.kayq-near-orc) #dt-switch-fab{
+    transform:translateY(-50px);
+  }
+
+  /* ── Compactação progressiva — desktop, janelas estreitas ──
+     Para view-desktop com janela estreita (600–880px): ajustes progressivos. */
+
+  /* ① ≤ 880px — esconde label, reduz espaçamentos */
+  @media (max-width: 880px) {
+    body.view-desktop .kayq-qb-label{ display:none; }
+    body.view-desktop .kayq-qb{ gap:10px; }
+    body.view-desktop .kayq-qb-actions{ gap:6px; }
+  }
+
+  /* ② ≤ 720px — remove o botão de copiar e aperta fonte/padding */
+  @media (max-width: 720px) {
+    body.view-desktop .kayq-qb{ gap:8px; }
+    body.view-desktop .kayq-qb-copy{ display:none !important; }
+    body.view-desktop .kayq-qb-ico{ width:32px; height:32px; border-radius:9px; }
+    body.view-desktop .kayq-qb-ico svg{ width:15px; height:15px; }
+    body.view-desktop .kayq-qb-send{ padding:0 12px; font-size:11.5px; letter-spacing:.5px; height:38px; gap:6px; }
+    body.view-desktop .kayq-qb-send svg{ width:16px; height:16px; }
+    body.view-desktop .kayq-qb-empty-btn{ padding:0 12px; font-size:11px; letter-spacing:.4px; height:38px; gap:6px; }
+    body.view-desktop .kayq-qb-empty-btn svg{ width:15px; height:15px; }
+  }
+
+  /* ③ ≤ 650px — badge some, preço encolhe, botão fica só ícone + "Enviar" */
+  @media (max-width: 650px) {
+    body.view-desktop .kayq-qb{ gap:6px; padding:8px 10px 8px 12px; }
+    body.view-desktop .kayq-qb-badge{ display:none; }
+    body.view-desktop .kayq-qb-price{ font-size:15px; }
+    body.view-desktop .kayq-qb-send span,
+    body.view-desktop .kayq-qb-empty-btn span{ font-size:0; letter-spacing:0; }
+    body.view-desktop .kayq-qb-send,
+    body.view-desktop .kayq-qb-empty-btn{ padding:0 13px; min-width:unset; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    #kayq-quote-bar, #kayq-mini-cta,
+    .kayq-qb-send, .kayq-qb-copy, .kayq-qb-empty-btn, .kayq-mini{ transition:none; }
+  }
+</style>
+
+<!-- Barra fixa (desktop) -->
+<div id="kayq-quote-bar" class="is-empty" aria-live="polite">
+  <div class="kayq-qb">
+    <div class="kayq-qb-info" onclick="if(typeof scrollToOrc==='function')scrollToOrc()" role="button" tabindex="0" aria-label="Ver orçamento completo" title="Ver orçamento completo">
+      <span class="kayq-qb-ico kayq-qb-ico-filled" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      </span>
+      <span class="kayq-qb-ico kayq-qb-ico-empty" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      </span>
+      <span class="kayq-qb-texts">
+        <span class="kayq-qb-label">Total do orçamento</span>
+        <span class="kayq-qb-filled-row">
+          <span class="kayq-qb-price"><small>R$</small>&nbsp;<b data-kayq-price>0</b></span>
+          <span class="kayq-qb-badge" data-kayq-count>0 serviços</span>
+        </span>
+        <span class="kayq-qb-empty-text">Nenhum serviço selecionado</span>
+      </span>
+      <span class="kayq-qb-info-hint" aria-hidden="true">
+        ver<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18,15 12,9 6,15"/></svg>
+      </span>
+    </div>
+    <div class="kayq-qb-actions">
+      <button type="button" class="kayq-qb-copy" onclick="copyOrcamento()" aria-label="Copiar orçamento" title="Copiar orçamento">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </button>
+      <button type="button" class="kayq-qb-send" onclick="enviarMensagem()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><use href="#kt-icon-18"></use></svg>
+        <span>Enviar no WhatsApp</span>
+      </button>
+      <button type="button" class="kayq-qb-empty-btn" onclick="kayqEmptyAction()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <span>Selecione um serviço primeiro</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Pilula compacta (telas estreitas) -->
+<div id="kayq-mini-cta">
+  <button type="button" class="kayq-mini-orc" onclick="if(typeof scrollToOrc==='function')scrollToOrc()" aria-label="Ver orcamento completo" title="Ver orcamento completo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+  </button>
+  <button type="button" class="kayq-mini" onclick="enviarMensagem()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><use href="#kt-icon-18"></use></svg>
+    <span class="kayq-mini-txt">Enviar no WhatsApp&nbsp;·&nbsp;<b><small>R$</small>&nbsp;<span data-kayq-price>0</span></b></span>
+  </button>
+</div>
+
+<script>
+/* KAYK · lógica do mini-menu de orçamento sempre disponível */
+(function(){
+  'use strict';
+
+  function isNarrowMode(){
+    return document.body.classList.contains('view-mobile');
+  }
+  function orcItemKeys(){
+    try{ return (typeof orcState !== 'undefined' && orcState) ? Object.keys(orcState) : []; }
+    catch(e){ return []; }
+  }
+  /* serviços escolhidos pelo usuário (ignora o diagnóstico grátis incluído automaticamente) */
+  function orcServiceCount(){
+    try{
+      if(typeof orcState === 'undefined' || !orcState) return 0;
+      var paid = Object.values(orcState).filter(function(i){ return i && !i.free; }).length;
+      /* se há itens mas todos marcados como grátis, ainda conta como 1 seleção */
+      return (paid === 0 && Object.keys(orcState).length > 0) ? 1 : paid;
+    }catch(e){ return 0; }
+  }
+  function currentTotalText(){
+    var el = document.getElementById('orc-total-val');
+    return (el && el.textContent) ? el.textContent : '0';
+  }
+  function scrollToPlans(){
+    var t = document.querySelector('.svc-plan-row') || document.getElementById('svc-intro-banner');
+    if(t){ t.scrollIntoView({behavior:'smooth', block:'start'}); }
+    else{ window.scrollTo({top:0, behavior:'smooth'}); }
+  }
+
+  /* Ação quando nada está selecionado: avisa e leva aos planos */
+  window.kayqEmptyAction = function(){
+    if(typeof showToast === 'function'){ showToast('Selecione um serviço primeiro', '#9e4a4a'); }
+    scrollToPlans();
+  };
+
+  /* Mantém barra + pílula sincronizados com a seleção */
+  window.kayqUpdateQuoteBar = function(){
+    var filled = orcItemKeys().length > 0;
+    var n = orcServiceCount();
+
+    document.body.classList.toggle('kayq-filled', filled);
+    document.body.classList.toggle('kayq-empty', !filled);
+
+    var bar = document.getElementById('kayq-quote-bar');
+    if(bar) bar.classList.toggle('is-empty', !filled);
+
+    if(filled){
+      var totalText = currentTotalText();
+      var svcWord = (n === 1) ? 'serviço' : 'serviços';
+      document.querySelectorAll('[data-kayq-price]').forEach(function(el){ el.textContent = totalText; });
+      document.querySelectorAll('[data-kayq-count]').forEach(function(el){ el.textContent = n + ' ' + svcWord; });
+    }
+  };
+
+  /* Esconde os CTAs flutuantes quando o orçamento já está na tela (evita duplicar botões) */
+  function setupNearObserver(){
+    var orc = document.getElementById('orc-resumo');
+    if(!orc || !('IntersectionObserver' in window)) return;
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        document.body.classList.toggle('kayq-near-orc', e.isIntersecting && e.intersectionRatio > 0.12);
+        try{ window.kayqUpdateQuoteBar(); }catch(ex){}
+      });
+    }, { threshold:[0, 0.12, 0.4] });
+    io.observe(orc);
+  }
+
+  /* Envolve orcUpdatePanel para atualizar a barra em toda mudança de estado */
+  function hookUpdatePanel(){
+    if(typeof orcUpdatePanel === 'function' && !orcUpdatePanel.__kayq){
+      var _orig = orcUpdatePanel;
+      var _wrap = function(){
+        var r = _orig.apply(this, arguments);
+        try{ window.kayqUpdateQuoteBar(); }catch(e){}
+        return r;
+      };
+      _wrap.__kayq = true;
+      orcUpdatePanel = _wrap; /* reatribuição global (mesmo padrão usado em clearOrcamento) */
+    }
+  }
+
+  function init(){
+    hookUpdatePanel();
+    setupNearObserver();
+    window.kayqUpdateQuoteBar();
+
+    var t;
+    window.addEventListener('resize', function(){ clearTimeout(t); t = setTimeout(window.kayqUpdateQuoteBar, 160); });
+
+    if('MutationObserver' in window){
+      var mo = new MutationObserver(function(){ window.kayqUpdateQuoteBar(); });
+      mo.observe(document.body, { attributes:true, attributeFilter:['class'] });
+    }
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 0); });
+  } else {
+    setTimeout(init, 0);
+  }
+})();
+</script>
+
+<style id="kt-perf-boost">
+/* ════════════════════════════════════════════════════════════════
+   KT PERF BOOST · otimizações de performance que preservam o visual
+   Carregado por último de propósito: vence o cascade dos modos.
+   ════════════════════════════════════════════════════════════════ */
+
+/* ── LEVE: o maior custo no celular é backdrop-filter (recalcula o
+   blur a cada frame de scroll). Removemos só ele — sombras, bordas e
+   gradientes continuam, então os painéis ainda parecem "vidro fosco
+   escuro", mas o scroll fica liso. ───────────────────────────────── */
+html.kt-perf-leve *,
+html.kt-perf-leve *::before,
+html.kt-perf-leve *::after{
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+
+/* ── O overlay de ruído da sidebar usa mix-blend-mode (custa no scroll).
+   Some nos modos leves — os orbs já estão ocultos lá. ─────────────── */
+html.kt-perf-leve #sidebar-orbs-noise,
+html.kt-perf-ultra-leve #sidebar-orbs-noise{display:none!important}
+
+/* ── ULTRA-LEVE: antes ficava "chapado" (sem nenhuma sombra). Devolvemos
+   sombras SUTIS e estáticas (são rasterizadas 1x e ficam em cache — custo
+   quase zero no scroll) para manter a profundidade premium. ───────── */
+html.kt-perf-ultra-leve .svc-plan-card,
+html.kt-perf-ultra-leve .svc-plan-card:hover,
+html.kt-perf-ultra-leve .uniq-svc-card,
+html.kt-perf-ultra-leve .cmp-wrap,
+html.kt-perf-ultra-leve .bk-card,
+html.kt-perf-ultra-leve .tip-item,
+html.kt-perf-ultra-leve .info-banner{
+  box-shadow:0 2px 10px rgba(0,0,0,.30)!important;
+}
+html.kt-perf-ultra-leve .svc-plan-card.spc-featured{
+  box-shadow:0 3px 16px rgba(200,169,110,.12),0 2px 10px rgba(0,0,0,.34)!important;
+}
+/* Temas claro/noturno: sombra coerente com o fundo */
+html.kt-perf-ultra-leve.kt-theme-branco .svc-plan-card,
+html.kt-theme-branco.kt-perf-ultra-leve .svc-plan-card,
+html.kt-theme-branco.kt-perf-ultra-leve .uniq-svc-card,
+html.kt-theme-branco.kt-perf-ultra-leve .bk-card,
+html.kt-theme-branco.kt-perf-ultra-leve .tip-item{
+  box-shadow:0 2px 10px rgba(91,65,23,.12)!important;
+}
+
+/* ── ULTRA-LEVE: transições instantâneas (.001ms) deixavam tudo "seco".
+   Devolvemos micro-transições rápidas só nos elementos interativos —
+   custo desprezível e devolve o tato de clique/hover. As animações de
+   entrada continuam desligadas (não mexemos em animation-duration). ── */
+html.kt-perf-ultra-leve .svc-plan-card,
+html.kt-perf-ultra-leve .spc-btn,
+html.kt-perf-ultra-leve .svc-nav-btn,
+html.kt-perf-ultra-leve .kt-setup-card,
+html.kt-perf-ultra-leve .dcp-pill,
+html.kt-perf-ultra-leve a,
+html.kt-perf-ultra-leve button{
+  transition:transform .14s ease,background-color .14s ease,
+             border-color .14s ease,box-shadow .14s ease,color .14s ease!important;
+}
+
+/* ── content-visibility: o navegador pula a renderização de cards que
+   estão fora da tela → 1ª pintura mais rápida e scroll mais leve em
+   aparelhos humildes. Só no celular e só nos modos leves (onde as sombras
+   já são sutis, sem risco de "cortar" brilhos). O grupo com canvas é
+   excluído via .kt-cv-skip (precisa do tamanho real). ──────────────── */
+@media (max-width:599px){
+  html.kt-perf-leve .svc-group-card:not(.kt-cv-skip),
+  html.kt-perf-ultra-leve .svc-group-card:not(.kt-cv-skip){
+    content-visibility:auto;
+    contain-intrinsic-size:auto 600px;
+  }
+}
+
+/* ── Celular no modo MÉDIO (escolha manual): reduz o raio do blur dos
+   orbs. O custo do blur cresce ~ao quadrado do raio, então 44px no lugar
+   de 64px é ~2x mais barato e continua bem suave. Pesado fica intacto. ─ */
+@media (max-width:599px){
+  html.kt-perf-medio #bg-orbs-canvas{filter:blur(44px) saturate(1.4)!important}
+  html.kt-perf-medio #sidebar-orbs-canvas{filter:blur(40px) saturate(1.35)!important}
+}
+</style>
 </body>
 </html>
